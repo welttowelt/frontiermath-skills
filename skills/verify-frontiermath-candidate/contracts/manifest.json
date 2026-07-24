@@ -1,0 +1,80 @@
+{
+  "schema": "frontiermath-contract-manifest-v1",
+  "contracts": {
+    "c8f81783e329ac0850cc5337078b97d4d9d1d5689e7a1a793745146cbaf8ebf4": {
+      "id": "hadamard-428-warmup-2026-06-27",
+      "checker": "hadamard",
+      "problem_id": "hadamard",
+      "prompt_type": "warmup",
+      "source": {
+        "url": "https://epoch.ai/data/open_problems_data.zip",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+        "prompt_sha256": "16b67136470a3ae37d6267d66e7db56ffbe39fad8b2dcc06bd2e0ce259b1d828"
+      },
+      "target": {
+        "order": 428
+      }
+    },
+    "7f4aad72620aea73a3bfe9eb7def16bcf06ae20f7dcec922ce91bb068d8258ae": {
+      "id": "hadamard-668-full-2026-06-27",
+      "checker": "hadamard",
+      "problem_id": "hadamard",
+      "prompt_type": "full_problem",
+      "source": {
+        "url": "https://epoch.ai/data/open_problems_data.zip",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+        "prompt_sha256": "db3e6c357eccd3864c33dd8f6d10a7011cde6a497cc85c4d267106634e02dbd1"
+      },
+      "target": {
+        "order": 668
+      }
+    },
+    "8213eb42583a43175e52885de581275d3bd670b1b73d009b4eaa111e79abcd65": {
+      "id": "ramsey-book-n25-warmup-2026-06-27",
+      "checker": "ramsey-book",
+      "problem_id": "ramsey-book-graphs",
+      "prompt_type": "warmup",
+      "source": {
+        "url": "https://epoch.ai/data/open_problems_data.zip",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+        "prompt_sha256": "1d07f28ba1b70f9f8aa557c0b611da779739fb6f9df5c673d8157d1b615b6189"
+      },
+      "target": {
+        "n": 25
+      }
+    },
+    "30b4db9e5a4dd761c3afa1392ce113dcdf0130e5b9034cb736cca83c6c3b509e": {
+      "id": "fixture-hadamard-order-4",
+      "checker": "hadamard",
+      "problem_id": "hadamard",
+      "prompt_type": "fixture",
+      "source": {
+        "url": "local://tests/fixtures/hadamard-order-4.csv",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "a28c0a1e413af63ebfb79bb5e5b5e65835531a87ee7a9cb1eee8f8d2d6531239",
+        "prompt_sha256": "a28c0a1e413af63ebfb79bb5e5b5e65835531a87ee7a9cb1eee8f8d2d6531239"
+      },
+      "target": {
+        "order": 4
+      }
+    },
+    "d33028f266991448bdf323026e19be81693cda4fa4826f4157e5f4b6d8ae367b": {
+      "id": "fixture-ramsey-book-n-2",
+      "checker": "ramsey-book",
+      "problem_id": "ramsey-book-graphs",
+      "prompt_type": "fixture",
+      "source": {
+        "url": "local://tests/fixtures/ramsey-book-n-2.txt",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "0f7c83b2b99421062621f874d976a288da2ab776bf3f412dbc552886028863fb",
+        "prompt_sha256": "71918726e2a583e64b5363504eef4ed3beff446a56f8bb4223fcfc1dd0eab2a4"
+      },
+      "target": {
+        "n": 2
+      }
+    }
+  }
+}

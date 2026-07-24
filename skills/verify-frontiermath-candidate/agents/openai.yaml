@@ -1,0 +1,4 @@
+interface:
+  display_name: "Verify FrontierMath Candidate"
+  short_description: "Check candidates against public contracts independently."
+  default_prompt: "Use $verify-frontiermath-candidate to normalize this candidate, run supported shadow verifiers, attack the checker, and report the exact verification boundary."

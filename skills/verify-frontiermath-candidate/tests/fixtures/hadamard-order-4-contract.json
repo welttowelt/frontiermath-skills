@@ -1,0 +1,15 @@
+{
+  "schema": "frontiermath-shadow-contract-v1",
+  "checker": "hadamard",
+  "problem_id": "hadamard",
+  "prompt_type": "fixture",
+  "source": {
+    "url": "local://tests/fixtures/hadamard-order-4.csv",
+    "retrieved": "2026-07-24",
+    "artifact_sha256": "a28c0a1e413af63ebfb79bb5e5b5e65835531a87ee7a9cb1eee8f8d2d6531239",
+    "prompt_sha256": "a28c0a1e413af63ebfb79bb5e5b5e65835531a87ee7a9cb1eee8f8d2d6531239"
+  },
+  "target": {
+    "order": 4
+  }
+}

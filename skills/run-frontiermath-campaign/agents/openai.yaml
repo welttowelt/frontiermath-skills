@@ -1,0 +1,4 @@
+interface:
+  display_name: "Run FrontierMath Campaign"
+  short_description: "Drive a FrontierMath lane to an audited candidate."
+  default_prompt: "Use $run-frontiermath-campaign to triage and advance this FrontierMath problem with durable state, independent checks, and explicit authority boundaries."

@@ -1,0 +1,147 @@
+---
+name: verify-frontiermath-candidate
+description: Independently check serialized candidates for supported Epoch AI FrontierMath public problem contracts. Use when validating a Hadamard matrix, a Ramsey book graph adjacency string, a warmup artifact, or a candidate packet; when designing a new public shadow verifier; or when auditing whether local computation justifies a claim. The skill never treats a local checker as equivalent to Epoch's paid bespoke verifier.
+---
+
+# Verify FrontierMath Candidate
+
+Verify the mathematical artifact, attack the checker, and report the exact
+boundary of what passed.
+
+## Required boundary
+
+Read `references/public-contract-boundary.md` before adding or extending a
+checker.
+
+Every result must name:
+
+- public prompt snapshot;
+- checker and version or hash;
+- candidate hash;
+- predicates checked;
+- predicates omitted;
+- fixture results;
+- runtime and environment;
+- status from the claim ladder.
+
+Use `shadow-verifier-pass`, never `Epoch-pass`, unless direct evidence from the
+named Epoch verifier is available.
+
+## Supported checks
+
+### Hadamard matrices
+
+```bash
+python3 scripts/verify_hadamard.py candidate.csv \
+  --contract contracts/hadamard-668-full-2026-06-27.json
+```
+
+The checker enforces:
+
+- exact square shape;
+- entries in `{−1,+1}`;
+- pairwise orthogonal rows.
+
+It uses integer bitsets, so no floating-point tolerance enters the decision.
+It does not prove that the candidate came from a novel construction.
+
+### Ramsey book graphs
+
+```bash
+python3 scripts/verify_ramsey_book.py \
+  --adjacency-file candidate.txt \
+  --contract contracts/ramsey-book-n25-warmup-2026-06-27.json
+```
+
+The checker enforces:
+
+- exact `4n-2` vertex count through string length;
+- the published column-major edge order;
+- no `B_(n-1)` in the graph;
+- no `B_n` in the complement.
+
+It permits surrounding file whitespace but rejects whitespace inside the
+binary string. It hashes both the raw candidate bytes and the normalized bit
+string. It does not execute an untrusted submitted Python generator. For the
+full problem, test the generator separately over a preregistered set of `n`
+values and feed each serialized output to this checker.
+
+## Contract binding
+
+The CLI derives `order` or `n` from a required JSON contract. A contract binds:
+
+- checker and problem ID;
+- prompt type;
+- source URL and retrieval date;
+- source-artifact and exact-prompt hashes;
+- target parameter.
+
+The checker hashes the contract bytes and accepts it only when that exact hash
+and content match `contracts/manifest.json`. It refuses an unregistered
+contract, checker mismatch, missing hash, conflicting target, oversized
+contract, or target above the supported ceiling. Do not replace the contract
+with a free-form prompt label. Add a new contract and manifest entry only after
+freezing the exact source prompt and reopening RCI.
+
+The result packet emits a privacy-safe manifest ID and hashes, not the caller's
+absolute contract path.
+
+## Verification workflow
+
+1. Freeze the prompt and candidate bytes; compute hashes.
+2. Normalize only transformations allowed by the prompt.
+3. Run input-shape checks before mathematical checks.
+4. Run the checker and preserve its structured output.
+5. Run positive, negative, malformed, and boundary fixtures.
+6. Seed a plausible invalid candidate and confirm rejection with a witness.
+7. Cross-check the decisive predicate through a different implementation or
+   mathematical argument.
+8. Audit translation from prompt to code.
+9. Report checked and unchecked predicates separately.
+
+If the same implementation generates and verifies a candidate, the result is
+not independent.
+
+## Adding a checker
+
+For a new problem:
+
+1. Write the acceptance predicates in plain mathematics.
+2. Mark which predicates are public, inferred, ambiguous, or paid-only.
+3. Choose exact arithmetic or prove an error bound.
+4. Keep parsing separate from semantics.
+5. Return a minimal failure witness.
+6. Add fixtures for parser ambiguity, boundary values, and mathematical
+   counterexamples.
+7. Add the exact contract hash and content to the bundled manifest.
+8. Seed a contract that retains the prompt hash but mutates the target and
+   confirm default rejection.
+9. Run an RCI audit, repair every fatal or major finding, and rerun tests.
+10. Forward-test in a clean context before changing lifecycle state.
+
+Do not execute downloaded or candidate-supplied code without a separate
+security review and explicit authority.
+
+Candidate and contract byte ceilings are enforced before parsing. Registered
+target ceilings bound the checker loops, but the scripts do not promise a
+wall-clock deadline against a hostile local filesystem or machine.
+
+## Handoffs
+
+- Send mathematical proof obligations to `$audit-math-proof` when installed;
+  otherwise require an independent reviewer to check the named obligations.
+- Send campaign decisions to `$run-frontiermath-campaign`.
+- Send bounded universal checks to `$find-math-counterexample` when installed
+  and only when the representation is faithful; otherwise record the finite
+  domain, evaluator, and completeness boundary directly.
+- Record verifier limitations in the candidate packet's verification
+  architecture note.
+
+## Research basis
+
+Mahboubi's CALCO invited-talk abstract identifies the verification gap around
+programs used to produce mathematics:
+<https://drops.dagstuhl.de/entities/document/10.4230/LIPIcs.CALCO.2023.5>.
+
+The hashed-contract and fixture architecture here is a local implementation
+choice. Do not attribute that specific design to the one-page source.

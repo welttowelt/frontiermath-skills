@@ -1,0 +1,15 @@
+{
+  "schema": "frontiermath-shadow-contract-v1",
+  "checker": "ramsey-book",
+  "problem_id": "ramsey-book-graphs",
+  "prompt_type": "fixture",
+  "source": {
+    "url": "local://tests/fixtures/ramsey-book-n-2.txt",
+    "retrieved": "2026-07-24",
+    "artifact_sha256": "0f7c83b2b99421062621f874d976a288da2ab776bf3f412dbc552886028863fb",
+    "prompt_sha256": "71918726e2a583e64b5363504eef4ed3beff446a56f8bb4223fcfc1dd0eab2a4"
+  },
+  "target": {
+    "n": 2
+  }
+}

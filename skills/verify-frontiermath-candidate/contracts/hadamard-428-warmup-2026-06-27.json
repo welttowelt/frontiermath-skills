@@ -1,0 +1,15 @@
+{
+  "schema": "frontiermath-shadow-contract-v1",
+  "checker": "hadamard",
+  "problem_id": "hadamard",
+  "prompt_type": "warmup",
+  "source": {
+    "url": "https://epoch.ai/data/open_problems_data.zip",
+    "retrieved": "2026-07-24",
+    "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+    "prompt_sha256": "16b67136470a3ae37d6267d66e7db56ffbe39fad8b2dcc06bd2e0ce259b1d828"
+  },
+  "target": {
+    "order": 428
+  }
+}
