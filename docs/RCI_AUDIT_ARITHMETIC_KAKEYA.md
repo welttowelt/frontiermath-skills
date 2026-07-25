@@ -2,7 +2,7 @@
 
 Date: 2026-07-25
 
-Status: open
+Status: closed
 
 Scope: Arithmetic Kakeya support added to `verify-frontiermath-candidate`
 
@@ -135,10 +135,18 @@ bundled manifest. A target-only contract mutation is rejected as unregistered.
 - guided, coverage-first, and slope-palette calibration packets are preserved
   under `experiments/arithmetic-kakeya/results/`.
 
-## Open closure items
+## Closure evidence
 
-- run the official structural validator after all documentation edits;
-- complete a clean-context forward test of the new CLI and contract mutation;
-- rerun the world graph validator after the vault mirror and Canvas update;
+- the official Skill Creator structural validator passes;
+- a clean clone of public commit
+  `9fbf0bce06dd2bea922143d3b3118501b36e5e96` passes all 42 tests, including
+  the Arithmetic Kakeya target-mutation attack;
+- the clean-clone warmup CLI returns `shadow-verifier-pass` with exact score
+  `7/4`;
+- the mirrored world graph and Canvas validator passes with no broken,
+  ambiguous, lifecycle, or Canvas-target errors;
+- full-target result packets retain their heuristic and private-verifier
+  boundaries.
 
-Until these close, the revised skill remains `draft`.
+The audit is `closed`. The revised skill is `forward-tested`, not `evaluated`;
+no paired campaign has established research lift.

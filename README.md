@@ -95,10 +95,10 @@ implementation checked against dense closure, an exact Katz--Tao recurrence
 gate, and a separately labeled prefix-only diagnostic that the canonical
 same-tail checker rejects.
 
-Both original skills passed the repaired public tree's clean-context rerun.
-The Arithmetic Kakeya verifier revision remains `draft` while its dedicated
-RCI audit is open. None of this is evidence of improved FrontierMath solve
-rate. See
+Both original skills and the Arithmetic Kakeya revision pass a clean-context
+rerun from public `main`. The revision's dedicated RCI audit is closed at the
+`forward-tested` lifecycle state. None of this is evidence of improved
+FrontierMath solve rate. See
 [the public RCI record](docs/RCI_AUDIT.md) and
 [the open Arithmetic Kakeya RCI record](docs/RCI_AUDIT_ARITHMETIC_KAKEYA.md),
 plus
