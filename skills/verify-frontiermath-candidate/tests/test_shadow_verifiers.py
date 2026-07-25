@@ -21,6 +21,10 @@ def load(name: str, path: Path):
 
 hadamard = load("verify_hadamard", ROOT / "scripts" / "verify_hadamard.py")
 ramsey = load("verify_ramsey_book", ROOT / "scripts" / "verify_ramsey_book.py")
+arithmetic_kakeya = load(
+    "verify_arithmetic_kakeya",
+    ROOT / "scripts" / "verify_arithmetic_kakeya.py",
+)
 
 
 def test_hadamard_order_four_passes():
@@ -92,6 +96,152 @@ def test_ramsey_rejects_internal_whitespace():
 def test_ramsey_known_valid_n_two_passes():
     result = ramsey.verify("000011101011000", 2)
     assert result["status"] == "shadow-verifier-pass"
+
+
+def test_arithmetic_kakeya_katz_tao_warmup_passes():
+    candidate = arithmetic_kakeya.parse_candidate_bytes(
+        (
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+        ).read_bytes()
+    )
+    result = arithmetic_kakeya.verify(
+        candidate,
+        arithmetic_kakeya.Fraction(7, 4),
+    )
+    assert result["status"] == "shadow-verifier-pass"
+    assert result["score"] == "7/4"
+    assert result["parameters"] == {"m": 4, "r": 3, "n": 4, "t": 0}
+    assert result["forcing_rounds"][0] == [[2, 2]]
+
+
+def test_arithmetic_kakeya_warmup_misses_full_threshold():
+    candidate = arithmetic_kakeya.parse_candidate_bytes(
+        (
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+        ).read_bytes()
+    )
+    result = arithmetic_kakeya.verify(
+        candidate,
+        arithmetic_kakeya.Fraction(67, 40),
+    )
+    assert result["status"] == "shadow-verifier-reject"
+    assert result["failure"] == "score-above-contract-threshold"
+
+
+def test_arithmetic_kakeya_ignores_false_human_header():
+    path = (
+        ROOT
+        / "tests"
+        / "fixtures"
+        / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+    )
+    raw = path.read_bytes().replace(
+        b"7/4; m=4, |R|=3, n=4, |T|=0",
+        b"1/1; m=0, |R|=0, n=99, |T|=0",
+        1,
+    )
+    candidate = arithmetic_kakeya.parse_candidate_bytes(raw)
+    result = arithmetic_kakeya.verify(
+        candidate,
+        arithmetic_kakeya.Fraction(7, 4),
+    )
+    assert result["score"] == "7/4"
+    assert result["parameters"] == {"m": 4, "r": 3, "n": 4, "t": 0}
+
+
+def test_arithmetic_kakeya_parser_requires_exactly_six_lines():
+    path = (
+        ROOT
+        / "tests"
+        / "fixtures"
+        / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+    )
+    raw = path.read_bytes() + b"extra\n"
+    try:
+        arithmetic_kakeya.parse_candidate_bytes(raw)
+    except ValueError as exc:
+        assert "exactly six lines" in str(exc)
+    else:
+        raise AssertionError("seven-line candidate was accepted")
+
+
+def test_arithmetic_kakeya_rejects_bare_integer_vertex_key():
+    path = (
+        ROOT
+        / "tests"
+        / "fixtures"
+        / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+    )
+    raw = path.read_bytes().replace(b"{(1,): (1, 0)}", b"{1: (1, 0)}", 1)
+    try:
+        arithmetic_kakeya.parse_candidate_bytes(raw)
+    except ValueError as exc:
+        assert "exactly 1 coordinates" in str(exc)
+    else:
+        raise AssertionError("unstated bare-integer vertex normalization was accepted")
+
+
+def test_arithmetic_kakeya_rejects_non_singleton_R_row():
+    path = (
+        ROOT
+        / "tests"
+        / "fixtures"
+        / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+    )
+    raw = path.read_bytes().replace(
+        b"{(1, 1): (1, 1)}",
+        b"{(1, 1): (1, 1), (2, 2): (1, 0)}",
+        1,
+    )
+    try:
+        arithmetic_kakeya.parse_candidate_bytes(raw)
+    except ValueError as exc:
+        assert "exactly one nonzero support" in str(exc)
+    else:
+        raise AssertionError("multi-support submitted row was accepted")
+
+
+def test_arithmetic_kakeya_contract_binds_exact_score():
+    contract, contract_hash, contract_id, manifest_hash = (
+        arithmetic_kakeya.load_contract(
+            ROOT
+            / "contracts"
+            / "arithmetic-kakeya-warmup-2026-06-27.json"
+        )
+    )
+    assert contract["target"] == {
+        "score_numerator": 7,
+        "score_denominator": 4,
+    }
+    assert len(contract_hash) == 64
+    assert contract_id == "arithmetic-kakeya-warmup-2026-06-27"
+    assert len(manifest_hash) == 64
+
+
+def test_arithmetic_kakeya_same_tail_expansion():
+    candidate = arithmetic_kakeya.Candidate(
+        claimed_header="fixture",
+        x_set=((0, 0), (1, 0)),
+        dimensions=(2, 3),
+        graph_functions=({(1,): (1, 0)}, {}),
+        initial_known=(),
+        singleton_rows=(),
+    )
+    edges = arithmetic_kakeya.graph_edges(candidate)
+    assert len(edges) == 3
+    assert {left[1] for left, _, _ in edges} == {1, 2, 3}
+    assert all(left[1:] == right[1:] for left, right, _ in edges)
+
+
+def test_arithmetic_kakeya_rational_span_is_integer_witness_equivalent():
+    basis, pivots = arithmetic_kakeya.rref_rows([[2, -2]])
+    assert arithmetic_kakeya.in_row_span([1, -1], basis, pivots)
 
 
 def test_ramsey_contract_binds_n_two():
@@ -204,6 +354,42 @@ def test_ramsey_rejects_registered_prompt_with_mutated_target(tmp_path: Path):
     )
 
 
+def test_arithmetic_kakeya_rejects_registered_prompt_with_mutated_target(
+    tmp_path: Path,
+):
+    original = (
+        ROOT
+        / "contracts"
+        / "arithmetic-kakeya-warmup-2026-06-27.json"
+    )
+    contract = json.loads(original.read_text(encoding="utf-8"))
+    contract["target"] = {
+        "score_numerator": 67,
+        "score_denominator": 40,
+    }
+    forged = tmp_path / "forged-arithmetic-kakeya-contract.json"
+    forged.write_text(json.dumps(contract, indent=2) + "\n", encoding="utf-8")
+
+    completed = run_cli(
+        str(ROOT / "scripts" / "verify_arithmetic_kakeya.py"),
+        str(
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+        ),
+        "--contract",
+        str(forged),
+    )
+    packet = json.loads(completed.stdout)
+    assert completed.returncode == 2
+    assert packet["status"] == "input-error"
+    assert "not registered in the bundled manifest" in packet["error"]
+    assert packet["prompt_snapshot"]["contract_registry"]["status"] == (
+        "unregistered-or-invalid"
+    )
+
+
 def test_hadamard_packet_uses_privacy_safe_contract_id():
     completed = run_cli(
         str(ROOT / "scripts" / "verify_hadamard.py"),
@@ -262,6 +448,8 @@ def test_all_bundled_public_contracts_resolve_through_manifest():
         "hadamard-428-warmup-2026-06-27",
         "hadamard-668-full-2026-06-27",
         "ramsey-book-n25-warmup-2026-06-27",
+        "arithmetic-kakeya-warmup-2026-06-27",
+        "arithmetic-kakeya-full-2026-06-27",
     }
     observed = {
         hadamard.load_contract(
@@ -272,6 +460,12 @@ def test_all_bundled_public_contracts_resolve_through_manifest():
         )[2],
         ramsey.load_contract(
             ROOT / "contracts" / "ramsey-book-n25-warmup-2026-06-27.json"
+        )[2],
+        arithmetic_kakeya.load_contract(
+            ROOT / "contracts" / "arithmetic-kakeya-warmup-2026-06-27.json"
+        )[2],
+        arithmetic_kakeya.load_contract(
+            ROOT / "contracts" / "arithmetic-kakeya-full-2026-06-27.json"
         )[2],
     }
     assert observed == expected

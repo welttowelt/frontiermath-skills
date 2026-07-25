@@ -14,6 +14,19 @@ Classify every acceptance predicate:
 
 A local pass covers only classes 1 and justified class 2 predicates.
 
+## Arithmetic Kakeya translation boundary
+
+The intuitive graph construction connects corresponding vertices in adjacent
+copies, and the formula for \(m(G)\) counts one edge for each shared suffix.
+The verifiable forcing rule describes the two prefixes but does not repeat that
+the later coordinates agree. The bundled checker uses equal suffixes. Treat
+this as a logically derived predicate with an explicit private-verifier gap,
+not as an unavailable official implementation detail.
+
+The public full threshold `1.675` is interpreted as the exact rational
+`67/40`. The first output line is human-readable only and is never trusted for
+the score or parameters.
+
 ## Checker design rules
 
 - Reject malformed input before mathematics.

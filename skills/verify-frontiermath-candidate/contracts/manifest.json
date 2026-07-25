@@ -46,6 +46,38 @@
         "n": 25
       }
     },
+    "ea84c81641c924880d795465d394ef08e1d7489e8cf354eec7dbf6b0bb593c6e": {
+      "id": "arithmetic-kakeya-warmup-2026-06-27",
+      "checker": "arithmetic-kakeya",
+      "problem_id": "arithmetic-kakeya",
+      "prompt_type": "warmup",
+      "source": {
+        "url": "https://epoch.ai/data/open_problems_data.zip",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+        "prompt_sha256": "9472a1b0c38047f31eb4f9b28a3ac589ff1991445a3bdad2db21345930a97c6d"
+      },
+      "target": {
+        "score_numerator": 7,
+        "score_denominator": 4
+      }
+    },
+    "15cc2356304bee1c10e920529af85e2221cd9060ca38c157fcbe5621106c515a": {
+      "id": "arithmetic-kakeya-full-2026-06-27",
+      "checker": "arithmetic-kakeya",
+      "problem_id": "arithmetic-kakeya",
+      "prompt_type": "full_problem",
+      "source": {
+        "url": "https://epoch.ai/data/open_problems_data.zip",
+        "retrieved": "2026-07-24",
+        "artifact_sha256": "3708c95ef874cfea8e4c6434980c8fbfa8395941daa1a858a0e87be9bd955be9",
+        "prompt_sha256": "52d7dde46542ec6093233f96f3bf360e33389b7faf50bcf099a05b28497e12bc"
+      },
+      "target": {
+        "score_numerator": 67,
+        "score_denominator": 40
+      }
+    },
     "30b4db9e5a4dd761c3afa1392ce113dcdf0130e5b9034cb736cca83c6c3b509e": {
       "id": "fixture-hadamard-order-4",
       "checker": "hadamard",
