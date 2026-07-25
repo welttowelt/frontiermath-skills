@@ -345,6 +345,27 @@ def test_arithmetic_kakeya_sparse_pair_span_matches_dense_reduction():
                     prime,
                 )
                 assert sparse == dense
+                residual = list(target)
+                for row, pivot in zip(basis, pivots):
+                    factor = residual[pivot] % prime
+                    if factor:
+                        residual = [
+                            (value - factor * basis_value) % prime
+                            for value, basis_value in zip(residual, row)
+                        ]
+                sparse_weight = (
+                    arithmetic_kakeya_search.pair_target_residual_weight_mod(
+                        first,
+                        first + 1,
+                        basis,
+                        pivots,
+                        width,
+                        prime,
+                    )
+                )
+                assert sparse_weight == sum(
+                    value % prime != 0 for value in residual
+                )
 
 
 def test_arithmetic_kakeya_search_mutation_preserves_known_set_size():
@@ -417,11 +438,31 @@ def test_arithmetic_kakeya_required_groups_survive_mutation_and_repair():
         genome = space.label_repair(genome, rng, 8)
 
 
+def test_arithmetic_kakeya_boundary_grid_budgets_are_exact():
+    slopes = arithmetic_kakeya_search.slope_pool(2)
+    for shape, edge_cost, singleton_capacity in (
+        ((10, 4), 66, 1),
+        ((2, 20), 58, 9),
+    ):
+        space = arithmetic_kakeya_search.SearchSpace(
+            shape,
+            slopes,
+            arithmetic_kakeya_search.Fraction(67, 40),
+            1_000_003,
+            force_all_groups=True,
+        )
+        assert len(space.vertices) == 40
+        assert space.budget == 67
+        assert sum(group.cost for group in space.groups) == edge_cost
+        assert space.budget - edge_cost == singleton_capacity
+
+
 def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():
     isolated = arithmetic_kakeya_search.Evaluation(
         forced=7,
         total=8,
         covered=7,
+        grounded=7,
         cost=11,
         denominator=7,
         rank=10,
@@ -431,6 +472,7 @@ def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():
         forced=6,
         total=8,
         covered=8,
+        grounded=8,
         cost=11,
         denominator=7,
         rank=10,
@@ -440,6 +482,56 @@ def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():
     assert connected.fitness(coverage_first=True) > isolated.fitness(
         coverage_first=True
     )
+
+
+def test_arithmetic_kakeya_fitness_prefers_lower_span_defect():
+    high_defect = arithmetic_kakeya_search.Evaluation(
+        forced=5,
+        total=6,
+        covered=6,
+        grounded=6,
+        cost=10,
+        denominator=6,
+        rank=8,
+        modular_rounds=[],
+        defect=4,
+    )
+    low_defect = arithmetic_kakeya_search.Evaluation(
+        forced=5,
+        total=6,
+        covered=6,
+        grounded=6,
+        cost=10,
+        denominator=6,
+        rank=8,
+        modular_rounds=[],
+        defect=1,
+    )
+    assert low_defect.fitness() > high_defect.fitness()
+    assert low_defect.fitness(coverage_first=True) > high_defect.fitness(
+        coverage_first=True
+    )
+
+
+def test_arithmetic_kakeya_grounding_rejects_isolated_covered_component():
+    isolated_rows = [
+        [1, 0, -1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1],
+    ]
+    assert arithmetic_kakeya_search.grounded_vertex_count(
+        isolated_rows,
+        set(),
+        3,
+    ) == 1
+    bridged_rows = [
+        [1, 0, -1, 0, 0, 0],
+        [0, 0, 1, 1, -1, -1],
+    ]
+    assert arithmetic_kakeya_search.grounded_vertex_count(
+        bridged_rows,
+        {2},
+        3,
+    ) == 3
 
 
 def test_arithmetic_kakeya_distinct_generator_mode_preserves_label_identity():

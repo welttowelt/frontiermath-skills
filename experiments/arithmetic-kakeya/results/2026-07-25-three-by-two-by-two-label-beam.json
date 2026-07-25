@@ -1,0 +1,22 @@
+{
+  "status": "bounded-search-no-exact-candidate",
+  "date": "2026-07-25",
+  "edge_semantics": "same-tail",
+  "target": "67/40",
+  "source": "best 3x2x2 topology from relational large seed 202607259",
+  "height": 10,
+  "slope_count": 127,
+  "label_slots": 15,
+  "beam_width": 50,
+  "depth": 6,
+  "evaluated": 435115,
+  "best_score": "5/3",
+  "best_forced": 10,
+  "vertices": 12,
+  "best_residual_defect": 4,
+  "unforced_vertices": [[1, 1, 1], [1, 1, 2]],
+  "structural_diagnosis": "The final two vertices form an unresolved component with no singleton row or edge to a known vertex.",
+  "exact_survivor_count": 0,
+  "completeness": "Bounded beam over label substitutions only; no completeness claim over all label assignments.",
+  "claim_boundary": "The result rejects this label neighborhood and observed terminal topology, not every 3x2x2 construction."
+}

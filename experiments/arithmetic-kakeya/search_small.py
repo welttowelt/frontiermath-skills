@@ -65,10 +65,12 @@ class Evaluation:
     forced: int
     total: int
     covered: int
+    grounded: int
     cost: int
     denominator: int
     rank: int
     modular_rounds: list[list[int]]
+    defect: int = 0
     exact_status: str | None = None
     exact_result: dict[str, object] | None = None
 
@@ -97,18 +99,18 @@ class Evaluation:
             return (
                 1,
                 self.covered,
+                self.grounded,
                 self.forced,
+                -self.defect,
                 self.rank,
-                -self.cost,
-                -self.denominator,
             )
         return (
             1,
             self.forced,
+            self.grounded,
+            -self.defect,
             self.rank,
             -self.cost,
-            -self.denominator,
-            0,
         )
 
 
@@ -232,9 +234,32 @@ def pair_target_in_span_mod(
     prime: int,
 ) -> bool:
     """Test e_first-e_second against an RREF row space without dense reduction."""
+    return (
+        pair_target_residual_weight_mod(
+            first,
+            second,
+            basis,
+            pivots,
+            width,
+            prime,
+        )
+        == 0
+    )
+
+
+def pair_target_residual_weight_mod(
+    first: int,
+    second: int,
+    basis: Sequence[Sequence[int]],
+    pivots: Sequence[int],
+    width: int,
+    prime: int,
+) -> int:
+    """Count nonzero free-column residues after reducing e_first-e_second."""
     pivot_rows = {pivot: row_index for row_index, pivot in enumerate(pivots)}
     first_pivot = pivot_rows.get(first)
     second_pivot = pivot_rows.get(second)
+    weight = 0
     for column in range(width):
         if column in pivot_rows:
             continue
@@ -247,8 +272,41 @@ def pair_target_in_span_mod(
         if second_pivot is not None:
             residual += basis[second_pivot][column]
         if residual % prime:
-            return False
-    return True
+            weight += 1
+    return weight
+
+
+def grounded_vertex_count(
+    rows: Sequence[Sequence[int]],
+    known: set[int],
+    total: int,
+) -> int:
+    """Count known vertices plus unresolved vertices connected to ground."""
+    unknown = [index for index in range(total) if index not in known]
+    adjacency = {index: set() for index in unknown}
+    grounded: set[int] = set()
+    for row in rows:
+        support = [
+            index
+            for index in unknown
+            if row[2 * index] != 0 or row[2 * index + 1] != 0
+        ]
+        if len(support) == 1:
+            grounded.add(support[0])
+        elif len(support) == 2:
+            left, right = support
+            adjacency[left].add(right)
+            adjacency[right].add(left)
+        elif len(support) > 2:
+            raise ValueError("generator row has support on more than two vertices")
+    frontier = list(grounded)
+    while frontier:
+        vertex_index = frontier.pop()
+        for neighbor in adjacency[vertex_index]:
+            if neighbor not in grounded:
+                grounded.add(neighbor)
+                frontier.append(neighbor)
+    return len(known) + len(grounded)
 
 
 class SearchSpace:
@@ -407,6 +465,7 @@ class SearchSpace:
         }
         rounds: list[list[int]] = []
         final_rank = 0
+        final_defect = 0
         while len(known) < len(self.vertices):
             unknown = [
                 index for index in range(len(self.vertices)) if index not in known
@@ -420,16 +479,20 @@ class SearchSpace:
             basis, pivots = row_rref_mod(restricted, self.prime)
             final_rank = len(pivots)
             forceable: list[int] = []
+            target_defects: list[int] = []
             for local_index, global_index in enumerate(unknown):
-                if pair_target_in_span_mod(
+                defect = pair_target_residual_weight_mod(
                     2 * local_index,
                     2 * local_index + 1,
                     basis,
                     pivots,
                     2 * len(unknown),
                     self.prime,
-                ):
+                )
+                target_defects.append(defect)
+                if defect == 0:
                     forceable.append(global_index)
+            final_defect = sum(target_defects)
             if not forceable:
                 break
             known.update(forceable)
@@ -438,10 +501,16 @@ class SearchSpace:
             forced=len(known),
             total=len(self.vertices),
             covered=len(supported | set(genome.known)),
+            grounded=grounded_vertex_count(
+                rows,
+                known,
+                len(self.vertices),
+            ),
             cost=self.cost(genome),
             denominator=len(self.vertices) - len(genome.known),
             rank=final_rank,
             modular_rounds=rounds,
+            defect=final_defect,
         )
         self.cache[genome] = evaluation
         return evaluation
@@ -996,7 +1065,9 @@ def main() -> int:
             "evaluated": len(space.cache),
             "best_forced": evaluation.forced,
             "best_derived": evaluation.forced - space.known_count,
+            "best_defect": evaluation.defect,
             "best_covered": evaluation.covered,
+            "best_grounded": evaluation.grounded,
             "best_cost": evaluation.cost,
             "best_score": (
                 f"{evaluation.score.numerator}/{evaluation.score.denominator}"
