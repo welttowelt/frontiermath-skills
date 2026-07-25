@@ -1,0 +1,22 @@
+{
+  "status": "literal-operation-identity-pass",
+  "date": "2026-07-25",
+  "edge_semantics": "literal-cross-tail",
+  "score": "14/9",
+  "target": "67/40",
+  "parameters": {
+    "m": 8,
+    "r": 6,
+    "n": 9,
+    "t": 0
+  },
+  "x_set": [[0, 0], [0, 1], [1, 0], [1, 1]],
+  "candidate": "skills/verify-frontiermath-candidate/tests/fixtures/arithmetic-kakeya-literal-cross-tail-14-over-9.txt",
+  "independent_check": "skills/verify-frontiermath-candidate/scripts/check_literal_cross_tail_14_over_9_identity.py",
+  "integer_identity_count": 9,
+  "all_integer_identities_pass": true,
+  "same_tail_shadow_status": "shadow-verifier-reject",
+  "same_tail_shadow_failure": "forcing-closure-stuck",
+  "epoch_verifier_equivalence": false,
+  "claim_boundary": "prompt/verifier-gap diagnostic only; not a claimed Arithmetic Kakeya bound"
+}

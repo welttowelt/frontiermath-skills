@@ -1,0 +1,61 @@
+{
+  "status": "bounded-search-no-exact-candidate",
+  "date": "2026-07-25",
+  "edge_semantics": "same-tail",
+  "target": "67/40",
+  "method": "one-prime evolutionary filter followed by exact rational verification",
+  "prime": 1000003,
+  "height": 3,
+  "slope_count": 15,
+  "population": 700,
+  "generations": 500,
+  "completeness": "heuristic; no completeness claim",
+  "runs": [
+    {
+      "known_count": 1,
+      "seed": 202607251,
+      "runtime_seconds": 366.355582,
+      "evaluated": 2606307,
+      "exact_survivor_count": 0,
+      "best_by_shape": [
+        {"shape": [5], "budget": 6, "cost": 6, "forced": 4, "vertices": 5},
+        {"shape": [6], "budget": 8, "cost": 8, "forced": 5, "vertices": 6},
+        {"shape": [7], "budget": 10, "cost": 10, "forced": 6, "vertices": 7},
+        {"shape": [8], "budget": 11, "cost": 11, "forced": 6, "vertices": 8},
+        {"shape": [2, 3], "budget": 8, "cost": 8, "forced": 5, "vertices": 6},
+        {"shape": [3, 2], "budget": 8, "cost": 8, "forced": 5, "vertices": 6},
+        {"shape": [2, 4], "budget": 11, "cost": 11, "forced": 6, "vertices": 8},
+        {"shape": [4, 2], "budget": 11, "cost": 11, "forced": 7, "vertices": 8},
+        {"shape": [3, 3], "budget": 13, "cost": 13, "forced": 8, "vertices": 9},
+        {"shape": [2, 2, 2], "budget": 11, "cost": 11, "forced": 7, "vertices": 8},
+        {"shape": [2, 5], "budget": 15, "cost": 15, "forced": 8, "vertices": 10},
+        {"shape": [5, 2], "budget": 15, "cost": 15, "forced": 9, "vertices": 10},
+        {"shape": [3, 4], "budget": 18, "cost": 18, "forced": 10, "vertices": 12},
+        {"shape": [4, 3], "budget": 18, "cost": 18, "forced": 10, "vertices": 12}
+      ]
+    },
+    {
+      "known_count": 2,
+      "seed": 202607252,
+      "runtime_seconds": 301.946726,
+      "evaluated": 2593336,
+      "exact_survivor_count": 0,
+      "best_by_shape": [
+        {"shape": [5], "budget": 5, "cost": 5, "forced": 4, "vertices": 5},
+        {"shape": [6], "budget": 6, "cost": 6, "forced": 5, "vertices": 6},
+        {"shape": [7], "budget": 8, "cost": 8, "forced": 6, "vertices": 7},
+        {"shape": [8], "budget": 10, "cost": 10, "forced": 7, "vertices": 8},
+        {"shape": [2, 3], "budget": 6, "cost": 6, "forced": 5, "vertices": 6},
+        {"shape": [3, 2], "budget": 6, "cost": 6, "forced": 5, "vertices": 6},
+        {"shape": [2, 4], "budget": 10, "cost": 10, "forced": 7, "vertices": 8},
+        {"shape": [4, 2], "budget": 10, "cost": 10, "forced": 7, "vertices": 8},
+        {"shape": [3, 3], "budget": 11, "cost": 11, "forced": 8, "vertices": 9},
+        {"shape": [2, 2, 2], "budget": 10, "cost": 10, "forced": 7, "vertices": 8},
+        {"shape": [2, 5], "budget": 13, "cost": 13, "forced": 8, "vertices": 10},
+        {"shape": [5, 2], "budget": 13, "cost": 13, "forced": 9, "vertices": 10},
+        {"shape": [3, 4], "budget": 16, "cost": 16, "forced": 10, "vertices": 12},
+        {"shape": [4, 3], "budget": 16, "cost": 16, "forced": 10, "vertices": 12}
+      ]
+    }
+  ]
+}

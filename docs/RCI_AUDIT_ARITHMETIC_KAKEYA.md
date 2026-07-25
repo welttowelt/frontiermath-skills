@@ -19,6 +19,20 @@ Repair: the checker implements equal suffixes, the documentation exposes the
 derivation and private-verifier gap, and a fixture distinguishes three
 same-suffix edges from nine cross-suffix pairs in shape `[2,3]`.
 
+Follow-up: the public forcing operation itself only constrains the first
+coordinates and therefore literally permits the nine cross-suffix pairs. The
+discovery program now supports this as an explicitly separate
+`literal-cross-tail` mode. It records both the literal exact result and the
+canonical same-tail shadow result; a literal-only survivor cannot be reported
+as a new Arithmetic Kakeya bound.
+
+The diagnostic found a six-line score-`14/9` example using only
+`X={(0,0),(1,0),(0,1),(1,1)}`. Nine hard-coded integer identities verify it
+under the prefix-only reading, while the same-tail checker gets stuck. Since
+`14/9` is also below the lower bound quoted for this fixed slope set, the
+example is preserved as evidence that the two readings are not equivalent,
+not as a mathematical solution.
+
 ### Major: human header could be mistaken for trusted score data
 
 The first output line is explicitly for humans.
@@ -59,6 +73,16 @@ bundled manifest. A target-only contract mutation is rejected as unregistered.
 - a neutral evolutionary run rediscovers a distinct exact `7/4` certificate;
 - a complete bounded `2x2`, four-slope, `T=empty` census checks 408,329
   candidates, finds 48 forcing certificates, and finds no score below `7/4`.
+- a 13-shape, 700-by-500-generation full-target search evaluates more than
+  2.2 million candidates with `T=empty`, finds no modular full-forcing
+  survivor, and records its command and aggregate packet under
+  `experiments/arithmetic-kakeya/results/`.
+- the search now recomputes its exact numerator budget from `n-|T|` and evolves
+  fixed-cardinality initial known sets; regression tests cover the denominator,
+  mutation invariant, and zero-denominator rejection.
+- the literal-operation diagnostic has an independent no-row-reducer identity
+  script and a regression proving that the canonical same-tail checker rejects
+  the same six-line serialization.
 
 ## Open closure items
 
@@ -69,4 +93,3 @@ bundled manifest. A target-only contract mutation is rejected as unregistered.
 - preserve the full-target search results and residual limitations.
 
 Until these close, the revised skill remains `draft`.
-

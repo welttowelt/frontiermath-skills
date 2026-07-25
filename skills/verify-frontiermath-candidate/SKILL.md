@@ -95,6 +95,17 @@ edge count. The verifiable-operation wording does not repeat the suffix-equality
 condition, so this translation choice is disclosed and remains outside any
 claim of private-verifier equivalence.
 
+Do not silently switch to the broader prefix-only reading. The repository
+preserves a score-\(14/9\) diagnostic for that literal reading and verifies it
+with nine hard-coded integer identities. The same serialization fails this
+skill's same-tail checker and would undercut the fixed-slope lower-bound
+discussion in the public write-up. It is evidence that the formulations are
+inequivalent as written, not a new Arithmetic Kakeya bound. Run:
+
+```bash
+python3 scripts/check_literal_cross_tail_14_over_9_identity.py
+```
+
 The bundled warmup reproduces Katz and Tao's four-vertex \(7/4\)
 configuration. `scripts/check_katz_tao_7_over_4_identity.py` independently
 checks explicit integer forcing identities without invoking row reduction.

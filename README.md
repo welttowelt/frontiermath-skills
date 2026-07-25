@@ -14,7 +14,9 @@ Two reusable agent skills for research on
 The repository currently ships exact shadow verifiers for:
 
 - Hadamard matrices;
-- Ramsey Book graph adjacency strings.
+- Ramsey Book graph adjacency strings;
+- Arithmetic Kakeya six-line certificates under the intended equal-suffix
+  graph semantics.
 
 These are public-contract shadow verifiers. They are not Epoch's bespoke
 verifier, do not imply access to it, and do not turn a local pass into an Epoch
@@ -44,6 +46,11 @@ python3 skills/verify-frontiermath-candidate/scripts/verify_ramsey_book.py \
   skills/verify-frontiermath-candidate/tests/fixtures/ramsey-book-n-2.txt \
   --contract \
   skills/verify-frontiermath-candidate/tests/fixtures/ramsey-book-n-2-contract.json
+
+python3 skills/verify-frontiermath-candidate/scripts/verify_arithmetic_kakeya.py \
+  skills/verify-frontiermath-candidate/tests/fixtures/arithmetic-kakeya-katz-tao-7-over-4.txt \
+  --contract \
+  skills/verify-frontiermath-candidate/contracts/arithmetic-kakeya-warmup-2026-06-27.json
 ```
 
 To use the campaign skill, point `FRONTIERMATH_WORLD` at a durable directory
@@ -79,15 +86,20 @@ before extending a checker.
 
 ## Quality status
 
-The current verifier suite has 19 adversarial tests, including contract
+The current verifier suite has 35 adversarial tests, including contract
 mutation attacks, privacy-safe packet checks, and exhaustive
 agreement with an independent naive oracle over all 32,768 labeled graphs in
-the included \(n=2\) Ramsey Book contract.
+the included \(n=2\) Ramsey Book contract. Arithmetic Kakeya adds a reproduced
+\(7/4\) warmup, an independent integer-identity check, and a separately labeled
+prefix-only diagnostic that the canonical same-tail checker rejects.
 
-Both skills passed the repaired public tree's clean-context rerun. This is
-validation of the skill contracts and current checkers, not evidence of
-improved FrontierMath solve rate. See
+Both original skills passed the repaired public tree's clean-context rerun.
+The Arithmetic Kakeya verifier revision remains `draft` while its dedicated
+RCI audit is open. None of this is evidence of improved FrontierMath solve
+rate. See
 [the public RCI record](docs/RCI_AUDIT.md) and
+[the open Arithmetic Kakeya RCI record](docs/RCI_AUDIT_ARITHMETIC_KAKEYA.md),
+plus
 [forward-test cases](docs/FORWARD_TESTS.md).
 
 The repository is distributed clone-first as agent skill folders and scripts;

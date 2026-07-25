@@ -200,17 +200,30 @@ class SearchSpace:
         slopes: tuple[Pair, ...],
         threshold: Fraction,
         prime: int,
+        known_count: int = 0,
+        edge_semantics: str = "same-tail",
     ) -> None:
         self.shape = shape
         self.slopes = slopes
         self.threshold = threshold
         self.prime = prime
+        if edge_semantics not in {"same-tail", "literal-cross-tail"}:
+            raise ValueError(
+                "edge_semantics must be 'same-tail' or 'literal-cross-tail'"
+            )
+        self.edge_semantics = edge_semantics
         self.vertices = vertices(shape)
+        if not 0 <= known_count < len(self.vertices):
+            raise ValueError(
+                "known_count must be nonnegative and smaller than the vertex count"
+            )
+        self.known_count = known_count
         self.vertex_index = {
             item: index for index, item in enumerate(self.vertices)
         }
         self.groups = groups(shape)
-        self.budget = threshold.numerator * len(self.vertices) // threshold.denominator
+        denominator = len(self.vertices) - known_count
+        self.budget = threshold.numerator * denominator // threshold.denominator
         self.measurement_count = len(self.vertices) * len(slopes)
         self.cache: dict[Genome, Evaluation] = {}
 
@@ -224,14 +237,20 @@ class SearchSpace:
                 range(1, dimension + 1)
                 for dimension in self.shape[group.axis + 1 :]
             ]
-            tails: Iterable[tuple[int, ...]]
-            tails = itertools.product(*tail_ranges) if tail_ranges else [()]
-            for tail in tails:
-                left = group.prefix + tuple(tail)
+            tails: Iterable[tuple[int, ...]] = (
+                itertools.product(*tail_ranges) if tail_ranges else [()]
+            )
+            cached_tails = tuple(tails)
+            if self.edge_semantics == "same-tail":
+                tail_pairs = ((tail, tail) for tail in cached_tails)
+            else:
+                tail_pairs = itertools.product(cached_tails, cached_tails)
+            for left_tail, right_tail in tail_pairs:
+                left = group.prefix + tuple(left_tail)
                 right = (
                     group.prefix[:-1]
                     + (group.prefix[-1] + 1,)
-                    + tuple(tail)
+                    + tuple(right_tail)
                 )
                 row = [0] * (2 * len(self.vertices))
                 left_offset = 2 * self.vertex_index[left]
@@ -306,6 +325,11 @@ class SearchSpace:
         labels = [-1] * len(self.groups)
         group_order = list(range(len(self.groups)))
         rng.shuffle(group_order)
+        known = (
+            tuple(sorted(rng.sample(range(len(self.vertices)), self.known_count)))
+            if self.known_count
+            else ()
+        )
         remaining = self.budget
         for group_index in group_order:
             group = self.groups[group_index]
@@ -317,13 +341,16 @@ class SearchSpace:
         measurements = tuple(
             sorted(rng.sample(range(self.measurement_count), measurement_total))
         )
-        return Genome(tuple(labels), measurements)
+        return Genome(tuple(labels), measurements, known)
 
     def mutate(self, genome: Genome, rng: random.Random) -> Genome:
         labels = list(genome.labels)
         measurements = set(genome.measurements)
         for _ in range(1 if rng.random() < 0.8 else rng.randint(2, 4)):
-            operation = rng.choice(("label", "measurement", "swap"))
+            operations = ["label", "measurement", "swap"]
+            if self.known_count:
+                operations.append("known")
+            operation = rng.choice(operations)
             if operation == "label" and labels:
                 index = rng.randrange(len(labels))
                 if labels[index] < 0:
@@ -342,6 +369,17 @@ class SearchSpace:
                 removed = rng.choice(tuple(measurements))
                 measurements.remove(removed)
                 measurements.add(rng.randrange(self.measurement_count))
+            elif operation == "known":
+                known = set(genome.known)
+                removed = rng.choice(tuple(known))
+                known.remove(removed)
+                available = [
+                    index
+                    for index in range(len(self.vertices))
+                    if index not in known
+                ]
+                known.add(rng.choice(available))
+                genome = Genome(genome.labels, genome.measurements, tuple(sorted(known)))
         result = Genome(tuple(labels), tuple(sorted(measurements)), genome.known)
         if self.cost(result) <= self.budget:
             return result
@@ -364,7 +402,10 @@ class SearchSpace:
                 if rng.random() < 0.5
             )
         )
-        child = Genome(labels, measurements)
+        known = (
+            left.known if rng.random() < 0.5 else right.known
+        ) if self.known_count else ()
+        child = Genome(labels, measurements, known)
         return child if self.cost(child) <= self.budget else left
 
     def exact_candidate(self, genome: Genome):
@@ -395,7 +436,65 @@ class SearchSpace:
 
     def exact_check(self, genome: Genome) -> dict[str, object]:
         candidate = self.exact_candidate(genome)
-        return VERIFIER.verify(candidate, self.threshold)
+        same_tail_result = VERIFIER.verify(candidate, self.threshold)
+        if self.edge_semantics == "same-tail":
+            return same_tail_result
+        known, rounds = VERIFIER.forcing_closure(
+            self.vertices,
+            self.rows(genome),
+            tuple(self.vertices[index] for index in genome.known),
+        )
+        score = Fraction(
+            self.cost(genome),
+            len(self.vertices) - len(genome.known),
+        )
+        result: dict[str, object] = {
+            "status": "shadow-verifier-pass",
+            "score": f"{score.numerator}/{score.denominator}",
+            "target_score": (
+                f"{self.threshold.numerator}/{self.threshold.denominator}"
+            ),
+            "parameters": {
+                "m": self.cost(genome) - len(genome.measurements),
+                "r": len(genome.measurements),
+                "n": len(self.vertices),
+                "t": len(genome.known),
+            },
+            "forcing_rounds": [
+                [list(vertex) for vertex in round_vertices]
+                for round_vertices in rounds
+            ],
+            "edge_semantics": "literal-cross-tail",
+            "checked_predicates": [
+                "public-operation-1-literal-prefix-conditions",
+                "exact-m-and-score",
+                "forcing-closure-by-rational-row-span",
+                "score-threshold",
+            ],
+            "same_tail_shadow_status": same_tail_result["status"],
+            "same_tail_shadow_failure": same_tail_result.get("failure"),
+            "epoch_verifier_equivalence": False,
+        }
+        if len(known) != len(self.vertices):
+            result.update(
+                {
+                    "status": "shadow-verifier-reject",
+                    "failure": "forcing-closure-stuck",
+                    "unforced_vertices": [
+                        list(vertex)
+                        for vertex in self.vertices
+                        if vertex not in known
+                    ],
+                }
+            )
+        elif score > self.threshold:
+            result.update(
+                {
+                    "status": "shadow-verifier-reject",
+                    "failure": "score-above-contract-threshold",
+                }
+            )
+        return result
 
     def serialize(self, genome: Genome, exact: dict[str, object]) -> str:
         candidate = self.exact_candidate(genome)
@@ -498,13 +597,35 @@ def main() -> int:
     parser.add_argument("--prime", type=int, default=1_000_003)
     parser.add_argument("--target-numerator", type=int, default=67)
     parser.add_argument("--target-denominator", type=int, default=40)
+    parser.add_argument(
+        "--known-count",
+        type=int,
+        default=0,
+        help="fix |T| and evolve which vertices are initially known",
+    )
+    parser.add_argument(
+        "--edge-semantics",
+        choices=("same-tail", "literal-cross-tail"),
+        default="same-tail",
+        help=(
+            "use intended equal suffixes or the broader literal wording of "
+            "public forcing operation 1"
+        ),
+    )
     args = parser.parse_args()
     threshold = Fraction(args.target_numerator, args.target_denominator)
     slopes = slope_pool(args.height)
     started = time.perf_counter()
     summaries: list[dict[str, object]] = []
     for offset, shape in enumerate(args.shapes):
-        space = SearchSpace(shape, slopes, threshold, args.prime)
+        space = SearchSpace(
+            shape,
+            slopes,
+            threshold,
+            args.prime,
+            known_count=args.known_count,
+            edge_semantics=args.edge_semantics,
+        )
         genome, evaluation, survivors = evolve(
             space,
             population_size=args.population,
@@ -517,12 +638,18 @@ def main() -> int:
             "groups": len(space.groups),
             "slope_count": len(slopes),
             "budget": space.budget,
+            "known_count": space.known_count,
+            "edge_semantics": space.edge_semantics,
             "evaluated": len(space.cache),
             "best_forced": evaluation.forced,
+            "best_derived": evaluation.forced - space.known_count,
             "best_cost": evaluation.cost,
             "best_score": (
                 f"{evaluation.score.numerator}/{evaluation.score.denominator}"
             ),
+            "best_initial_known": [
+                list(space.vertices[index]) for index in genome.known
+            ],
             "best_modular_rounds": evaluation.modular_rounds,
             "exact_survivor_count": len(survivors),
         }
@@ -543,6 +670,8 @@ def main() -> int:
         "seed": args.seed,
         "population": args.population,
         "generations": args.generations,
+        "known_count": args.known_count,
+        "edge_semantics": args.edge_semantics,
         "runtime_seconds": round(time.perf_counter() - started, 6),
         "summaries": summaries,
         "completeness": "heuristic; no completeness claim",

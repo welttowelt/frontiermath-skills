@@ -23,6 +23,14 @@ the later coordinates agree. The bundled checker uses equal suffixes. Treat
 this as a logically derived predicate with an explicit private-verifier gap,
 not as an unavailable official implementation detail.
 
+The repository also preserves the broader prefix-only reading as a diagnostic,
+never as a canonical acceptance mode. That reading admits a score-\(14/9\)
+object for the standard three nonzero slopes; nine independent integer
+identities pass, while the equal-suffix checker rejects the serialization.
+This proves the readings are inequivalent as written and raises the
+private-verifier gap from a merely syntactic concern to a concrete contract
+risk.
+
 The public full threshold `1.675` is interpreted as the exact rational
 `67/40`. The first output line is human-readable only and is never trusted for
 the score or parameters.

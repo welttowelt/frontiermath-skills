@@ -15,6 +15,7 @@ def load(name: str, path: Path):
     spec = importlib.util.spec_from_file_location(name, path)
     assert spec and spec.loader
     module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
@@ -24,6 +25,10 @@ ramsey = load("verify_ramsey_book", ROOT / "scripts" / "verify_ramsey_book.py")
 arithmetic_kakeya = load(
     "verify_arithmetic_kakeya",
     ROOT / "scripts" / "verify_arithmetic_kakeya.py",
+)
+arithmetic_kakeya_search = load(
+    "search_arithmetic_kakeya",
+    ROOT.parents[1] / "experiments" / "arithmetic-kakeya" / "search_small.py",
 )
 
 
@@ -242,6 +247,112 @@ def test_arithmetic_kakeya_same_tail_expansion():
 def test_arithmetic_kakeya_rational_span_is_integer_witness_equivalent():
     basis, pivots = arithmetic_kakeya.rref_rows([[2, -2]])
     assert arithmetic_kakeya.in_row_span([1, -1], basis, pivots)
+
+
+def test_arithmetic_kakeya_search_known_set_changes_exact_budget():
+    space = arithmetic_kakeya_search.SearchSpace(
+        (2, 2),
+        arithmetic_kakeya_search.slope_pool(2),
+        arithmetic_kakeya_search.Fraction(7, 4),
+        1_000_003,
+        known_count=1,
+    )
+    assert len(space.vertices) == 4
+    assert space.budget == 5
+    genome = space.random_genome(arithmetic_kakeya_search.random.Random(7))
+    assert len(genome.known) == 1
+    assert space.cost(genome) <= 5
+    evaluation = space.evaluate(genome)
+    assert evaluation.denominator == 3
+
+
+def test_arithmetic_kakeya_search_mutation_preserves_known_set_size():
+    rng = arithmetic_kakeya_search.random.Random(11)
+    space = arithmetic_kakeya_search.SearchSpace(
+        (2, 3),
+        arithmetic_kakeya_search.slope_pool(2),
+        arithmetic_kakeya_search.Fraction(67, 40),
+        1_000_003,
+        known_count=2,
+    )
+    genome = space.random_genome(rng)
+    for _ in range(100):
+        genome = space.mutate(genome, rng)
+        assert len(genome.known) == 2
+        assert len(set(genome.known)) == 2
+        assert space.cost(genome) <= space.budget
+
+
+def test_arithmetic_kakeya_search_rejects_all_vertices_known():
+    try:
+        arithmetic_kakeya_search.SearchSpace(
+            (2, 2),
+            arithmetic_kakeya_search.slope_pool(2),
+            arithmetic_kakeya_search.Fraction(67, 40),
+            1_000_003,
+            known_count=4,
+        )
+    except ValueError as exc:
+        assert "smaller than the vertex count" in str(exc)
+    else:
+        raise AssertionError("search accepted a zero score denominator")
+
+
+def test_arithmetic_kakeya_search_keeps_literal_cross_tail_semantics_separate():
+    slopes = arithmetic_kakeya_search.slope_pool(2)
+    label_index = slopes.index((1, 0))
+    same_tail = arithmetic_kakeya_search.SearchSpace(
+        (2, 3),
+        slopes,
+        arithmetic_kakeya_search.Fraction(7, 4),
+        1_000_003,
+        edge_semantics="same-tail",
+    )
+    literal = arithmetic_kakeya_search.SearchSpace(
+        (2, 3),
+        slopes,
+        arithmetic_kakeya_search.Fraction(7, 4),
+        1_000_003,
+        edge_semantics="literal-cross-tail",
+    )
+    genome = arithmetic_kakeya_search.Genome(
+        (label_index,) + (-1,) * (len(same_tail.groups) - 1),
+        (),
+    )
+    assert same_tail.cost(genome) == literal.cost(genome) == 3
+    assert len(same_tail.edge_rows(genome)) == 3
+    assert len(literal.edge_rows(genome)) == 9
+
+
+def test_arithmetic_kakeya_literal_diagnostic_fails_same_tail_checker():
+    candidate = arithmetic_kakeya.parse_candidate_bytes(
+        (
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "arithmetic-kakeya-literal-cross-tail-14-over-9.txt"
+        ).read_bytes()
+    )
+    result = arithmetic_kakeya.verify(
+        candidate,
+        arithmetic_kakeya.Fraction(67, 40),
+    )
+    assert result["status"] == "shadow-verifier-reject"
+    assert result["failure"] == "forcing-closure-stuck"
+
+
+def test_arithmetic_kakeya_literal_diagnostic_has_independent_identities():
+    completed = run_cli(
+        str(
+            ROOT
+            / "scripts"
+            / "check_literal_cross_tail_14_over_9_identity.py"
+        )
+    )
+    packet = json.loads(completed.stdout)
+    assert completed.returncode == 0
+    assert packet["status"] == "literal-operation-identity-pass"
+    assert all(packet["identity_checks"].values())
 
 
 def test_ramsey_contract_binds_n_two():
