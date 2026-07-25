@@ -1,0 +1,71 @@
+{
+  "status": "bounded-search-no-exact-candidate",
+  "date": "2026-07-25",
+  "edge_semantics": "same-tail",
+  "target": "67/40",
+  "source_topology": "one-unit deletion from calibrated 11/6 shape 2x3",
+  "method": "fixed-topology label evolution over every structurally viable one-unit deletion, followed by exact rational verification of modular survivors",
+  "prime": 1000003,
+  "height": 10,
+  "slope_count": 127,
+  "seed": 202607262,
+  "population": 500,
+  "generations": 1000,
+  "runtime_seconds": 324.091868,
+  "cases": [
+    {
+      "case": "delete-edge-1-1",
+      "evaluated": 389025,
+      "exact_checked": 0,
+      "best_forced": 4,
+      "unforced_vertices": [[1, 1], [2, 3]]
+    },
+    {
+      "case": "delete-edge-1-2",
+      "evaluated": 362332,
+      "exact_checked": 0,
+      "best_forced": 5,
+      "unforced_vertices": [[2, 3]],
+      "best_candidate": "5/3; m=6, |R|=4, n=6, |T|=0\n[(0, 0), (0, 1), (2, 1), (3, -2), (4, -7), (5, -7), (9, 5), (9, 7)]\n[2, 3]\n[{(1,): (3, -2)}, {(1, 1): (0, 1), (2, 1): (5, -7), (2, 2): (3, -2)}]\n[]\n[{(1, 1): (4, -7)}, {(1, 2): (9, 7)}, {(1, 3): (2, 1)}, {(2, 1): (9, 5)}]"
+    },
+    {
+      "case": "delete-edge-2-1",
+      "evaluated": 397667,
+      "exact_checked": 0,
+      "best_forced": 4,
+      "unforced_vertices": [[2, 2], [2, 3]]
+    },
+    {
+      "case": "delete-singleton-1",
+      "evaluated": 393537,
+      "exact_checked": 0,
+      "best_forced": 4,
+      "unforced_vertices": [[2, 2], [2, 3]]
+    },
+    {
+      "case": "delete-singleton-2",
+      "evaluated": 405016,
+      "exact_checked": 0,
+      "best_forced": 5,
+      "unforced_vertices": [[2, 3]]
+    },
+    {
+      "case": "delete-singleton-3",
+      "evaluated": 370471,
+      "exact_checked": 0,
+      "best_forced": 5,
+      "unforced_vertices": [[1, 3]]
+    },
+    {
+      "case": "delete-singleton-4",
+      "evaluated": 397640,
+      "exact_checked": 0,
+      "best_forced": 3,
+      "unforced_vertices": [[2, 1], [2, 2], [2, 3]]
+    }
+  ],
+  "evaluated_total": 2715688,
+  "exact_survivor_count": 0,
+  "completeness": "Heuristic label search over seven structurally viable deletions; no completeness claim over rational labels.",
+  "claim_boundary": "The best five-of-six near miss is rejected by the exact same-tail checker and is not a full-target candidate."
+}

@@ -86,7 +86,7 @@ before extending a checker.
 
 ## Quality status
 
-The current verifier suite has 42 adversarial tests, including contract
+The current verifier suite has 57 adversarial tests, including contract
 mutation attacks, privacy-safe packet checks, and exhaustive
 agreement with an independent naive oracle over all 32,768 labeled graphs in
 the included \(n=2\) Ramsey Book contract. Arithmetic Kakeya adds a reproduced
@@ -100,7 +100,7 @@ rerun from public `main`. The revision's dedicated RCI audit is closed at the
 `forward-tested` lifecycle state. None of this is evidence of improved
 FrontierMath solve rate. See
 [the public RCI record](docs/RCI_AUDIT.md) and
-[the open Arithmetic Kakeya RCI record](docs/RCI_AUDIT_ARITHMETIC_KAKEYA.md),
+[the closed Arithmetic Kakeya RCI record](docs/RCI_AUDIT_ARITHMETIC_KAKEYA.md),
 plus
 [forward-test cases](docs/FORWARD_TESTS.md).
 

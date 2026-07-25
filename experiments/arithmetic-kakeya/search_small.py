@@ -223,6 +223,34 @@ def in_span_mod(
     return not any(residual)
 
 
+def pair_target_in_span_mod(
+    first: int,
+    second: int,
+    basis: Sequence[Sequence[int]],
+    pivots: Sequence[int],
+    width: int,
+    prime: int,
+) -> bool:
+    """Test e_first-e_second against an RREF row space without dense reduction."""
+    pivot_rows = {pivot: row_index for row_index, pivot in enumerate(pivots)}
+    first_pivot = pivot_rows.get(first)
+    second_pivot = pivot_rows.get(second)
+    for column in range(width):
+        if column in pivot_rows:
+            continue
+        residual = (
+            (1 if column == first else 0)
+            - (1 if column == second else 0)
+        )
+        if first_pivot is not None:
+            residual -= basis[first_pivot][column]
+        if second_pivot is not None:
+            residual += basis[second_pivot][column]
+        if residual % prime:
+            return False
+    return True
+
+
 class SearchSpace:
     def __init__(
         self,
@@ -234,6 +262,7 @@ class SearchSpace:
         edge_semantics: str = "same-tail",
         distinct_generator_labels: bool = False,
         singleton_slots: int = 4,
+        force_all_groups: bool = False,
     ) -> None:
         self.shape = shape
         self.slopes = slopes
@@ -254,6 +283,11 @@ class SearchSpace:
             item: index for index, item in enumerate(self.vertices)
         }
         self.groups = groups(shape)
+        self.required_groups = (
+            frozenset(range(len(self.groups)))
+            if force_all_groups
+            else frozenset()
+        )
         if singleton_slots < 1:
             raise ValueError("singleton_slots must be positive")
         self.distinct_generator_labels = distinct_generator_labels
@@ -267,6 +301,13 @@ class SearchSpace:
                 )
         denominator = len(self.vertices) - known_count
         self.budget = threshold.numerator * denominator // threshold.denominator
+        required_cost = sum(
+            self.groups[index].cost for index in self.required_groups
+        )
+        if required_cost > self.budget:
+            raise ValueError(
+                "required graph groups exceed the exact score budget"
+            )
         self.measurement_count = len(self.vertices) * len(slopes)
         if distinct_generator_labels:
             singleton_offset = len(self.groups)
@@ -380,10 +421,14 @@ class SearchSpace:
             final_rank = len(pivots)
             forceable: list[int] = []
             for local_index, global_index in enumerate(unknown):
-                target = [0] * (2 * len(unknown))
-                target[2 * local_index] = 1
-                target[2 * local_index + 1] = -1
-                if in_span_mod(target, basis, pivots, self.prime):
+                if pair_target_in_span_mod(
+                    2 * local_index,
+                    2 * local_index + 1,
+                    basis,
+                    pivots,
+                    2 * len(unknown),
+                    self.prime,
+                ):
                     forceable.append(global_index)
             if not forceable:
                 break
@@ -411,7 +456,12 @@ class SearchSpace:
             else ()
         )
         remaining = self.budget
+        for group_index in self.required_groups:
+            labels[group_index] = self.random_group_label(group_index, rng)
+            remaining -= self.groups[group_index].cost
         for group_index in group_order:
+            if group_index in self.required_groups:
+                continue
             group = self.groups[group_index]
             if group.cost <= remaining and rng.random() < 0.65:
                 labels[group_index] = self.random_group_label(group_index, rng)
@@ -435,7 +485,10 @@ class SearchSpace:
                 index = rng.randrange(len(labels))
                 if labels[index] < 0:
                     labels[index] = self.random_group_label(index, rng)
-                elif rng.random() < 0.35:
+                elif (
+                    index not in self.required_groups
+                    and rng.random() < 0.35
+                ):
                     labels[index] = -1
                 else:
                     labels[index] = self.random_group_label(index, rng)
@@ -521,7 +574,11 @@ class SearchSpace:
             removable_groups = [
                 index
                 for index, label_index in enumerate(labels)
-                if label_index >= 0 and index != protected_group
+                if (
+                    label_index >= 0
+                    and index != protected_group
+                    and index not in self.required_groups
+                )
             ]
             if not removable_measurements and not removable_groups:
                 return genome
@@ -534,6 +591,54 @@ class SearchSpace:
 
         result = current()
         return result if result != genome else self.mutate(genome, rng)
+
+    def label_repair(
+        self,
+        genome: Genome,
+        rng: random.Random,
+        trials: int,
+        coverage_first: bool = False,
+    ) -> Genome:
+        """Sample cost-preserving label substitutions and keep the best."""
+        if trials < 1 or self.distinct_generator_labels:
+            return genome
+        active_groups = [
+            index for index, label_index in enumerate(genome.labels)
+            if label_index >= 0
+        ]
+        if not active_groups and not genome.measurements:
+            return genome
+        best = genome
+        best_fitness = self.evaluate(genome).fitness(coverage_first)
+        for _ in range(trials):
+            labels = list(genome.labels)
+            measurements = set(genome.measurements)
+            if active_groups and (
+                not measurements or rng.random() < 0.5
+            ):
+                group_index = rng.choice(active_groups)
+                labels[group_index] = rng.randrange(len(self.slopes))
+            else:
+                measurement = rng.choice(tuple(measurements))
+                measurements.remove(measurement)
+                vertex_index, _ = divmod(measurement, len(self.slopes))
+                replacement = (
+                    vertex_index * len(self.slopes)
+                    + rng.randrange(len(self.slopes))
+                )
+                measurements.add(replacement)
+            candidate = Genome(
+                tuple(labels),
+                tuple(sorted(measurements)),
+                genome.known,
+            )
+            if self.cost(candidate) > self.budget:
+                continue
+            fitness = self.evaluate(candidate).fitness(coverage_first)
+            if fitness > best_fitness:
+                best = candidate
+                best_fitness = fitness
+        return best
 
     def crossover(
         self,
@@ -675,6 +780,8 @@ def evolve(
     guided_repair_rate: float = 0.0,
     guided_repair_depth: int = 1,
     coverage_first: bool = False,
+    label_repair_rate: float = 0.0,
+    label_repair_trials: int = 8,
 ) -> tuple[Genome, Evaluation, list[dict[str, object]]]:
     rng = random.Random(seed)
     population = [space.random_genome(rng) for _ in range(population_size)]
@@ -723,9 +830,16 @@ def evolve(
             if guided_repair_rate and rng.random() < guided_repair_rate:
                 for _ in range(guided_repair_depth):
                     child = space.guided_mutate(child, rng)
-                next_population.append(child)
             else:
-                next_population.append(space.mutate(child, rng))
+                child = space.mutate(child, rng)
+            if label_repair_rate and rng.random() < label_repair_rate:
+                child = space.label_repair(
+                    child,
+                    rng,
+                    label_repair_trials,
+                    coverage_first,
+                )
+            next_population.append(child)
         if generation % 20 == 0:
             next_population.extend(
                 space.random_genome(rng)
@@ -809,6 +923,23 @@ def main() -> int:
         default=4,
         help="per-vertex singleton choices in distinct-generator mode",
     )
+    parser.add_argument(
+        "--label-repair-rate",
+        type=float,
+        default=0.0,
+        help="probability of sampled cost-preserving slope hill climbing",
+    )
+    parser.add_argument(
+        "--label-repair-trials",
+        type=int,
+        default=8,
+        help="slope substitutions sampled in each label-repair step",
+    )
+    parser.add_argument(
+        "--force-all-groups",
+        action="store_true",
+        help="keep every product-graph group active and evolve only its label",
+    )
     args = parser.parse_args()
     if not 0.0 <= args.guided_repair_rate <= 1.0:
         parser.error("--guided-repair-rate must be between 0 and 1")
@@ -816,6 +947,10 @@ def main() -> int:
         parser.error("--guided-repair-depth must be positive")
     if args.singleton_slots < 1:
         parser.error("--singleton-slots must be positive")
+    if not 0.0 <= args.label_repair_rate <= 1.0:
+        parser.error("--label-repair-rate must be between 0 and 1")
+    if args.label_repair_trials < 1:
+        parser.error("--label-repair-trials must be positive")
     threshold = Fraction(args.target_numerator, args.target_denominator)
     if args.distinct_generator_labels:
         label_count = max(
@@ -837,6 +972,7 @@ def main() -> int:
             edge_semantics=args.edge_semantics,
             distinct_generator_labels=args.distinct_generator_labels,
             singleton_slots=args.singleton_slots,
+            force_all_groups=args.force_all_groups,
         )
         genome, evaluation, survivors = evolve(
             space,
@@ -846,6 +982,8 @@ def main() -> int:
             guided_repair_rate=args.guided_repair_rate,
             guided_repair_depth=args.guided_repair_depth,
             coverage_first=args.coverage_first,
+            label_repair_rate=args.label_repair_rate,
+            label_repair_trials=args.label_repair_trials,
         )
         summary: dict[str, object] = {
             "shape": list(shape),
@@ -895,6 +1033,9 @@ def main() -> int:
         "coverage_first": args.coverage_first,
         "distinct_generator_labels": args.distinct_generator_labels,
         "singleton_slots": args.singleton_slots,
+        "label_repair_rate": args.label_repair_rate,
+        "label_repair_trials": args.label_repair_trials,
+        "force_all_groups": args.force_all_groups,
         "known_count": args.known_count,
         "edge_semantics": args.edge_semantics,
         "runtime_seconds": round(time.perf_counter() - started, 6),

@@ -316,6 +316,37 @@ def test_arithmetic_kakeya_search_known_set_changes_exact_budget():
     assert evaluation.denominator == 3
 
 
+def test_arithmetic_kakeya_sparse_pair_span_matches_dense_reduction():
+    rng = arithmetic_kakeya_search.random.Random(31)
+    prime = 1_000_003
+    for width in range(2, 14, 2):
+        for _ in range(25):
+            rows = [
+                [rng.randrange(prime) for _ in range(width)]
+                for _ in range(rng.randrange(width + 1))
+            ]
+            basis, pivots = arithmetic_kakeya_search.row_rref_mod(rows, prime)
+            for first in range(0, width, 2):
+                target = [0] * width
+                target[first] = 1
+                target[first + 1] = -1
+                dense = arithmetic_kakeya_search.in_span_mod(
+                    target,
+                    basis,
+                    pivots,
+                    prime,
+                )
+                sparse = arithmetic_kakeya_search.pair_target_in_span_mod(
+                    first,
+                    first + 1,
+                    basis,
+                    pivots,
+                    width,
+                    prime,
+                )
+                assert sparse == dense
+
+
 def test_arithmetic_kakeya_search_mutation_preserves_known_set_size():
     rng = arithmetic_kakeya_search.random.Random(11)
     space = arithmetic_kakeya_search.SearchSpace(
@@ -347,6 +378,43 @@ def test_arithmetic_kakeya_guided_repair_preserves_budget_and_known_set():
         genome = space.guided_mutate(genome, rng)
         assert len(genome.known) == 1
         assert space.cost(genome) <= space.budget
+
+
+def test_arithmetic_kakeya_label_repair_is_monotone_and_budget_safe():
+    rng = arithmetic_kakeya_search.random.Random(37)
+    space = arithmetic_kakeya_search.SearchSpace(
+        (3, 3),
+        arithmetic_kakeya_search.slope_pool(3),
+        arithmetic_kakeya_search.Fraction(67, 40),
+        1_000_003,
+        known_count=1,
+    )
+    genome = space.random_genome(rng)
+    before = space.evaluate(genome).fitness()
+    repaired = space.label_repair(genome, rng, 100)
+    assert space.cost(repaired) <= space.budget
+    assert repaired.known == genome.known
+    assert space.evaluate(repaired).fitness() >= before
+
+
+def test_arithmetic_kakeya_required_groups_survive_mutation_and_repair():
+    rng = arithmetic_kakeya_search.random.Random(41)
+    space = arithmetic_kakeya_search.SearchSpace(
+        (8,),
+        arithmetic_kakeya_search.slope_pool(3),
+        arithmetic_kakeya_search.Fraction(67, 40),
+        1_000_003,
+        known_count=1,
+        force_all_groups=True,
+    )
+    genome = space.random_genome(rng)
+    for _ in range(100):
+        assert all(
+            genome.labels[index] >= 0 for index in space.required_groups
+        )
+        assert space.cost(genome) <= space.budget
+        genome = space.guided_mutate(genome, rng)
+        genome = space.label_repair(genome, rng, 8)
 
 
 def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():

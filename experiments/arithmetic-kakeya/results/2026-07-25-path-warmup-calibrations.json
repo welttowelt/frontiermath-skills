@@ -1,0 +1,37 @@
+{
+  "date": "2026-07-25",
+  "target": "7/4",
+  "edge_semantics": "same-tail",
+  "calibrations": [
+    {
+      "name": "forced-full-path-height-three",
+      "status": "calibration-failed",
+      "shape": [4],
+      "seed": 43,
+      "population": 1000,
+      "generations": 1000,
+      "force_all_groups": true,
+      "slope_count": 15,
+      "evaluated": 2431833,
+      "exact_survivor_count": 0,
+      "best_forced": 3,
+      "vertices": 4
+    },
+    {
+      "name": "unconstrained-path-height-ten",
+      "status": "calibration-failed",
+      "shape": [4],
+      "seed": 41,
+      "population": 1000,
+      "generations": 2000,
+      "force_all_groups": false,
+      "slope_count": 127,
+      "evaluated": 6571555,
+      "exact_survivor_count": 0,
+      "best_forced": 3,
+      "vertices": 4
+    }
+  ],
+  "decision": "Do not promote the proposed 40- or 41-vertex full-path boundary family; it failed the small known-score control.",
+  "claim_boundary": "Seeded heuristic calibration, not a proof that every path certificate has score above 7/4."
+}
