@@ -110,6 +110,26 @@ The bundled warmup reproduces Katz and Tao's four-vertex \(7/4\)
 configuration. `scripts/check_katz_tao_7_over_4_identity.py` independently
 checks explicit integer forcing identities without invoking row reduction.
 
+The discovery programs under `experiments/arithmetic-kakeya/` are not
+verifiers. `search_small.py` uses one-prime modular closure only as a filter
+and reruns every full-forcing survivor through the exact checker. Its
+`--coverage-first` and guided-repair options address isolated-vertex search
+traps without changing the acceptance predicate. The neutral seed-7
+calibration must still rediscover an exact \(7/4\) object:
+
+```bash
+python3 experiments/arithmetic-kakeya/search_small.py \
+  --shape 2x2 --height 2 --population 250 --generations 300 \
+  --seed 7 --target-numerator 7 --target-denominator 4
+```
+
+`check_cycle_map_equivalence.py` independently implements the augmented
+labelled-cycle formulation and compares its forcing rounds with dense closure.
+`analyze_katz_tao_recurrence.py` proves by exact rational arithmetic that
+deeper iteration of the published recurrence stays above \(67/40\). These are
+cross-check and route-elimination artifacts, respectively; neither proves a
+full-target construction.
+
 ## Contract binding
 
 The CLI derives `order` or `n` from a required JSON contract. A contract binds:

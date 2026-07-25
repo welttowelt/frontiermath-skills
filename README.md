@@ -86,12 +86,14 @@ before extending a checker.
 
 ## Quality status
 
-The current verifier suite has 35 adversarial tests, including contract
+The current verifier suite has 39 adversarial tests, including contract
 mutation attacks, privacy-safe packet checks, and exhaustive
 agreement with an independent naive oracle over all 32,768 labeled graphs in
 the included \(n=2\) Ramsey Book contract. Arithmetic Kakeya adds a reproduced
-\(7/4\) warmup, an independent integer-identity check, and a separately labeled
-prefix-only diagnostic that the canonical same-tail checker rejects.
+\(7/4\) warmup, an independent integer-identity check, a second cycle-map
+implementation checked against dense closure, an exact Katz--Tao recurrence
+gate, and a separately labeled prefix-only diagnostic that the canonical
+same-tail checker rejects.
 
 Both original skills passed the repaired public tree's clean-context rerun.
 The Arithmetic Kakeya verifier revision remains `draft` while its dedicated

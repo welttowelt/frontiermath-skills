@@ -1,0 +1,32 @@
+{
+  "status": "bounded-search-no-exact-candidate",
+  "date": "2026-07-25",
+  "edge_semantics": "same-tail",
+  "target": "67/40",
+  "method": "one-prime evolutionary filter followed by exact rational verification",
+  "prime": 1000003,
+  "height": 3,
+  "slope_count": 15,
+  "seed": 202607250,
+  "population": 700,
+  "generations": 500,
+  "known_count": 0,
+  "runtime_seconds": 821.641029,
+  "evaluated": 2229861,
+  "exact_survivor_count": 0,
+  "best_by_shape": [
+    {"shape": [12], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [16], "budget": 26, "cost": 26, "forced": 13, "vertices": 16},
+    {"shape": [20], "budget": 33, "cost": 33, "forced": 16, "vertices": 20},
+    {"shape": [24], "budget": 40, "cost": 40, "forced": 20, "vertices": 24},
+    {"shape": [2, 6], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [6, 2], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [3, 4], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [4, 3], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [4, 4], "budget": 26, "cost": 26, "forced": 14, "vertices": 16},
+    {"shape": [2, 2, 3], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [2, 3, 2], "budget": 20, "cost": 20, "forced": 10, "vertices": 12},
+    {"shape": [3, 2, 2], "budget": 20, "cost": 20, "forced": 11, "vertices": 12}
+  ],
+  "completeness": "heuristic; no completeness claim"
+}

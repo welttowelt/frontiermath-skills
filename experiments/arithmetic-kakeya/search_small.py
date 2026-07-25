@@ -64,6 +64,7 @@ class Genome:
 class Evaluation:
     forced: int
     total: int
+    covered: int
     cost: int
     denominator: int
     rank: int
@@ -79,7 +80,10 @@ class Evaluation:
     def score(self) -> Fraction:
         return Fraction(self.cost, self.denominator)
 
-    def fitness(self) -> tuple[int, int, int, int, int]:
+    def fitness(
+        self,
+        coverage_first: bool = False,
+    ) -> tuple[int, int, int, int, int, int]:
         if self.forcing:
             return (
                 2,
@@ -87,8 +91,25 @@ class Evaluation:
                 -self.cost,
                 self.rank,
                 0,
+                0,
             )
-        return (1, self.forced, self.rank, -self.cost, -self.denominator)
+        if coverage_first:
+            return (
+                1,
+                self.covered,
+                self.forced,
+                self.rank,
+                -self.cost,
+                -self.denominator,
+            )
+        return (
+            1,
+            self.forced,
+            self.rank,
+            -self.cost,
+            -self.denominator,
+            0,
+        )
 
 
 def normalize_pair(a: int, b: int) -> Pair:
@@ -285,6 +306,14 @@ class SearchSpace:
             return cached
         known = set(genome.known)
         rows = self.rows(genome)
+        supported = {
+            index
+            for index in range(len(self.vertices))
+            if any(
+                row[2 * index] != 0 or row[2 * index + 1] != 0
+                for row in rows
+            )
+        }
         rounds: list[list[int]] = []
         final_rank = 0
         while len(known) < len(self.vertices):
@@ -313,6 +342,7 @@ class SearchSpace:
         evaluation = Evaluation(
             forced=len(known),
             total=len(self.vertices),
+            covered=len(supported | set(genome.known)),
             cost=self.cost(genome),
             denominator=len(self.vertices) - len(genome.known),
             rank=final_rank,
@@ -384,6 +414,76 @@ class SearchSpace:
         if self.cost(result) <= self.budget:
             return result
         return genome
+
+    def guided_mutate(self, genome: Genome, rng: random.Random) -> Genome:
+        evaluation = self.evaluate(genome)
+        derived = {
+            index
+            for round_indices in evaluation.modular_rounds
+            for index in round_indices
+        }
+        unresolved = [
+            index
+            for index in range(len(self.vertices))
+            if index not in set(genome.known) | derived
+        ]
+        if not unresolved:
+            return self.mutate(genome, rng)
+
+        victim_index = rng.choice(unresolved)
+        victim = self.vertices[victim_index]
+        labels = list(genome.labels)
+        measurements = set(genome.measurements)
+        protected_group: int | None = None
+        protected_measurement: int | None = None
+        incident_groups = [
+            index
+            for index, group in enumerate(self.groups)
+            if victim[: group.axis + 1]
+            in {
+                group.prefix,
+                group.prefix[:-1] + (group.prefix[-1] + 1,),
+            }
+        ]
+        if incident_groups and rng.random() < 0.55:
+            protected_group = rng.choice(incident_groups)
+            labels[protected_group] = rng.randrange(len(self.slopes))
+        else:
+            protected_measurement = (
+                victim_index * len(self.slopes)
+                + rng.randrange(len(self.slopes))
+            )
+            measurements.add(protected_measurement)
+
+        def current() -> Genome:
+            return Genome(
+                tuple(labels),
+                tuple(sorted(measurements)),
+                genome.known,
+            )
+
+        while self.cost(current()) > self.budget:
+            removable_measurements = [
+                value
+                for value in measurements
+                if value != protected_measurement
+            ]
+            removable_groups = [
+                index
+                for index, label_index in enumerate(labels)
+                if label_index >= 0 and index != protected_group
+            ]
+            if not removable_measurements and not removable_groups:
+                return genome
+            if removable_measurements and (
+                not removable_groups or rng.random() < 0.6
+            ):
+                measurements.remove(rng.choice(removable_measurements))
+            else:
+                labels[rng.choice(removable_groups)] = -1
+
+        result = current()
+        return result if result != genome else self.mutate(genome, rng)
 
     def crossover(
         self,
@@ -522,6 +622,9 @@ def evolve(
     population_size: int,
     generations: int,
     seed: int,
+    guided_repair_rate: float = 0.0,
+    guided_repair_depth: int = 1,
+    coverage_first: bool = False,
 ) -> tuple[Genome, Evaluation, list[dict[str, object]]]:
     rng = random.Random(seed)
     population = [space.random_genome(rng) for _ in range(population_size)]
@@ -532,10 +635,13 @@ def evolve(
         population = list(dict.fromkeys(population))
         ranked = sorted(
             population,
-            key=lambda genome: space.evaluate(genome).fitness(),
+            key=lambda genome: space.evaluate(genome).fitness(coverage_first),
             reverse=True,
         )
-        if space.evaluate(ranked[0]).fitness() > best_evaluation.fitness():
+        if (
+            space.evaluate(ranked[0]).fitness(coverage_first)
+            > best_evaluation.fitness(coverage_first)
+        ):
             best_genome = ranked[0]
             best_evaluation = space.evaluate(best_genome)
         for genome in ranked:
@@ -564,7 +670,12 @@ def evolve(
                 child = space.crossover(left, right, rng)
             else:
                 child = rng.choice(parent_pool)
-            next_population.append(space.mutate(child, rng))
+            if guided_repair_rate and rng.random() < guided_repair_rate:
+                for _ in range(guided_repair_depth):
+                    child = space.guided_mutate(child, rng)
+                next_population.append(child)
+            else:
+                next_population.append(space.mutate(child, rng))
         if generation % 20 == 0:
             next_population.extend(
                 space.random_genome(rng)
@@ -612,7 +723,33 @@ def main() -> int:
             "public forcing operation 1"
         ),
     )
+    parser.add_argument(
+        "--emit-best-candidate",
+        action="store_true",
+        help="include the best genome and exact rejection packet even without a survivor",
+    )
+    parser.add_argument(
+        "--guided-repair-rate",
+        type=float,
+        default=0.0,
+        help="probability of mutating an unresolved vertex directly (0 to 1)",
+    )
+    parser.add_argument(
+        "--guided-repair-depth",
+        type=int,
+        default=1,
+        help="number of consecutive guided edits when repair is selected",
+    )
+    parser.add_argument(
+        "--coverage-first",
+        action="store_true",
+        help="rank full generator support ahead of partial forcing progress",
+    )
     args = parser.parse_args()
+    if not 0.0 <= args.guided_repair_rate <= 1.0:
+        parser.error("--guided-repair-rate must be between 0 and 1")
+    if args.guided_repair_depth < 1:
+        parser.error("--guided-repair-depth must be positive")
     threshold = Fraction(args.target_numerator, args.target_denominator)
     slopes = slope_pool(args.height)
     started = time.perf_counter()
@@ -631,6 +768,9 @@ def main() -> int:
             population_size=args.population,
             generations=args.generations,
             seed=args.seed + offset,
+            guided_repair_rate=args.guided_repair_rate,
+            guided_repair_depth=args.guided_repair_depth,
+            coverage_first=args.coverage_first,
         )
         summary: dict[str, object] = {
             "shape": list(shape),
@@ -643,6 +783,7 @@ def main() -> int:
             "evaluated": len(space.cache),
             "best_forced": evaluation.forced,
             "best_derived": evaluation.forced - space.known_count,
+            "best_covered": evaluation.covered,
             "best_cost": evaluation.cost,
             "best_score": (
                 f"{evaluation.score.numerator}/{evaluation.score.denominator}"
@@ -657,6 +798,10 @@ def main() -> int:
             survivor = survivors[0]
             summary["candidate"] = survivor["candidate"]
             summary["exact"] = survivor["exact"]
+        elif args.emit_best_candidate:
+            exact = space.exact_check(genome)
+            summary["best_candidate"] = space.serialize(genome, exact)
+            summary["best_exact"] = exact
         summaries.append(summary)
         print(json.dumps(summary, sort_keys=True), flush=True)
     final = {
@@ -670,6 +815,9 @@ def main() -> int:
         "seed": args.seed,
         "population": args.population,
         "generations": args.generations,
+        "guided_repair_rate": args.guided_repair_rate,
+        "guided_repair_depth": args.guided_repair_depth,
+        "coverage_first": args.coverage_first,
         "known_count": args.known_count,
         "edge_semantics": args.edge_semantics,
         "runtime_seconds": round(time.perf_counter() - started, 6),

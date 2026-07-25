@@ -283,6 +283,47 @@ def test_arithmetic_kakeya_search_mutation_preserves_known_set_size():
         assert space.cost(genome) <= space.budget
 
 
+def test_arithmetic_kakeya_guided_repair_preserves_budget_and_known_set():
+    rng = arithmetic_kakeya_search.random.Random(19)
+    space = arithmetic_kakeya_search.SearchSpace(
+        (4, 2),
+        arithmetic_kakeya_search.slope_pool(2),
+        arithmetic_kakeya_search.Fraction(67, 40),
+        1_000_003,
+        known_count=1,
+    )
+    genome = space.random_genome(rng)
+    for _ in range(100):
+        genome = space.guided_mutate(genome, rng)
+        assert len(genome.known) == 1
+        assert space.cost(genome) <= space.budget
+
+
+def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():
+    isolated = arithmetic_kakeya_search.Evaluation(
+        forced=7,
+        total=8,
+        covered=7,
+        cost=11,
+        denominator=7,
+        rank=10,
+        modular_rounds=[],
+    )
+    connected = arithmetic_kakeya_search.Evaluation(
+        forced=6,
+        total=8,
+        covered=8,
+        cost=11,
+        denominator=7,
+        rank=10,
+        modular_rounds=[],
+    )
+    assert isolated.fitness() > connected.fitness()
+    assert connected.fitness(coverage_first=True) > isolated.fitness(
+        coverage_first=True
+    )
+
+
 def test_arithmetic_kakeya_search_rejects_all_vertices_known():
     try:
         arithmetic_kakeya_search.SearchSpace(
@@ -353,6 +394,37 @@ def test_arithmetic_kakeya_literal_diagnostic_has_independent_identities():
     assert completed.returncode == 0
     assert packet["status"] == "literal-operation-identity-pass"
     assert all(packet["identity_checks"].values())
+
+
+def test_arithmetic_kakeya_published_recurrence_stays_above_target():
+    completed = run_cli(
+        str(
+            ROOT.parents[1]
+            / "experiments"
+            / "arithmetic-kakeya"
+            / "analyze_katz_tao_recurrence.py"
+        )
+    )
+    packet = json.loads(completed.stdout)
+    assert completed.returncode == 0
+    assert packet["status"] == "recurrence-does-not-reach-target"
+    assert packet["target_polynomial"] == "-37/64000"
+
+
+def test_arithmetic_kakeya_cycle_map_matches_dense_checker():
+    completed = run_cli(
+        str(
+            ROOT.parents[1]
+            / "experiments"
+            / "arithmetic-kakeya"
+            / "check_cycle_map_equivalence.py"
+        ),
+        "--trials",
+        "100",
+    )
+    packet = json.loads(completed.stdout)
+    assert completed.returncode == 0
+    assert packet["status"] == "cycle-map-equivalence-pass"
 
 
 def test_ramsey_contract_binds_n_two():
