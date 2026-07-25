@@ -130,6 +130,12 @@ deeper iteration of the published recurrence stays above \(67/40\). These are
 cross-check and route-elimination artifacts, respectively; neither proves a
 full-target construction.
 
+The `--distinct-generator-labels` option is a reproducible negative-control
+ablation, not a recommended full-target mode. A seeded \(2\times2\) run failed
+to rediscover the warmup after 31,887 evaluations. A height-ten relational
+palette did rediscover it. Preserve this calibration boundary: distinct
+parameters can erase the tuned slope relations a forcing identity needs.
+
 ## Contract binding
 
 The CLI derives `order` or `n` from a required JSON contract. A contract binds:
@@ -186,9 +192,11 @@ For a new problem:
 Do not execute downloaded or candidate-supplied code without a separate
 security review and explicit authority.
 
-Candidate and contract byte ceilings are enforced before parsing. Registered
-target ceilings bound the checker loops, but the scripts do not promise a
-wall-clock deadline against a hostile local filesystem or machine.
+Candidate and contract byte ceilings are enforced before parsing. The
+Arithmetic Kakeya checker rejects a decisive over-threshold score before row
+reduction and caps its exact path at 128 vertices and 512 generators.
+Registered target ceilings further bound checker loops, but the scripts do not
+promise a wall-clock deadline against a hostile local filesystem or machine.
 
 ## Handoffs
 

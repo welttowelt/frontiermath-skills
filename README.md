@@ -86,7 +86,7 @@ before extending a checker.
 
 ## Quality status
 
-The current verifier suite has 39 adversarial tests, including contract
+The current verifier suite has 42 adversarial tests, including contract
 mutation attacks, privacy-safe packet checks, and exhaustive
 agreement with an independent naive oracle over all 32,768 labeled graphs in
 the included \(n=2\) Ramsey Book contract. Arithmetic Kakeya adds a reproduced

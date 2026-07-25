@@ -137,6 +137,56 @@ def test_arithmetic_kakeya_warmup_misses_full_threshold():
     )
     assert result["status"] == "shadow-verifier-reject"
     assert result["failure"] == "score-above-contract-threshold"
+    assert result["forcing_rounds"] == []
+    assert (
+        "forcing-closure-not-run-after-score-rejection"
+        in result["unchecked_predicates"]
+    )
+
+
+def test_arithmetic_kakeya_score_rejection_skips_exact_closure():
+    candidate = arithmetic_kakeya.parse_candidate_bytes(
+        (
+            ROOT
+            / "tests"
+            / "fixtures"
+            / "arithmetic-kakeya-katz-tao-7-over-4.txt"
+        ).read_bytes()
+    )
+    original = arithmetic_kakeya.forcing_closure
+
+    def fail_if_called(*_args, **_kwargs):
+        raise AssertionError("forcing closure ran after decisive score rejection")
+
+    arithmetic_kakeya.forcing_closure = fail_if_called
+    try:
+        result = arithmetic_kakeya.verify(
+            candidate,
+            arithmetic_kakeya.Fraction(67, 40),
+        )
+    finally:
+        arithmetic_kakeya.forcing_closure = original
+    assert result["failure"] == "score-above-contract-threshold"
+
+
+def test_arithmetic_kakeya_vertex_resource_ceiling_fails_safe():
+    candidate = arithmetic_kakeya.Candidate(
+        claimed_header="resource boundary",
+        x_set=((0, 0),),
+        dimensions=(arithmetic_kakeya.MAX_VERTICES + 1,),
+        graph_functions=({},),
+        initial_known=(),
+        singleton_rows=(),
+    )
+    try:
+        arithmetic_kakeya.verify(
+            candidate,
+            arithmetic_kakeya.Fraction(67, 40),
+        )
+    except ValueError as exc:
+        assert "exceeds supported ceiling" in str(exc)
+    else:
+        raise AssertionError("oversized graph reached exact row reduction")
 
 
 def test_arithmetic_kakeya_ignores_false_human_header():
@@ -322,6 +372,36 @@ def test_arithmetic_kakeya_coverage_first_penalizes_isolated_vertices():
     assert connected.fitness(coverage_first=True) > isolated.fitness(
         coverage_first=True
     )
+
+
+def test_arithmetic_kakeya_distinct_generator_mode_preserves_label_identity():
+    slopes = arithmetic_kakeya_search.distinct_tau_pool(11, 23)
+    assert len(set(slopes)) == 11
+    assert len(
+        {
+            arithmetic_kakeya_search.Fraction(a - b, a + b)
+            for a, b in slopes
+        }
+    ) == 11
+    space = arithmetic_kakeya_search.SearchSpace(
+        (2, 2),
+        slopes,
+        arithmetic_kakeya_search.Fraction(7, 4),
+        1_000_003,
+        distinct_generator_labels=True,
+        singleton_slots=2,
+    )
+    rng = arithmetic_kakeya_search.random.Random(29)
+    genome = space.random_genome(rng)
+    for _ in range(100):
+        for group_index, label_index in enumerate(genome.labels):
+            assert label_index in {-1, group_index}
+        for measurement in genome.measurements:
+            vertex_index, slope_index = divmod(measurement, len(slopes))
+            start = len(space.groups) + vertex_index * space.singleton_slots
+            assert start <= slope_index < start + space.singleton_slots
+        genome = space.guided_mutate(genome, rng)
+        assert space.cost(genome) <= space.budget
 
 
 def test_arithmetic_kakeya_search_rejects_all_vertices_known():

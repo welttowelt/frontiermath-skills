@@ -1,0 +1,37 @@
+{
+  "date": "2026-07-25",
+  "target": "7/4",
+  "edge_semantics": "same-tail",
+  "calibrations": [
+    {
+      "name": "seeded-distinct-generator-labels",
+      "status": "calibration-failed",
+      "shape": [2, 2],
+      "seed": 17,
+      "population": 500,
+      "generations": 500,
+      "singleton_slots": 4,
+      "slope_count": 19,
+      "evaluated": 31887,
+      "exact_survivor_count": 0,
+      "best_forced": 3,
+      "vertices": 4,
+      "interpretation": "This fixed distinct-label ablation did not reproduce the warmup and is not promoted to a full-target search family."
+    },
+    {
+      "name": "height-ten-relational-palette",
+      "status": "calibration-passed",
+      "shape": [2, 2],
+      "seed": 7,
+      "population": 1000,
+      "generations": 1000,
+      "guided_repair_rate": 0.5,
+      "slope_count": 127,
+      "evaluated": 291193,
+      "exact_survivor_count": 1,
+      "exact_score": "7/4",
+      "interpretation": "The larger bounded rational palette retains enough tuned relations to reproduce the exact warmup."
+    }
+  ],
+  "claim_boundary": "Search calibration only; neither row is a full-target result."
+}

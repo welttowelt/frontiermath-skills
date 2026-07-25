@@ -133,6 +133,15 @@ def slope_pool(height: int) -> tuple[Pair, ...]:
     return tuple(sorted(slopes))
 
 
+def distinct_tau_pool(count: int, seed: int) -> tuple[Pair, ...]:
+    """Return distinct projective labels with seeded integer tau parameters."""
+    if count < 1:
+        raise ValueError("distinct tau pool must be nonempty")
+    rng = random.Random(seed)
+    tau_values = rng.sample(range(-10_000_000, 10_000_001), count)
+    return tuple((1 + tau, 1 - tau) for tau in tau_values)
+
+
 def vertices(shape: Sequence[int]) -> tuple[Vertex, ...]:
     return tuple(
         itertools.product(*(range(1, dimension + 1) for dimension in shape))
@@ -223,6 +232,8 @@ class SearchSpace:
         prime: int,
         known_count: int = 0,
         edge_semantics: str = "same-tail",
+        distinct_generator_labels: bool = False,
+        singleton_slots: int = 4,
     ) -> None:
         self.shape = shape
         self.slopes = slopes
@@ -243,10 +254,49 @@ class SearchSpace:
             item: index for index, item in enumerate(self.vertices)
         }
         self.groups = groups(shape)
+        if singleton_slots < 1:
+            raise ValueError("singleton_slots must be positive")
+        self.distinct_generator_labels = distinct_generator_labels
+        self.singleton_slots = singleton_slots
+        if distinct_generator_labels:
+            required_labels = len(self.groups) + len(self.vertices) * singleton_slots
+            if len(slopes) < required_labels:
+                raise ValueError(
+                    "distinct-generator mode needs one label per group and "
+                    "singleton slot"
+                )
         denominator = len(self.vertices) - known_count
         self.budget = threshold.numerator * denominator // threshold.denominator
         self.measurement_count = len(self.vertices) * len(slopes)
+        if distinct_generator_labels:
+            singleton_offset = len(self.groups)
+            self.measurement_universe = tuple(
+                vertex_index * len(slopes)
+                + singleton_offset
+                + vertex_index * singleton_slots
+                + slot
+                for vertex_index in range(len(self.vertices))
+                for slot in range(singleton_slots)
+            )
+        else:
+            self.measurement_universe = tuple(range(self.measurement_count))
         self.cache: dict[Genome, Evaluation] = {}
+
+    def random_group_label(self, group_index: int, rng: random.Random) -> int:
+        if self.distinct_generator_labels:
+            return group_index
+        return rng.randrange(len(self.slopes))
+
+    def random_measurement(
+        self,
+        rng: random.Random,
+        vertex_index: int | None = None,
+    ) -> int:
+        if vertex_index is None or not self.distinct_generator_labels:
+            return rng.choice(self.measurement_universe)
+        start = len(self.groups) + vertex_index * self.singleton_slots
+        slope_index = start + rng.randrange(self.singleton_slots)
+        return vertex_index * len(self.slopes) + slope_index
 
     def edge_rows(self, genome: Genome) -> tuple[list[int], ...]:
         rows: list[list[int]] = []
@@ -364,12 +414,12 @@ class SearchSpace:
         for group_index in group_order:
             group = self.groups[group_index]
             if group.cost <= remaining and rng.random() < 0.65:
-                labels[group_index] = rng.randrange(len(self.slopes))
+                labels[group_index] = self.random_group_label(group_index, rng)
                 remaining -= group.cost
-        maximum_measurements = min(remaining, self.measurement_count)
+        maximum_measurements = min(remaining, len(self.measurement_universe))
         measurement_total = rng.randrange(maximum_measurements + 1)
         measurements = tuple(
-            sorted(rng.sample(range(self.measurement_count), measurement_total))
+            sorted(rng.sample(self.measurement_universe, measurement_total))
         )
         return Genome(tuple(labels), measurements, known)
 
@@ -384,13 +434,13 @@ class SearchSpace:
             if operation == "label" and labels:
                 index = rng.randrange(len(labels))
                 if labels[index] < 0:
-                    labels[index] = rng.randrange(len(self.slopes))
+                    labels[index] = self.random_group_label(index, rng)
                 elif rng.random() < 0.35:
                     labels[index] = -1
                 else:
-                    labels[index] = rng.randrange(len(self.slopes))
+                    labels[index] = self.random_group_label(index, rng)
             elif operation == "measurement":
-                value = rng.randrange(self.measurement_count)
+                value = self.random_measurement(rng)
                 if value in measurements:
                     measurements.remove(value)
                 else:
@@ -398,7 +448,7 @@ class SearchSpace:
             elif operation == "swap" and measurements:
                 removed = rng.choice(tuple(measurements))
                 measurements.remove(removed)
-                measurements.add(rng.randrange(self.measurement_count))
+                measurements.add(self.random_measurement(rng))
             elif operation == "known":
                 known = set(genome.known)
                 removed = rng.choice(tuple(known))
@@ -447,12 +497,12 @@ class SearchSpace:
         ]
         if incident_groups and rng.random() < 0.55:
             protected_group = rng.choice(incident_groups)
-            labels[protected_group] = rng.randrange(len(self.slopes))
-        else:
-            protected_measurement = (
-                victim_index * len(self.slopes)
-                + rng.randrange(len(self.slopes))
+            labels[protected_group] = self.random_group_label(
+                protected_group,
+                rng,
             )
+        else:
+            protected_measurement = self.random_measurement(rng, victim_index)
             measurements.add(protected_measurement)
 
         def current() -> Genome:
@@ -745,13 +795,36 @@ def main() -> int:
         action="store_true",
         help="rank full generator support ahead of partial forcing progress",
     )
+    parser.add_argument(
+        "--distinct-generator-labels",
+        action="store_true",
+        help=(
+            "assign a separate seeded integer-tau label to every active graph "
+            "group and singleton slot"
+        ),
+    )
+    parser.add_argument(
+        "--singleton-slots",
+        type=int,
+        default=4,
+        help="per-vertex singleton choices in distinct-generator mode",
+    )
     args = parser.parse_args()
     if not 0.0 <= args.guided_repair_rate <= 1.0:
         parser.error("--guided-repair-rate must be between 0 and 1")
     if args.guided_repair_depth < 1:
         parser.error("--guided-repair-depth must be positive")
+    if args.singleton_slots < 1:
+        parser.error("--singleton-slots must be positive")
     threshold = Fraction(args.target_numerator, args.target_denominator)
-    slopes = slope_pool(args.height)
+    if args.distinct_generator_labels:
+        label_count = max(
+            len(groups(shape)) + math.prod(shape) * args.singleton_slots
+            for shape in args.shapes
+        )
+        slopes = distinct_tau_pool(label_count, args.seed)
+    else:
+        slopes = slope_pool(args.height)
     started = time.perf_counter()
     summaries: list[dict[str, object]] = []
     for offset, shape in enumerate(args.shapes):
@@ -762,6 +835,8 @@ def main() -> int:
             args.prime,
             known_count=args.known_count,
             edge_semantics=args.edge_semantics,
+            distinct_generator_labels=args.distinct_generator_labels,
+            singleton_slots=args.singleton_slots,
         )
         genome, evaluation, survivors = evolve(
             space,
@@ -818,6 +893,8 @@ def main() -> int:
         "guided_repair_rate": args.guided_repair_rate,
         "guided_repair_depth": args.guided_repair_depth,
         "coverage_first": args.coverage_first,
+        "distinct_generator_labels": args.distinct_generator_labels,
+        "singleton_slots": args.singleton_slots,
         "known_count": args.known_count,
         "edge_semantics": args.edge_semantics,
         "runtime_seconds": round(time.perf_counter() - started, 6),

@@ -23,8 +23,8 @@ SHA256_PATTERN = re.compile(r"^[0-9a-f]{64}$")
 MAX_CONTRACT_BYTES = 64 * 1024
 MAX_MANIFEST_BYTES = 256 * 1024
 MAX_CANDIDATE_BYTES = 8 * 1024 * 1024
-MAX_VERTICES = 1024
-MAX_GENERATORS = 8192
+MAX_VERTICES = 128
+MAX_GENERATORS = 512
 
 Pair = tuple[int, int]
 Vertex = tuple[int, ...]
@@ -469,15 +469,51 @@ def verify(
         raise ValueError(f"R contains vertex outside the graph: {bad_r}")
 
     edges = graph_edges(candidate)
+    denominator = len(vertices) - len(candidate.initial_known)
+    if denominator <= 0:
+        raise ValueError("score denominator n-|T| must be positive")
+    score = Fraction(len(edges) + len(candidate.singleton_rows), denominator)
+    parameters = {
+        "m": len(edges),
+        "r": len(candidate.singleton_rows),
+        "n": len(vertices),
+        "t": len(candidate.initial_known),
+    }
+    unchecked_predicates = [
+        "Epoch-private-verifier-parser-equivalence",
+        "novelty-and-prior-art",
+        "publication-acceptance",
+    ]
+    if score > target_score:
+        return {
+            "claimed_header": candidate.claimed_header,
+            "score": f"{score.numerator}/{score.denominator}",
+            "target_score": (
+                f"{target_score.numerator}/{target_score.denominator}"
+            ),
+            "parameters": parameters,
+            "forcing_rounds": [],
+            "status": "shadow-verifier-reject",
+            "failure": "score-above-contract-threshold",
+            "checked_predicates": [
+                "six-line-public-serialization",
+                "X-domain-and-excluded-output-slope",
+                "constructible-product-graph-domains",
+                "same-tail-edge-expansion",
+                "singleton-support-R",
+                "exact-m-and-score",
+                "score-threshold",
+            ],
+            "unchecked_predicates": unchecked_predicates
+            + ["forcing-closure-not-run-after-score-rejection"],
+            "epoch_verifier_equivalence": False,
+        }
+
     rows = generator_rows(candidate, vertices, edges)
     if len(rows) > MAX_GENERATORS:
         raise ValueError(
             f"graph and R exceed supported ceiling of {MAX_GENERATORS} generators"
         )
-    denominator = len(vertices) - len(candidate.initial_known)
-    if denominator <= 0:
-        raise ValueError("score denominator n-|T| must be positive")
-    score = Fraction(len(edges) + len(candidate.singleton_rows), denominator)
     known, rounds = forcing_closure(
         vertices,
         rows,
@@ -487,12 +523,7 @@ def verify(
         "claimed_header": candidate.claimed_header,
         "score": f"{score.numerator}/{score.denominator}",
         "target_score": f"{target_score.numerator}/{target_score.denominator}",
-        "parameters": {
-            "m": len(edges),
-            "r": len(candidate.singleton_rows),
-            "n": len(vertices),
-            "t": len(candidate.initial_known),
-        },
+        "parameters": parameters,
         "forcing_rounds": [
             [list(item) for item in round_items]
             for round_items in rounds
@@ -507,11 +538,7 @@ def verify(
             "forcing-closure-by-rational-row-span",
             "score-threshold",
         ],
-        "unchecked_predicates": [
-            "Epoch-private-verifier-parser-equivalence",
-            "novelty-and-prior-art",
-            "publication-acceptance",
-        ],
+        "unchecked_predicates": unchecked_predicates,
         "epoch_verifier_equivalence": False,
     }
     if len(known) != len(vertices):
@@ -522,14 +549,6 @@ def verify(
                 "unforced_vertices": [
                     list(item) for item in vertices if item not in known
                 ],
-            }
-        )
-        return common
-    if score > target_score:
-        common.update(
-            {
-                "status": "shadow-verifier-reject",
-                "failure": "score-above-contract-threshold",
             }
         )
         return common

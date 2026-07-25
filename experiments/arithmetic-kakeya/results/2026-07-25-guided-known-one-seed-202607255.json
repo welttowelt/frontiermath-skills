@@ -1,0 +1,64 @@
+{
+  "status": "bounded-search-no-exact-candidate",
+  "date": "2026-07-25",
+  "edge_semantics": "same-tail",
+  "target": "67/40",
+  "method": "one-prime evolutionary filter followed by exact rational verification",
+  "prime": 1000003,
+  "height": 3,
+  "slope_count": 15,
+  "seed": 202607255,
+  "population": 1000,
+  "generations": 1000,
+  "known_count": 1,
+  "guided_repair_rate": 0.7,
+  "guided_repair_depth": 1,
+  "coverage_first": false,
+  "runtime_seconds": 881.907592,
+  "evaluated": 3998976,
+  "exact_survivor_count": 0,
+  "best_by_shape": [
+    {
+      "shape": [4, 2],
+      "budget": 11,
+      "cost": 11,
+      "forced": 7,
+      "vertices": 8,
+      "unforced_vertices": [[1, 1]]
+    },
+    {
+      "shape": [5, 2],
+      "budget": 15,
+      "cost": 15,
+      "forced": 9,
+      "vertices": 10,
+      "unforced_vertices": [[1, 1]]
+    },
+    {
+      "shape": [3, 3],
+      "budget": 13,
+      "cost": 13,
+      "forced": 8,
+      "vertices": 9,
+      "unforced_vertices": [[1, 1]]
+    },
+    {
+      "shape": [3, 4],
+      "budget": 18,
+      "cost": 18,
+      "forced": 11,
+      "vertices": 12,
+      "unforced_vertices": [[3, 2]]
+    },
+    {
+      "shape": [4, 3],
+      "budget": 18,
+      "cost": 18,
+      "forced": 10,
+      "vertices": 12,
+      "unforced_vertices": [[1, 2], [4, 2]]
+    }
+  ],
+  "completeness": "heuristic; no completeness claim",
+  "preservation_note": "Compact packet reconstructed from the complete emitted final JSON immediately after the run."
+}

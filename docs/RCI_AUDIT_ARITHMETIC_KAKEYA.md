@@ -79,6 +79,27 @@ Exact rational arithmetic verifies
 `(67/40)^3-4(67/40)+2=-37/64000`. The route gate rules out only deeper
 iteration of this recurrence; it does not rule out a different gadget.
 
+### Major: operational ceilings allowed an impractical exact path
+
+The original 1,024-vertex and 8,192-generator declarations were not supported
+by a dense exact-rational performance argument.
+
+Repair: the checker now rejects an over-threshold score before row reduction,
+caps exact work at 128 vertices and 512 generators, and exposes closure as
+unchecked when score rejection is already decisive. A 129-vertex fixture fails
+before exact reduction. Five seeded 128-vertex, score-bounded probes completed
+in at most 3.2 seconds on the audit machine; this is a bounded performance
+probe, not a wall-clock guarantee.
+
+### Search ablation: distinct labels lose the warmup control
+
+Because \(|X|\) is uncharged, topology-only search with a separate seeded
+integer-\(\tau\) label per generator was plausible. It failed to reproduce the
+\(2\times2\) warmup after 31,887 evaluations, whereas the 127-slope
+height-ten palette succeeded after 291,193. Keep distinct labels as a negative
+control and route full-target search toward tuned short relations. This is not
+a universal impossibility result.
+
 ### Major: target provenance
 
 The warmup and full thresholds must not be caller-relabelled.
@@ -89,7 +110,7 @@ bundled manifest. A target-only contract mutation is rejected as unregistered.
 ## Verification so far
 
 - live warmup and full prompts are byte-equal to the pinned snapshot;
-- 39 tests pass on Python 3.9 and Python 3.12;
+- 42 tests pass on Python 3.9 and Python 3.12;
 - the independent integer-identity script passes;
 - the independent cycle-map implementation passes the warmup plus 200 seeded
   random equivalence trials;
@@ -109,13 +130,15 @@ bundled manifest. A target-only contract mutation is rejected as unregistered.
 - the literal-operation diagnostic has an independent no-row-reducer identity
   script and a regression proving that the canonical same-tail checker rejects
   the same six-line serialization.
+- the operational-ceiling repair rejects over-threshold objects before closure
+  and fails safely above 128 vertices;
+- guided, coverage-first, and slope-palette calibration packets are preserved
+  under `experiments/arithmetic-kakeya/results/`.
 
 ## Open closure items
 
 - run the official structural validator after all documentation edits;
 - complete a clean-context forward test of the new CLI and contract mutation;
 - rerun the world graph validator after the vault mirror and Canvas update;
-- audit the 1,024-vertex and 8,192-generator operational ceilings;
-- preserve the full-target search results and residual limitations.
 
 Until these close, the revised skill remains `draft`.
