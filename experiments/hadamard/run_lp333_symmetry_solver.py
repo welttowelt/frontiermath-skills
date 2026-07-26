@@ -178,8 +178,11 @@ def main() -> int:
             == "PASS"
         ),
         "full_group_order": (
-            metadata["symmetry"]["full_group_order"] == 72
-            and metadata["symmetry"]["nonidentity_lex_leaders"] == 71
+            metadata["symmetry"]["full_group_order"]
+            == metadata["symmetry"]["decimation_quotient_order"]
+            * metadata["symmetry"]["sequence_swap_factor"]
+            and metadata["symmetry"]["nonidentity_lex_leaders"]
+            == metadata["symmetry"]["full_group_order"] - 1
         ),
         "preregistration_schema": (
             preregistration.get("schema")

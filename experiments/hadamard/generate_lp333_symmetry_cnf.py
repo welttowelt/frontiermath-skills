@@ -86,12 +86,17 @@ def unit_permutations(spec: dict[str, Any]) -> list[dict[str, Any]]:
 
 
 def validate_decimation_group(
-    spec: dict[str, Any], actions: Sequence[dict[str, Any]]
+    spec: dict[str, Any],
+    actions: Sequence[dict[str, Any]],
+    subgroup_order: int,
 ) -> dict[str, Any]:
     permutations = {item["permutation"] for item in actions}
     identity = tuple(range(spec["r"]))
-    if len(actions) != 36 or identity not in permutations:
-        raise ValueError("expected the 36-element unit/H decimation group")
+    expected_order = 216 // subgroup_order
+    if len(actions) != expected_order or identity not in permutations:
+        raise ValueError(
+            f"expected the {expected_order}-element unit/H decimation group"
+        )
     for left in permutations:
         for right in permutations:
             composition = tuple(right[left[index]] for index in range(spec["r"]))
@@ -124,7 +129,7 @@ def validate_decimation_group(
     return {
         "result": "PASS",
         "unit_group_order": 216,
-        "fixed_multiplier_subgroup_order": 6,
+        "fixed_multiplier_subgroup_order": subgroup_order,
         "quotient_action_order": len(actions),
         "closure_compositions_checked": len(actions) ** 2,
         "orbit_size_checks": len(actions) * spec["r"],
@@ -272,8 +277,10 @@ def main() -> int:
         "--random-equivalence-samples", type=int, default=1000
     )
     args = parser.parse_args()
-    if args.family_id not in (7, 9, 10):
-        raise ValueError("static symmetry generator accepts ID7, ID9, or ID10")
+    if args.family_id not in (4, 5, 7, 9, 10):
+        raise ValueError(
+            "static symmetry generator accepts ID4, ID5, ID7, ID9, or ID10"
+        )
     if args.random_equivalence_samples <= 0:
         raise ValueError("random-equivalence sample count must be positive")
 
@@ -301,15 +308,24 @@ def main() -> int:
     if random_equivalence["result"] != "PASS":
         raise ValueError("base CNF semantic-equivalence control failed")
     actions = unit_permutations(model.spec)
-    group_control = validate_decimation_group(model.spec, actions)
+    group_control = validate_decimation_group(
+        model.spec, actions, len(subgroup["elements"])
+    )
     variable_group = variable_actions(model.za, model.zb, actions)
     variables = tuple(model.za + model.zb)
     identity = tuple(variables)
     nonidentity = [
         item for item in variable_group if item["mapping"] != identity
     ]
-    if len(variable_group) != 72 or len(nonidentity) != 71:
-        raise ValueError("expected 72 full symmetry actions and one identity")
+    expected_full_group_order = 2 * len(actions)
+    if (
+        len(variable_group) != expected_full_group_order
+        or len(nonidentity) != expected_full_group_order - 1
+    ):
+        raise ValueError(
+            f"expected {expected_full_group_order} full symmetry actions "
+            "and one identity"
+        )
 
     breaker_records = []
     for action_index, action in enumerate(nonidentity):
@@ -416,8 +432,8 @@ def main() -> int:
                 "giant-weight lexicographic orders",
             ],
             "axis_warning": (
-                "The paper's SAT Competition timing ratios do not transfer "
-                "to LP333; this run uses the existing ID10 DRAT baseline."
+                "The paper's benchmark timing ratios do not transfer to "
+                "LP333; only terminal local evidence controls promotion."
             ),
         },
         "inputs": {

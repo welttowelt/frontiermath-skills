@@ -265,8 +265,13 @@ def verify_family(
         )
         if action[2] != identity
     ]
-    if len(actions) != 71:
-        raise ValueError("independent action reconstruction is not order 72")
+    expected_nonidentity = metadata["symmetry"][
+        "nonidentity_lex_leaders"
+    ]
+    if len(actions) != expected_nonidentity:
+        raise ValueError(
+            "independent action reconstruction has the wrong group order"
+        )
 
     expected: list[tuple[int, ...]] = []
     next_variable = model.builder.num_vars + 1
@@ -324,9 +329,9 @@ def verify_family(
         ),
         "finite_orbit_argument": (
             "Every satisfying assignment has a lexicographically least "
-            "representative in its finite 72-action orbit; each action "
-            "preserves the original formula, so all lex-leaders preserve "
-            "satisfiability."
+            f"representative in its finite {len(actions) + 1}-action orbit; "
+            "each action preserves the original formula, so all lex-leaders "
+            "preserve satisfiability."
         ),
         "run_checks": run_checks,
         "proof": proof,
