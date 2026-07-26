@@ -1,0 +1,151 @@
+{
+  "claim_boundary": "This artifact characterizes two strict-UNKNOWN runs. It neither proves nor disproves either fixed multiplier family.",
+  "do_not_promote": [
+    "A resource ceiling as evidence for SAT or UNSAT.",
+    "A different random seed as the next scientific lever.",
+    "A smaller proof file without complete independent replay.",
+    "Unlogged programmatic pruning."
+  ],
+  "evidence_unit": "matched LP333 ID4/ID5 static-symmetry calibration",
+  "matched_comparison": {
+    "classification": {
+      "id4": "search-bound at the 300 second wall ceiling",
+      "id5": "search plus proof-output bound at the 1 GiB proof ceiling",
+      "pair": "structural search reduction is required; merely raising or compressing the proof-volume allowance does not create a terminal mathematical result"
+    },
+    "id5_over_id4": {
+      "learned_literals_per_conflict": 0.9092454221328569,
+      "maximum_observed_rss": 1.5265418719211823,
+      "proof_bytes_per_conflict": 1.0748096734647736,
+      "proof_output_rate": 1.3318412067062757,
+      "propagations_per_conflict": 0.7605657223076816
+    },
+    "shared_observations": [
+      "Search occupies more than 83% of solver process time in both runs.",
+      "Both runs generate over two million conflicts and over one billion propagations.",
+      "Proof deletion records slightly exceed proof addition records in both runs.",
+      "Both runs stay well below the preregistered 4 GiB memory ceiling."
+    ]
+  },
+  "ranked_next_levers": [
+    {
+      "lever": "Add independently audited compression-derived necessary constraints to the same fixed-family formulas.",
+      "promotion_gate": "Exact derivation, semantic controls, formula bindings, and fresh proof or direct-model verification.",
+      "rank": 1,
+      "reason": "This attacks the shared search volume before proof emission and can remain a static, checkable CNF transformation."
+    },
+    {
+      "lever": "Prototype exact PAF-bound conflict reasons in a proof-producing programmatic solver.",
+      "promotion_gate": "Every learned reason must be independently validated and bound into a checker-accepted terminal certificate.",
+      "rank": 2,
+      "reason": "A specialized propagator can learn shorter problem-level reasons than the generic PB encoding, but proof logging and independent reason validation are substantial new machinery."
+    },
+    {
+      "lever": "Use binary or compressed proof output only as plumbing.",
+      "promotion_gate": "No promotion without complete independent replay.",
+      "rank": 3,
+      "reason": "It may prevent ID5's storage ceiling but does not address ID4's wall ceiling or reduce conflict search."
+    }
+  ],
+  "runs": {
+    "id4": {
+      "bindings": {
+        "cnf_sha256": "9588cfbd9d3c8849c95c8cc96268391f87cbbe145d80e440bf24a201023e55d2",
+        "encoding_metadata_sha256": "c74708915570bbc8108d1a05f9d68ffa4b169c218eb4d56f48486c3ddb8e3d81",
+        "manifest_sha256": "92aa30285dc63f85fd96f20458cde82b736327daba1cfef8eb3bdb07a6c32183",
+        "solver_log_sha256": "65a96f85a598330aa54f7998f5a19859c0a7726b50515a7c660edf6873081953",
+        "solver_sha256": "898c289365195bc56fadcd22e5c3e31fd782b2e9bd7fe69e4607e481b72c813a"
+      },
+      "counts": {
+        "conflicts": 2342324,
+        "decisions": 11400436,
+        "learned_clauses": 2230251,
+        "learned_literals": 74432275,
+        "proof_added_clauses": 6086071,
+        "proof_deleted_clauses": 6328184,
+        "propagations": 2240255824,
+        "restarts": 140241
+      },
+      "family_id": 4,
+      "formula": {
+        "bytes": 30623396,
+        "clauses": 1258456,
+        "variables": 190897
+      },
+      "outcome": {
+        "maximum_observed_rss_bytes": 831488000,
+        "proof_bytes": 971074958,
+        "status": "unknown",
+        "termination": "solver-ceiling-or-error",
+        "wall_seconds": 300.5064805839993
+      },
+      "profile": {
+        "search_percent": 87.52,
+        "search_seconds": 260.68,
+        "simplify_percent": 12.48,
+        "simplify_seconds": 37.17,
+        "stable_percent": 53.92,
+        "stable_seconds": 160.6,
+        "unstable_percent": 31.16,
+        "unstable_seconds": 92.8
+      },
+      "rates": {
+        "conflicts_per_wall_second": 7794.587309558072,
+        "learned_literals_per_conflict": 31.77710470455838,
+        "proof_bytes_per_conflict": 414.5775554534727,
+        "proof_bytes_per_wall_second": 3231460.9525652463,
+        "propagations_per_conflict": 956.4243990156784
+      }
+    },
+    "id5": {
+      "bindings": {
+        "cnf_sha256": "ce1af710fc3937d0169d573a063c736dbdb06da26af03b9d6a841f79a4f6024a",
+        "encoding_metadata_sha256": "70e7bba7b4cd23f7bf242d01685138c3ab314a5786827c4083d39d79369da865",
+        "manifest_sha256": "6e74e1c73616379e3f75d86f6dc2134d64632f9187442e106376b68f50fa85d2",
+        "solver_log_sha256": "4f757e798f5f233b0c53eab725cf159a5b5df7d8f2552085b1c04203829117e7",
+        "solver_sha256": "898c289365195bc56fadcd22e5c3e31fd782b2e9bd7fe69e4607e481b72c813a"
+      },
+      "counts": {
+        "conflicts": 2411354,
+        "decisions": 11016532,
+        "learned_clauses": 2298169,
+        "learned_literals": 69671702,
+        "proof_added_clauses": 7432093,
+        "proof_deleted_clauses": 7659045,
+        "propagations": 1754075841,
+        "restarts": 127359
+      },
+      "family_id": 5,
+      "formula": {
+        "bytes": 30623388,
+        "clauses": 1258456,
+        "variables": 190897
+      },
+      "outcome": {
+        "maximum_observed_rss_bytes": 1269301248,
+        "proof_bytes": 1074479972,
+        "status": "unknown",
+        "termination": "proof-size-ceiling",
+        "wall_seconds": 249.6588493750005
+      },
+      "profile": {
+        "search_percent": 83.28,
+        "search_seconds": 206.3,
+        "simplify_percent": 16.72,
+        "simplify_seconds": 41.41,
+        "stable_percent": 46.17,
+        "stable_seconds": 114.38,
+        "unstable_percent": 34.39,
+        "unstable_seconds": 85.2
+      },
+      "rates": {
+        "conflicts_per_wall_second": 9658.59614444518,
+        "learned_literals_per_conflict": 28.893186981256175,
+        "proof_bytes_per_conflict": 445.59196700277107,
+        "proof_bytes_per_wall_second": 4303792.854488709,
+        "propagations_per_conflict": 727.4236138700497
+      }
+    }
+  },
+  "schema": "frontiermath-hadamard-workload-characterization-v1"
+}
