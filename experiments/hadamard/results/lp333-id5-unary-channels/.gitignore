@@ -2,3 +2,6 @@ id5-symmetry.cnf
 calibration/*.drat
 calibration/*.log
 calibration/*.model
+one-hour/*.drat
+one-hour/*.log
+one-hour/*.model
