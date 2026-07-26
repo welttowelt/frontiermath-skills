@@ -1,0 +1,186 @@
+{
+  "bogus_proof_control": {
+    "proof": {
+      "bytes": 2,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/bogus-empty-proof-on-sat-cell-73.drat",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "rejected": true,
+    "run": {
+      "accepted": false,
+      "accepted_returncodes": [],
+      "command": [
+        "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/proof_phase2/tools/drat-trim/drat-trim",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf",
+        "experiments/hadamard/results/id3-profile-proof-pilot/bogus-empty-proof-on-sat-cell-73.drat",
+        "-I"
+      ],
+      "log": "experiments/hadamard/results/id3-profile-proof-pilot/bogus-empty-proof-on-sat-cell-73.log",
+      "log_sha256": "3c45bcfe34aea0ed5c81a1c2703398db5739dd1eac5c34736b5a4a2147a9db8e",
+      "maximum_resident_set_size_bytes": 57262080,
+      "returncode": 1,
+      "timed_out": false,
+      "wall_seconds": 0.06250775000080466
+    },
+    "target": "SAT cell 73"
+  },
+  "budget": {
+    "clause_ceiling_per_cell": 2000000,
+    "memory_byte_ceiling": 12884901888,
+    "proof_byte_ceiling": 5368709120,
+    "replay_wall_seconds_ceiling": 7200
+  },
+  "cell_0": {
+    "encoding": {
+      "clauses": 67572,
+      "cnf_bytes": 1196751,
+      "cnf_sha256": "95316c5396653a8e3f643c14e1f6d26984e9b5f76b5c7746aa6a8f8fb4e74310",
+      "square_counts": {
+        "25": 12,
+        "49": 6
+      },
+      "variables": 12044
+    },
+    "encoding_metadata": {
+      "bytes": 7209,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00-encoding.json",
+      "sha256": "602292f14444f72e9d8c0d37ebaac80e35c694aa79a7916cedb25b169104e4d9"
+    },
+    "independent_replay": {
+      "accepted": true,
+      "accepted_returncodes": [
+        0
+      ],
+      "command": [
+        "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/proof_phase2/tools/drat-trim/drat-trim",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00.cnf",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00.drat",
+        "-I"
+      ],
+      "log": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00-drat-trim.log",
+      "log_sha256": "21823f05d18e07f258f29cfb8dbbbdbf4773f14ad77984b236e9f5e5b4fdd147",
+      "maximum_resident_set_size_bytes": 57131008,
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.07621241699962411
+    },
+    "proof": {
+      "bytes": 564139,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00.drat",
+      "sha256": "c46fda5e2189830c3ab278e243b6727053e268d83103035ee13044d91a4be590"
+    },
+    "solver": {
+      "accepted": true,
+      "accepted_returncodes": [
+        20
+      ],
+      "command": [
+        "/tmp/frontiermath-cadical-rel-3.0.1/build/cadical",
+        "--binary=false",
+        "--factor=false",
+        "--checkproof=1",
+        "-q",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00.cnf",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00.drat"
+      ],
+      "log": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-00-cadical.log",
+      "log_sha256": "ef054736556ceb4341460592c2c6dcd4df19938e6e246494b4a03501ebb814b5",
+      "maximum_resident_set_size_bytes": 13729792,
+      "returncode": 20,
+      "timed_out": false,
+      "wall_seconds": 0.036972665999201126
+    }
+  },
+  "cell_73": {
+    "arithmetic_verification": {
+      "bytes": 842,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73-arithmetic-verification.json",
+      "sha256": "ba6cf5373be2025f767ad1d2a5057d2ae4841159241fe8f747e83cb86bf70a66"
+    },
+    "direct_model_verification": {
+      "bytes": 6286,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73-model-verification.json",
+      "sha256": "4e61ad1610cef7c32a3e0d7fdd8dcb270fdfe7b83a5f27bc1c257ae9b56ee843"
+    },
+    "encoding": {
+      "clauses": 92904,
+      "cnf_bytes": 1677723,
+      "cnf_sha256": "255879dc8c072d6d0fa621d6dc1bfd752b13d71946baf94c7ae86d2e1b4f4da3",
+      "square_counts": {
+        "1": 12,
+        "121": 4,
+        "49": 2
+      },
+      "variables": 12728
+    },
+    "encoding_metadata": {
+      "bytes": 8034,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73-encoding.json",
+      "sha256": "a8158cd435dd5175f1ae488aaeced0cb4e3c696bf94244bcae7059d176e1f5f2"
+    },
+    "model": {
+      "bytes": 75779,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.model",
+      "sha256": "30f2b3d3a31d4b13da53d1000427b67dc2b4c8f0cc6a5320657276cd5a4908c9"
+    },
+    "solver": {
+      "accepted": true,
+      "accepted_returncodes": [
+        10
+      ],
+      "command": [
+        "/tmp/frontiermath-cadical-rel-3.0.1/build/cadical",
+        "--factor=false",
+        "--checkwitness=true",
+        "-q",
+        "-w",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.model",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf"
+      ],
+      "log": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73-cadical.log",
+      "log_sha256": "e18884942e060c3f4c1a656fe7db8dcd9e5704fb1c016c400d02a5f5f680c9e0",
+      "maximum_resident_set_size_bytes": 89161728,
+      "returncode": 10,
+      "timed_out": false,
+      "wall_seconds": 11.870149125003081
+    },
+    "witness": {
+      "bytes": 482,
+      "path": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73-witness.json",
+      "sha256": "97fd54af5c63f9df6da62bfa08d7d525afc97f2eb50add156bc40dcd7f8d5a2b"
+    }
+  },
+  "claim_status": {
+    "cell_0": "proof-certified-infeasible",
+    "cell_73": "model-verified-feasible"
+  },
+  "gate_a_checks": {
+    "bogus_proof_rejected": true,
+    "both_bound_to_same_ledger": true,
+    "both_under_clause_ceiling": true,
+    "negative_proof_under_byte_ceiling": true,
+    "negative_replay_under_memory_ceiling": true,
+    "negative_replay_under_wall_ceiling": true,
+    "positive_arithmetic_check_passed": true,
+    "positive_direct_check_passed": true
+  },
+  "refined_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+  "runner_sha256": "efd35eb63a6a274ba9fffc579a2f1009bfadad822399cd05889501f050138ae4",
+  "runtime_seconds": 12.312971208004456,
+  "schema": "frontiermath-hadamard-id3-profile-proof-pilot-v1",
+  "scope": "named compressed profile cells only; no full LP(333) or H(668) claim",
+  "status": "pass",
+  "tools": {
+    "cadical": {
+      "binary_sha256": "e49484772382f43a455368427ea934af0d253368112cb50e48b8f016579f1fc6",
+      "path": "/tmp/frontiermath-cadical-rel-3.0.1/build/cadical",
+      "version": "3.0.1"
+    },
+    "drat_trim": {
+      "binary_sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47",
+      "path": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/proof_phase2/tools/drat-trim/drat-trim",
+      "source_sha256": "d834b649f437e091597f5347f259b9f681087f89ca0844d0cee250a1a1a0c2ee"
+    }
+  }
+}

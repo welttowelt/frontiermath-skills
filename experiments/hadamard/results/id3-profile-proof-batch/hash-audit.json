@@ -1,0 +1,18 @@
+{
+  "auditor_sha256": "b2aacedc11d7bde133119213f447e5723cfd156b2d90f4be9990d90f6cf9e43a",
+  "cells_checked": 52,
+  "cells_expected": 52,
+  "checker_binary_sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47",
+  "checker_source_sha256": "d834b649f437e091597f5347f259b9f681087f89ca0844d0cee250a1a1a0c2ee",
+  "errors": [],
+  "fresh_bogus_proof_control": null,
+  "fresh_replay_count": 0,
+  "fresh_replays": [],
+  "manifest_sha256": "614f4f333ebb00d3aa8b637744d18f25e8a5a44cad36ae1ae3875bc866734748",
+  "mode": "hash-and-manifest",
+  "refined_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+  "runtime_seconds": 0.5521075830038171,
+  "schema": "frontiermath-hadamard-id3-profile-proof-batch-audit-v1",
+  "status": "pass",
+  "total_proof_bytes": 1127906114
+}

@@ -1,0 +1,56 @@
+{
+  "baseline": {
+    "auxiliary_xor_variables": 3906,
+    "branches": 4965135,
+    "conflicts": 565407,
+    "model": "pairwise-xor",
+    "primary_variables": 126,
+    "proto_constraints": 15669,
+    "proto_variables": 4032,
+    "sat": null,
+    "status": "UNKNOWN",
+    "wall_seconds": 30.059264792005706
+  },
+  "benchmark_sha256": "007409f0c2823f87d3b4051d1904a5fa33850cf8714c99f9d26ebce28d253ea0",
+  "block": {
+    "branches": 0,
+    "conflicts": 0,
+    "contribution_variables": 434,
+    "element_table_entries": 3513888,
+    "model": "crt-column-types",
+    "pattern_domain_sizes": {
+      "-3": 84,
+      "1": 126,
+      "3": 84
+    },
+    "primary_type_variables": 14,
+    "proto_constraints": 899,
+    "proto_variables": 882,
+    "sat": null,
+    "status": "UNKNOWN",
+    "wall_seconds": 32.70703537499503
+  },
+  "claim_limit": "LP63 formulation calibration only; transfer to id3 requires a separate measured implementation",
+  "comparison": {
+    "branch_reduction_baseline_over_block": null,
+    "gate_pass": false,
+    "significance_floor": 3.0,
+    "wall_speedup_baseline_over_block": null
+  },
+  "configuration": {
+    "max_seconds_per_model": 30.0,
+    "seed": 20260726,
+    "workers": 8
+  },
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "fixture_sha256": "56879582d061334bf489f0241434d95864242e4281eae792dfd7a4985a8f476e",
+  "schema": "frontiermath-hadamard-lp63-model-benchmark-v1",
+  "solver": {
+    "name": "OR-Tools CP-SAT",
+    "version": "9.15.6755"
+  },
+  "status": "measured"
+}

@@ -1,0 +1,108 @@
+{
+  "claim_limit": "UNKNOWN is no evidence of infeasibility; INFEASIBLE lacks a replayable proof artifact and closes only this one slice",
+  "compressed_witness_sha256": "bdc6b5e2161a36f698e1f33d116631a47dcd3f7160b89c524df80ff731f041aa",
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "family_id": 3,
+  "generator_sha256": "eba43e6526944148d97efcedbe8157893cd9434a1a51db1bbcd429bded6413f4",
+  "model": {
+    "added_compression_equalities": 18,
+    "base_model": "lp333/code/cpsat_search.py",
+    "nonzero_shift_orbits": 116,
+    "orbit_variables_per_sequence": 117,
+    "proto_constraints": 54428,
+    "proto_variables": 13806
+  },
+  "oriented_compression": {
+    "a_row_sum": -1,
+    "a_tilde": [
+      13,
+      -1,
+      -1,
+      5,
+      1,
+      -5,
+      -5,
+      -7,
+      -1
+    ],
+    "b_row_sum": -1,
+    "b_tilde": [
+      13,
+      -7,
+      5,
+      -1,
+      1,
+      -1,
+      -5,
+      -5,
+      -1
+    ]
+  },
+  "sat": null,
+  "schema": "frontiermath-hadamard-id3-exact-slice-v1",
+  "scope": "one exact 9-compression slice of the id3 orbit model",
+  "solver": {
+    "branches": 7674499,
+    "conflicts": 2321,
+    "max_seconds": 300.0,
+    "name": "OR-Tools CP-SAT",
+    "random_seed": 20260726,
+    "version": "9.15.6755",
+    "wall_seconds": 300.12518795899814,
+    "workers": 8
+  },
+  "source": {
+    "base_model_sha256": "26f3c6b7877769455461b6c355f75a5cf3615f6e4d93c6f4ead85a5101c510c9",
+    "repository": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions",
+    "search_common_sha256": "e5142332a45835828ffb3d74eda07d0d7b3fab8a64cceeddef6d1718401ca760",
+    "subgroup_elements": [
+      1,
+      10,
+      100
+    ],
+    "subgroup_record": {
+      "elements": [
+        1,
+        10,
+        100
+      ],
+      "generators": [
+        10
+      ],
+      "id": 3,
+      "killed_by_mod37_obstruction": false,
+      "mod37_full_reduction": false,
+      "mod9_full_reduction": false,
+      "num_nonzero_orbits": 116,
+      "num_orbits": 117,
+      "orbit_signature": [
+        [
+          1,
+          9
+        ],
+        [
+          3,
+          108
+        ]
+      ],
+      "order": 3,
+      "structure": {
+        "order": 3,
+        "reduction_mod37": [
+          1,
+          10,
+          26
+        ],
+        "reduction_mod37_order": 3,
+        "reduction_mod9": [
+          1
+        ],
+        "reduction_mod9_order": 1
+      }
+    }
+  },
+  "status": "UNKNOWN"
+}

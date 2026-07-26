@@ -1,0 +1,21 @@
+{
+  "adversarial_single-entry_mutation_rejected": true,
+  "candidate_sha256": "56879582d061334bf489f0241434d95864242e4281eae792dfd7a4985a8f476e",
+  "candidate_violations": [],
+  "checked_predicates": [
+    "length",
+    "binary-entry-domain",
+    "row-sums",
+    "all-nonzero-periodic-autocorrelations",
+    "prescribed-pq2-compression"
+  ],
+  "checker_sha256": "20b3ff8fe11b0c61003e0fc96126a54f9522cefa227b6998dd132122ee1e425f",
+  "claim_status": "published-calibration-reproduced",
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "length": 63,
+  "runtime_seconds": 0.00117787499766564,
+  "status": "pass"
+}

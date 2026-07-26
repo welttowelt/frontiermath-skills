@@ -1,0 +1,10 @@
+{
+  "candidate": "experiments/hadamard/results/order-128-from-lp63.csv",
+  "candidate_sha256": "bd44b9bbe295de72732109838e84611108de6cd69a290baf99ad254b3ae18dfa",
+  "construction": "two-circulant-core Legendre-pair construction",
+  "generator_sha256": "e04a9108487bfa8ae3e609e71557f5528e4003043a9fc29df59c78b08e1dfd97",
+  "legendre_pair_sha256": "56879582d061334bf489f0241434d95864242e4281eae792dfd7a4985a8f476e",
+  "order": 128,
+  "status": "generated",
+  "verification_boundary": "shape and entry checks only; exact Gram verification is separate"
+}

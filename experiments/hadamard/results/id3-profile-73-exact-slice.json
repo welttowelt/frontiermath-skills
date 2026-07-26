@@ -1,0 +1,107 @@
+{
+  "claim_limit": "UNKNOWN has no negative force; uncertified INFEASIBLE closes only this exact profile slice",
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "family_id": 3,
+  "generator_sha256": "0137c2d9d4683b9886d97eddc96648162baad3c17fb0b93f5563ffe7b1767338",
+  "inputs": {
+    "a_tilde": [
+      1,
+      11,
+      1,
+      -1,
+      1,
+      -11,
+      -1,
+      -1,
+      1
+    ],
+    "b_tilde": [
+      1,
+      1,
+      7,
+      -1,
+      1,
+      -7,
+      11,
+      -1,
+      -11
+    ],
+    "profile_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532"
+  },
+  "model": {
+    "base_model": "lp333/code/cpsat_search.py",
+    "nonzero_shift_orbits": 116,
+    "orbit_variables_per_sequence": 117,
+    "primary_orbit_hints": 234,
+    "proto_constraints": 54502,
+    "proto_variables": 13806
+  },
+  "profile_id": 73,
+  "sat": null,
+  "schema": "frontiermath-hadamard-id3-profile-ledger-slice-v1",
+  "scope": "one ranked prescribed-margin compressed profile inside the complete common-multiplier id3 PAF model",
+  "solver": {
+    "branches": 5878941,
+    "conflicts": 830895,
+    "max_seconds": 300.0,
+    "name": "OR-Tools CP-SAT",
+    "random_seed": 20260799,
+    "version": "9.15.6755",
+    "wall_seconds": 300.1868644169954,
+    "workers": 8
+  },
+  "source": {
+    "base_model_sha256": "26f3c6b7877769455461b6c355f75a5cf3615f6e4d93c6f4ead85a5101c510c9",
+    "paper_doi": "10.1016/j.jsc.2026.102606",
+    "repository": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions",
+    "subgroup_record": {
+      "elements": [
+        1,
+        10,
+        100
+      ],
+      "generators": [
+        10
+      ],
+      "id": 3,
+      "killed_by_mod37_obstruction": false,
+      "mod37_full_reduction": false,
+      "mod9_full_reduction": false,
+      "num_nonzero_orbits": 116,
+      "num_orbits": 117,
+      "orbit_signature": [
+        [
+          1,
+          9
+        ],
+        [
+          3,
+          108
+        ]
+      ],
+      "order": 3,
+      "structure": {
+        "order": 3,
+        "reduction_mod37": [
+          1,
+          10,
+          26
+        ],
+        "reduction_mod37_order": 3,
+        "reduction_mod9": [
+          1
+        ],
+        "reduction_mod9_order": 1
+      }
+    }
+  },
+  "square_counts": {
+    "1": 12,
+    "121": 4,
+    "49": 2
+  },
+  "status": "UNKNOWN"
+}
