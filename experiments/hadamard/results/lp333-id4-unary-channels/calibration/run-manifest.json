@@ -1,0 +1,113 @@
+{
+  "binding_checks": {
+    "direct_full_length_semantic_equivalence": true,
+    "formula_audit": true,
+    "formula_hash": true,
+    "full_group_order": true,
+    "generator_hash": true,
+    "lp63_positive_control": true,
+    "metadata_status": true,
+    "preregistered_evidence_unit": true,
+    "preregistration_audit": true,
+    "preregistration_schema": true,
+    "random_semantic_equivalence": true,
+    "symmetry_group_control": true
+  },
+  "budgets": {
+    "drat_baseline_bytes": 712682070,
+    "max_memory_bytes": 4294967296,
+    "max_proof_bytes": 1073741824,
+    "max_verification_seconds": 120.0,
+    "max_wall_seconds": 300.0,
+    "promotion_proof_bytes": 237560690
+  },
+  "claim_boundary": "Only proof-certified-unsat or directly-verified-sat decides the named fixed family; resource ceilings remain UNKNOWN.",
+  "environment": {
+    "machine": "arm64",
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6"
+  },
+  "family_id": 4,
+  "inputs": {
+    "encoding_metadata": "experiments/hadamard/results/lp333-id4-unary-channels/encoding.json",
+    "encoding_metadata_sha256": "c7bd7a26e1e9a3bcc1cd8cf426967c2f56ef7f6f635c114692c093a4c4ecc039",
+    "formula_audit": "experiments/hadamard/results/lp333-id4-unary-channels/unary-channel-audit.json",
+    "formula_audit_sha256": "cf913d109164a2db0c802c2f151c3034cabcee108807f59863b424bd8e36142e",
+    "formula_sha256": "652d014fa2e1822521b163dd479a3c178bf53519fc59144f6e0eb684f18c988f",
+    "preregistration": "experiments/hadamard/preregistrations/lp333-id4-id5-unary-cardinality-channels.json",
+    "preregistration_audit": "experiments/hadamard/preregistrations/lp333-id4-id5-unary-cardinality-channels-audit.json",
+    "preregistration_audit_sha256": "6409ce31804cd4da44eb5b1644ed5bf78fa0a26b1985116bf7a64e5fdef76912",
+    "preregistration_sha256": "a044911badea6b9c8ca329c87d97608ab43b7135ca5b02b1a63faa7317128da5",
+    "sat_control_cnf_sha256": "255879dc8c072d6d0fa621d6dc1bfd752b13d71946baf94c7ae86d2e1b4f4da3"
+  },
+  "proof_checks": {
+    "first_bogus": {
+      "accepted": false,
+      "log_sha256": "967896eeabcd3b04deb2ca9b4846bc6016b39002f2618a9cc89ae03557b112a0",
+      "not_verified_marker": true,
+      "proof_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rejected": true,
+      "returncode": 1,
+      "timed_out": false,
+      "verified_marker": false,
+      "wall_seconds": 0.08963812499860069
+    },
+    "first_replay": null,
+    "fresh_bogus": null,
+    "fresh_replay": null,
+    "fresh_replay_bindings": null,
+    "sat_model_audit": null
+  },
+  "runner_sha256": "e29c53bb5bc72f851ce5b0376e2b8310384aa3b9b9dfd18d07b87067ee1d4cb0",
+  "schema": "frontiermath-hadamard-lp333-symmetry-run-v2",
+  "significance": {
+    "accepted_twice": false,
+    "fresh_bogus_rejected": false,
+    "proof_reduction_over_drat": 2.886831175437213,
+    "proof_volume_gate_applicable": false,
+    "proof_volume_gate_pass": false
+  },
+  "solver": {
+    "command": [
+      "/Users/m1/.cache/frontiermath-tools/cadical-rel-3.0.1/build/cadical",
+      "--binary=false",
+      "--factor=false",
+      "--checkproof=1",
+      "--checkwitness=true",
+      "-t",
+      "300",
+      "-w",
+      "experiments/hadamard/results/lp333-id4-unary-channels/calibration/id4-symmetry.model",
+      "experiments/hadamard/results/lp333-id4-unary-channels/id4-symmetry.cnf",
+      "experiments/hadamard/results/lp333-id4-unary-channels/calibration/id4-symmetry.drat"
+    ],
+    "log_sha256": "8a1b838d2d0dbbdb953d57291efed1cf598128386983b3f1b5820dd4d7e93a9b",
+    "maximum_observed_rss_bytes": 729055232,
+    "model": {
+      "bytes": 10,
+      "exists": true,
+      "sha256": "8fba55cea0f98be36fab7b65349dda867a58aabfcf974a46098f5123830ac5cb"
+    },
+    "proof": {
+      "bytes": 246873484,
+      "exists": true,
+      "sha256": "946459c1b20303fe23ad68cf7cecfa9b03afd3f2ca29510ce956e1cf44a307ba"
+    },
+    "returncode": 0,
+    "termination": "solver-ceiling-or-error",
+    "wall_seconds": 300.1046637920008
+  },
+  "status": "unknown",
+  "tools": {
+    "cadical": {
+      "path": "/Users/m1/.cache/frontiermath-tools/cadical-rel-3.0.1/build/cadical",
+      "sha256": "898c289365195bc56fadcd22e5c3e31fd782b2e9bd7fe69e4607e481b72c813a",
+      "source_repo": "/Users/m1/.cache/frontiermath-tools/cadical-rel-3.0.1",
+      "source_revision": "c60730422e758ef1cebe7aeddf2dda31c996bf04"
+    },
+    "drat_trim": {
+      "path": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/proof_phase2/tools/drat-trim/drat-trim",
+      "sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47"
+    }
+  }
+}

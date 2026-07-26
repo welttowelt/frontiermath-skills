@@ -15,3 +15,8 @@ It also checks 864 source XOR clauses and rejects a one-literal mutation.
 
 The large CNF and proof payloads are ignored; tracked metadata and manifests
 bind their hashes.
+
+The 300-second proof-producing calibration remains strictly **UNKNOWN**, but
+the channel mechanism passes its workload gate: `279,414` conflicts and a
+`266,805,565`-byte incomplete proof, down from `1,901,171` conflicts and
+`903,361,631` bytes in the translation-only parent.
