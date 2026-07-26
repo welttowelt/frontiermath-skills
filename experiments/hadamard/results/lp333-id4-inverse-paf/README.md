@@ -12,3 +12,8 @@ The quotient reduces the formula from 1,258,456 to 752,244 clauses and from
 
 The CNF and proof-run payloads are intentionally ignored; tracked manifests
 bind their SHA-256 hashes.
+
+The proof-producing calibration remained strictly **UNKNOWN** at the
+preregistered 300-second wall ceiling. Its incomplete proof was 966,817,925
+bytes and peak observed RSS was 862,208,000 bytes. The quotient is therefore a
+validated representation reduction, not a decision of ID4.
