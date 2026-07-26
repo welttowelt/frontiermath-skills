@@ -1,0 +1,130 @@
+{
+  "binding_checks": {
+    "formula_hash": true,
+    "full_group_order": true,
+    "generator_hash": true,
+    "lp63_positive_control": true,
+    "metadata_status": true,
+    "symmetry_group_control": true
+  },
+  "budgets": {
+    "drat_baseline_bytes": 712682070,
+    "max_memory_bytes": 4294967296,
+    "max_proof_bytes": 1073741824,
+    "max_verification_seconds": 120.0,
+    "max_wall_seconds": 300.0,
+    "promotion_proof_bytes": 237560690
+  },
+  "claim_boundary": "Only gate-pass promotes this exact static mechanism to ID9; resource ceilings remain UNKNOWN.",
+  "environment": {
+    "machine": "arm64",
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6"
+  },
+  "family_id": 10,
+  "inputs": {
+    "encoding_metadata": "experiments/hadamard/results/lp333-id10-symmetry/encoding.json",
+    "encoding_metadata_sha256": "2eff579b4647ac02b28135620e4bb78ce9937b39a677b753815ba1ea234b19db",
+    "formula_sha256": "93d0ef38aa56f4c73f9bd354e3631f31d74ed510af1f55855cb0b66bd397df4c",
+    "sat_control_cnf_sha256": "83ff4312637773ca2de25703331476c3e68b4313f20258cd1804c124ef952109"
+  },
+  "proof_checks": {
+    "first_bogus": {
+      "accepted": false,
+      "log_sha256": "7dea51991a07b1622b8ab38b194b4579f530c6927fb2ebc4636b4448e7b83720",
+      "not_verified_marker": true,
+      "proof_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rejected": true,
+      "returncode": 1,
+      "timed_out": false,
+      "verified_marker": false,
+      "wall_seconds": 0.07126304200028244
+    },
+    "first_replay": {
+      "accepted": true,
+      "log_sha256": "735e8539b067cec941e986deb2ae5c7ac2daa345e6cfa083e827c5445007d520",
+      "not_verified_marker": false,
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 12.132846458000131
+    },
+    "fresh_bogus": {
+      "accepted": false,
+      "log_sha256": "c507062f78f171b4c6d209be7949a13b8cbe031a1827e3f342c470e0b5231131",
+      "not_verified_marker": true,
+      "proof_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rejected": true,
+      "returncode": 1,
+      "timed_out": false,
+      "verified_marker": false,
+      "wall_seconds": 0.03936874999999418
+    },
+    "fresh_replay": {
+      "accepted": true,
+      "log_sha256": "3cc3db36575855365072b69aa44ea46f58ab3bf14d79e103bbf6d53de141c9d2",
+      "not_verified_marker": false,
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 12.234728292
+    },
+    "fresh_replay_bindings": {
+      "cadical_sha256_unchanged": true,
+      "checker_sha256_unchanged": true,
+      "formula_sha256_unchanged": true,
+      "proof_sha256_unchanged": true
+    }
+  },
+  "runner_sha256": "4fd24341ad0c86255796a0379f9783dec8b6468245d215e1093717b6e37e5f76",
+  "schema": "frontiermath-hadamard-lp333-symmetry-run-v1",
+  "significance": {
+    "accepted_twice": true,
+    "fresh_bogus_rejected": true,
+    "proof_reduction_over_drat": 3.304030094161756,
+    "proof_volume_gate_pass": true
+  },
+  "solver": {
+    "command": [
+      "/tmp/frontiermath-cadical-rel-3.0.1/build/cadical",
+      "--binary=false",
+      "--factor=false",
+      "--checkproof=1",
+      "--checkwitness=true",
+      "-t",
+      "300",
+      "-w",
+      "experiments/hadamard/results/lp333-id10-symmetry/calibration-v2/id10-symmetry.model",
+      "experiments/hadamard/results/lp333-id10-symmetry/id10-symmetry.cnf",
+      "experiments/hadamard/results/lp333-id10-symmetry/calibration-v2/id10-symmetry.drat"
+    ],
+    "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "maximum_observed_rss_bytes": 422543360,
+    "model": {
+      "bytes": 16,
+      "exists": true,
+      "sha256": "bde6e1eede96772c07c8ce29fd18088863815bd043aa59a06f11f5838cf8a162"
+    },
+    "proof": {
+      "bytes": 215700841,
+      "exists": true,
+      "sha256": "653a7058cf3a0296589f0a4be3f8c819fd52bcdc5c9962d8b92559ca806a90f0"
+    },
+    "returncode": 20,
+    "termination": "unsat",
+    "wall_seconds": 23.375085832999503
+  },
+  "status": "gate-pass",
+  "tools": {
+    "cadical": {
+      "path": "/tmp/frontiermath-cadical-rel-3.0.1/build/cadical",
+      "sha256": "c75281be5592c1494b57ea7a84d999e5dbdf920003262f911ae26ccf402a0c50",
+      "source_repo": "/tmp/frontiermath-cadical-rel-3.0.1",
+      "source_revision": "c60730422e758ef1cebe7aeddf2dda31c996bf04"
+    },
+    "drat_trim": {
+      "path": "../hadamard-668-multiplier-obstructions/lp333/proof_phase2/tools/drat-trim/drat-trim",
+      "sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47"
+    }
+  }
+}

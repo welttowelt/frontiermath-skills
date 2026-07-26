@@ -1,0 +1,582 @@
+{
+  "claim_boundary": "The lex-leaders preserve satisfiability by selecting the least assignment in every explicitly verified finite symmetry orbit. UNSAT still requires an accepted complete proof.",
+  "cnf": {
+    "bytes": 11469271,
+    "clauses": 499144,
+    "path": "experiments/hadamard/results/lp333-id10-symmetry/id10-symmetry.cnf",
+    "sha256": "93d0ef38aa56f4c73f9bd354e3631f31d74ed510af1f55855cb0b66bd397df4c",
+    "unit_split_count": 659,
+    "variables": 74545
+  },
+  "controls": {
+    "exact_decimation_group": {
+      "closure_compositions_checked": 1296,
+      "fixed_multiplier_subgroup_order": 6,
+      "orbit_size_checks": 2124,
+      "paf_coefficient_checks": 3572568,
+      "quotient_action_order": 36,
+      "result": "PASS",
+      "unit_group_order": 216
+    },
+    "lp63_positive_canonicalization": {
+      "canonical_pair_directly_verified": true,
+      "canonical_prefix_sha256": "009a943fcba964d06015256e78c23c4fde31a1539e656d4f56c0ebc8ee1287f3",
+      "fixture_sha256": "56879582d061334bf489f0241434d95864242e4281eae792dfd7a4985a8f476e",
+      "lex_comparisons": 72,
+      "orbit_assignments": 72,
+      "result": "PASS",
+      "sequence_swap_factor": 2,
+      "unit_decimations": 36
+    }
+  },
+  "family_id": 10,
+  "generator_sha256": "35eb63d91e773e5d2db6a45b1f0a489c855fcdb1b235580b8b728c773e8380f2",
+  "inputs": {
+    "lp63_fixture": "experiments/hadamard/results/lp63-trace-reconstruction.json",
+    "lp63_fixture_sha256": "56879582d061334bf489f0241434d95864242e4281eae792dfd7a4985a8f476e",
+    "proof_encoder": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/proof_phase2/lp333_cnf.py",
+    "proof_encoder_sha256": "c24821d116bf9cf789e18330ba14dfb19f6d63c19a6874de36144867d78f5094"
+  },
+  "paper_to_levers": {
+    "adopted_shadow": "static lex-leaders with prefix auxiliaries for an explicit small symmetry group",
+    "axis_warning": "The paper's SAT Competition timing ratios do not transfer to LP333; this run uses the existing ID10 DRAT baseline.",
+    "not_adopted": [
+      "general dominance proof logging",
+      "dynamic symmetry learning",
+      "giant-weight lexicographic orders"
+    ],
+    "paper": "Bogaerts, Gocht, McCreesh, Nordstrom, Certified Dominance and Symmetry Breaking for Combinatorial Optimisation",
+    "pdf_sha256": "026caf5d675eab8d6b8d163d91cfef5c719d0e1ce775f476e6973354ddc06509",
+    "url": "https://arxiv.org/abs/2203.12275"
+  },
+  "schema": "frontiermath-hadamard-lp333-symmetry-cnf-v1",
+  "status": "generated",
+  "subgroup": {
+    "elements": [
+      1,
+      73,
+      121,
+      175,
+      196,
+      322
+    ],
+    "orbit_count": 59,
+    "orbit_signature": {
+      "1": 3,
+      "3": 2,
+      "6": 54
+    },
+    "order": 6
+  },
+  "symmetry": {
+    "added_auxiliaries": 7993,
+    "added_clauses": 47958,
+    "breakers": [
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 1
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 2
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 2
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 4
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 4
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 5
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 5
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 7
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 7
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 8
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 8
+      },
+      {
+        "auxiliaries": 71,
+        "clauses": 426,
+        "support": 72,
+        "swap_sequences": false,
+        "unit": 10
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 10
+      },
+      {
+        "auxiliaries": 103,
+        "clauses": 618,
+        "support": 104,
+        "swap_sequences": false,
+        "unit": 11
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 11
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 13
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 13
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 14
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 14
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 16
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 16
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 19
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 19
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 20
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 20
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 22
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 22
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 25
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 25
+      },
+      {
+        "auxiliaries": 103,
+        "clauses": 618,
+        "support": 104,
+        "swap_sequences": false,
+        "unit": 26
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 26
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 31
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 31
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 35
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 35
+      },
+      {
+        "auxiliaries": 103,
+        "clauses": 618,
+        "support": 104,
+        "swap_sequences": false,
+        "unit": 38
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 38
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 41
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 41
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 43
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 43
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 49
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 49
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 50
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 50
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 52
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 52
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 53
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 53
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 62
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 62
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 67
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 67
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 71
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 71
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 76
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 76
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 77
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 77
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 79
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 79
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 95
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 95
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 98
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 98
+      },
+      {
+        "auxiliaries": 71,
+        "clauses": 426,
+        "support": 72,
+        "swap_sequences": false,
+        "unit": 100
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 100
+      },
+      {
+        "auxiliaries": 115,
+        "clauses": 690,
+        "support": 116,
+        "swap_sequences": false,
+        "unit": 125
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 125
+      },
+      {
+        "auxiliaries": 107,
+        "clauses": 642,
+        "support": 108,
+        "swap_sequences": false,
+        "unit": 154
+      },
+      {
+        "auxiliaries": 117,
+        "clauses": 702,
+        "support": 118,
+        "swap_sequences": true,
+        "unit": 154
+      }
+    ],
+    "decimation_quotient_order": 36,
+    "encoding": "complete lex-leaders with fresh prefix-equality auxiliaries",
+    "full_group_order": 72,
+    "nonidentity_lex_leaders": 71,
+    "sequence_swap_factor": 2,
+    "support_max": 118,
+    "support_min": 72,
+    "variable_order": "za[0..58], then zb[0..58]"
+  }
+}

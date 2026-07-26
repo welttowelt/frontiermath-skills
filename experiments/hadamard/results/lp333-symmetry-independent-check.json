@@ -1,0 +1,72 @@
+{
+  "families": [
+    {
+      "family_id": 9,
+      "finite_orbit_argument": "Every satisfying assignment has a lexicographically least representative in its finite 72-action orbit; each action preserves the original formula, so all lex-leaders preserve satisfiability.",
+      "first_replay_seconds": 7.53665754099984,
+      "formula_sha256": "9bc776129715c24415836c6ebc6666595d1cd0a26015c4ec30910ebfa7817047",
+      "fresh_replay_seconds": 7.471588499999598,
+      "manifest_sha256": "a93bb80cc5c2bd9b118f002b9f1da8050db208d3a721b2a7665df7d75267de48",
+      "metadata_sha256": "ac669716b02ddff94c0cd810f0e7ae797a4aa0087479ed39f7bb4630d957302a",
+      "proof": {
+        "bytes": 205229334,
+        "exists": true,
+        "sha256": "cbcb38dd551dbf9c2617e149230bf1e10629f4cc431f5ffc80dbd3bebaedbeaa"
+      },
+      "result": "PASS",
+      "run_checks": {
+        "first_replay": true,
+        "fresh_bogus_rejected": true,
+        "fresh_replay": true,
+        "proof_exists": true,
+        "solver_unsat": true,
+        "status_gate_pass": true,
+        "volume_gate": true
+      },
+      "solver_wall_seconds": 20.320200458000727,
+      "symmetry_actions": 72,
+      "symmetry_auxiliaries_checked": 7993,
+      "symmetry_clause_block_exact": true,
+      "symmetry_clauses_checked": 47958
+    },
+    {
+      "family_id": 10,
+      "finite_orbit_argument": "Every satisfying assignment has a lexicographically least representative in its finite 72-action orbit; each action preserves the original formula, so all lex-leaders preserve satisfiability.",
+      "first_replay_seconds": 12.132846458000131,
+      "formula_sha256": "93d0ef38aa56f4c73f9bd354e3631f31d74ed510af1f55855cb0b66bd397df4c",
+      "fresh_replay_seconds": 12.234728292,
+      "manifest_sha256": "b890d6ddb0fa3f0b583b8b93487e33a97af91ff1c021eedab8be78b6cef139aa",
+      "metadata_sha256": "2eff579b4647ac02b28135620e4bb78ce9937b39a677b753815ba1ea234b19db",
+      "proof": {
+        "bytes": 215700841,
+        "exists": true,
+        "sha256": "653a7058cf3a0296589f0a4be3f8c819fd52bcdc5c9962d8b92559ca806a90f0"
+      },
+      "result": "PASS",
+      "run_checks": {
+        "first_replay": true,
+        "fresh_bogus_rejected": true,
+        "fresh_replay": true,
+        "proof_exists": true,
+        "solver_unsat": true,
+        "status_gate_pass": true,
+        "volume_gate": true
+      },
+      "solver_wall_seconds": 23.375085832999503,
+      "symmetry_actions": 72,
+      "symmetry_auxiliaries_checked": 7993,
+      "symmetry_clause_block_exact": true,
+      "symmetry_clauses_checked": 47958
+    }
+  ],
+  "lex_leader_truth_table": {
+    "full_assignments": 128,
+    "functional_auxiliary_extensions": true,
+    "primary_assignments": 16,
+    "result": "PASS",
+    "support": 4
+  },
+  "schema": "frontiermath-lp333-symmetry-independent-check-v1",
+  "status": "pass",
+  "verifier_sha256": "bad4d562152006d67af54b665577b4f38b5c48c527ca9451e0223c4b58df849f"
+}

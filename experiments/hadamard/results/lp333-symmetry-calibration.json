@@ -1,0 +1,65 @@
+{
+  "schema": "frontiermath-hadamard-lp333-symmetry-calibration-v1",
+  "status": "id9-and-id10-proof-certified",
+  "claim": "Complete static lex-leaders for the 72-element decimation-by-sequence-swap group reduce the ID10 DRAT proof by more than 3x and proof-certify previously unresolved fixed family ID9 infeasible.",
+  "claim_boundary": "This closes fixed families ID9 and ID10 and, through the separate affine-normalization theorem, their coherent translated versions. It does not decide the other seven fixed families, unrestricted LP(333), or H(668).",
+  "mechanism": {
+    "decimation_quotient_order": 36,
+    "sequence_swap_factor": 2,
+    "full_group_order": 72,
+    "nonidentity_lex_leaders": 71,
+    "added_auxiliaries": 7993,
+    "added_clauses": 47958,
+    "paper_to_levers_source": "https://arxiv.org/abs/2203.12275",
+    "paper_pdf_sha256": "026caf5d675eab8d6b8d163d91cfef5c719d0e1ce775f476e6973354ddc06509"
+  },
+  "native_pb_falsifier": {
+    "status": "unknown-at-proof-ceiling",
+    "variables": 3540,
+    "constraints": 13752,
+    "solver_wall_seconds": 144.15395487500064,
+    "partial_proof_bytes": 1075661152,
+    "encoding_sha256": "c7a56cb88e6e95000e33330892e49f690ef31561be5912b4b4dc2802b0badcde",
+    "manifest_sha256": "10e922281a680428abc5d58e848cb06df091ded04e03eee71abeab2e205a3586"
+  },
+  "id10": {
+    "status": "proof-certified-unsat",
+    "solver_wall_seconds": 23.375085832999503,
+    "proof_bytes": 215700841,
+    "proof_sha256": "653a7058cf3a0296589f0a4be3f8c819fd52bcdc5c9962d8b92559ca806a90f0",
+    "drat_baseline_bytes": 712682070,
+    "proof_reduction_over_baseline": 3.304030094161756,
+    "first_replay_seconds": 12.132846458000131,
+    "fresh_replay_seconds": 12.234728292,
+    "metadata_sha256": "2eff579b4647ac02b28135620e4bb78ce9937b39a677b753815ba1ea234b19db",
+    "manifest_sha256": "b890d6ddb0fa3f0b583b8b93487e33a97af91ff1c021eedab8be78b6cef139aa"
+  },
+  "id9": {
+    "status": "proof-certified-unsat",
+    "prior_status": "unknown-at-1-gib-proof-ceiling",
+    "solver_wall_seconds": 20.320200458000727,
+    "proof_bytes": 205229334,
+    "proof_sha256": "cbcb38dd551dbf9c2617e149230bf1e10629f4cc431f5ffc80dbd3bebaedbeaa",
+    "first_replay_seconds": 7.53665754099984,
+    "fresh_replay_seconds": 7.471588499999598,
+    "metadata_sha256": "ac669716b02ddff94c0cd810f0e7ae797a4aa0087479ed39f7bb4630d957302a",
+    "manifest_sha256": "a93bb80cc5c2bd9b118f002b9f1da8050db208d3a721b2a7665df7d75267de48"
+  },
+  "independent_check": {
+    "status": "pass",
+    "symmetry_actions_per_family": 72,
+    "symmetry_clauses_checked_per_family": 47958,
+    "symmetry_auxiliaries_checked_per_family": 7993,
+    "lex_leader_truth_table_assignments": 128,
+    "sha256": "b8c5b56a8c7a6319365091b123dcb2eb9e916a252d7bf32c3f28ed9b6c7d2deb"
+  },
+  "open_fixed_family_ids_after_result": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    7
+  ]
+}
