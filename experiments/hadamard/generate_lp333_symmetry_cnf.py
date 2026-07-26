@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Add complete static lex-leaders for the exact LP333 symmetry group."""
+"""Add complete static lex-leaders for an exact LP333 symmetry group."""
 
 from __future__ import annotations
 
@@ -35,6 +35,36 @@ def load_encoder(source_repo: Path):
     sys.path.insert(0, str(proof_dir))
     module = importlib.import_module("lp333_cnf")
     return module, encoder_path
+
+
+def load_source_family(
+    source_repo: Path, family_id: int
+) -> tuple[dict[str, Any], Path, Path]:
+    classification_path = (
+        source_repo / "lp333" / "results" / "subgroup_classification.json"
+    )
+    status_path = source_repo / "lp333" / "results" / "master_status.json"
+    classification = json.loads(
+        classification_path.read_text(encoding="utf-8")
+    )
+    statuses = json.loads(status_path.read_text(encoding="utf-8"))
+    subgroup = next(
+        record
+        for record in classification["subgroups"]
+        if record["id"] == family_id
+    )
+    status = next(
+        record
+        for record in statuses["families"]
+        if record["id"] == family_id
+    )
+    if status["status"] != "OPEN":
+        raise ValueError(f"family {family_id} is not source-OPEN")
+    return (
+        {"classification": subgroup, "status": status},
+        classification_path,
+        status_path,
+    )
 
 
 def unit_permutations(spec: dict[str, Any]) -> list[dict[str, Any]]:
@@ -238,12 +268,32 @@ def main() -> int:
     parser.add_argument("--source-repo", required=True, type=Path)
     parser.add_argument("--lp63-fixture", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
+    parser.add_argument(
+        "--random-equivalence-samples", type=int, default=1000
+    )
     args = parser.parse_args()
-    if args.family_id not in (9, 10):
-        raise ValueError("symmetry calibration accepts only ID9 or ID10")
+    if args.family_id not in (7, 9, 10):
+        raise ValueError("static symmetry generator accepts ID7, ID9, or ID10")
+    if args.random_equivalence_samples <= 0:
+        raise ValueError("random-equivalence sample count must be positive")
 
+    source_family, classification_path, status_path = load_source_family(
+        args.source_repo, args.family_id
+    )
     encoder, encoder_path = load_encoder(args.source_repo)
     model, subgroup = encoder.build_lp333_model(args.family_id)
+    if (
+        subgroup["elements"]
+        != source_family["classification"]["elements"]
+    ):
+        raise ValueError("proof encoder selected a different subgroup")
+    random_equivalence = encoder.random_equivalence_audit(
+        model,
+        args.random_equivalence_samples,
+        20260726 + args.family_id,
+    )
+    if random_equivalence["result"] != "PASS":
+        raise ValueError("base CNF semantic-equivalence control failed")
     actions = unit_permutations(model.spec)
     group_control = validate_decimation_group(model.spec, actions)
     variable_group = variable_actions(model.za, model.zb, actions)
@@ -302,6 +352,7 @@ def main() -> int:
             "elements": subgroup["elements"],
             "order": len(subgroup["elements"]),
             "orbit_count": model.spec["r"],
+            "orbits": model.spec["orbits"],
             "orbit_signature": dict(
                 sorted(Counter(model.spec["sizes"]).items())
             ),
@@ -311,7 +362,10 @@ def main() -> int:
             "sequence_swap_factor": 2,
             "full_group_order": len(variable_group),
             "nonidentity_lex_leaders": len(nonidentity),
-            "variable_order": "za[0..58], then zb[0..58]",
+            "variable_order": (
+                f"za[0..{len(model.za) - 1}], then "
+                f"zb[0..{len(model.zb) - 1}]"
+            ),
             "encoding": (
                 "complete lex-leaders with fresh prefix-equality auxiliaries"
             ),
@@ -330,8 +384,14 @@ def main() -> int:
             "unit_split_count": serialization["unit_split_count"],
         },
         "controls": {
+            "random_semantic_cnf_equivalence": random_equivalence,
             "exact_decimation_group": group_control,
             "lp63_positive_canonicalization": positive_control,
+        },
+        "primary_variables": {
+            "meaning": "z=0 is orbit sign +1; z=1 is orbit sign -1",
+            "za": model.za,
+            "zb": model.zb,
         },
         "paper_to_levers": {
             "paper": (
@@ -359,6 +419,12 @@ def main() -> int:
             "proof_encoder_sha256": sha256_file(encoder_path),
             "lp63_fixture": str(args.lp63_fixture),
             "lp63_fixture_sha256": sha256_file(args.lp63_fixture),
+            "subgroup_classification": str(classification_path),
+            "subgroup_classification_sha256": sha256_file(
+                classification_path
+            ),
+            "master_status": str(status_path),
+            "master_status_sha256": sha256_file(status_path),
         },
         "generator_sha256": sha256_file(Path(__file__).resolve()),
     }

@@ -197,6 +197,63 @@ def verify_family(
     formula = Path(metadata["cnf"]["path"])
     if sha256_file(formula) != metadata["cnf"]["sha256"]:
         raise ValueError("formula hash mismatch")
+    if manifest["inputs"]["encoding_metadata_sha256"] != sha256_file(
+        metadata_path
+    ):
+        raise ValueError("manifest is bound to different metadata")
+    if manifest["inputs"]["formula_sha256"] != sha256_file(formula):
+        raise ValueError("manifest is bound to a different formula")
+
+    proof_path = Path(manifest["solver"]["command"][-1])
+    proof = manifest["solver"]["proof"]
+    if (
+        not proof_path.is_file()
+        or sha256_file(proof_path) != proof["sha256"]
+        or proof_path.stat().st_size != proof["bytes"]
+    ):
+        raise ValueError("proof artifact does not match the manifest")
+
+    version_two_bindings = None
+    if manifest.get("schema", "").endswith("-v2"):
+        generator = Path(__file__).with_name(
+            "generate_lp333_symmetry_cnf.py"
+        )
+        runner = Path(__file__).with_name(
+            "run_lp333_symmetry_solver.py"
+        )
+        preregistration = Path(
+            manifest["inputs"]["preregistration"]
+        )
+        preregistration_audit = Path(
+            manifest["inputs"]["preregistration_audit"]
+        )
+        version_two_bindings = {
+            "generator_sha256": (
+                metadata["generator_sha256"] == sha256_file(generator)
+            ),
+            "runner_sha256": (
+                manifest["runner_sha256"] == sha256_file(runner)
+            ),
+            "preregistration_sha256": (
+                manifest["inputs"]["preregistration_sha256"]
+                == sha256_file(preregistration)
+            ),
+            "preregistration_audit_sha256": (
+                manifest["inputs"]["preregistration_audit_sha256"]
+                == sha256_file(preregistration_audit)
+            ),
+            "preregistration_audit_pass": (
+                json.loads(
+                    preregistration_audit.read_text(encoding="utf-8")
+                )["status"]
+                == "pass"
+            ),
+        }
+        if not all(version_two_bindings.values()):
+            raise ValueError(
+                f"v2 source or preregistration binding failed: "
+                f"{version_two_bindings}"
+            )
 
     model, _ = encoder.build_lp333_model(family_id)
     variables = tuple(model.za + model.zb)
@@ -228,9 +285,12 @@ def verify_family(
     if actual != expected:
         raise ValueError("serialized symmetry clause block mismatch")
 
-    proof = manifest["solver"]["proof"]
+    volume_applicable = manifest["significance"].get(
+        "proof_volume_gate_applicable", True
+    )
     run_checks = {
-        "status_gate_pass": manifest["status"] == "gate-pass",
+        "terminal_status": manifest["status"]
+        in ("gate-pass", "proof-certified-unsat"),
         "solver_unsat": (
             manifest["solver"]["returncode"] == 20
             and manifest["solver"]["termination"] == "unsat"
@@ -245,9 +305,10 @@ def verify_family(
         "fresh_bogus_rejected": manifest["proof_checks"]["fresh_bogus"][
             "rejected"
         ],
-        "volume_gate": manifest["significance"][
-            "proof_volume_gate_pass"
-        ],
+        "volume_gate": (
+            not volume_applicable
+            or manifest["significance"]["proof_volume_gate_pass"]
+        ),
     }
     if not all(run_checks.values()):
         raise ValueError(f"decisive run checks failed: {run_checks}")
@@ -278,6 +339,7 @@ def verify_family(
         ],
         "metadata_sha256": sha256_file(metadata_path),
         "manifest_sha256": sha256_file(manifest_path),
+        "version_two_bindings": version_two_bindings,
     }
 
 

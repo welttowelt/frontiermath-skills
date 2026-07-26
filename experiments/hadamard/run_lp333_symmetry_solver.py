@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run the proof-producing ID10 calibration with static symmetry breaking."""
+"""Run a proof-producing LP333 formula with static symmetry breaking."""
 
 from __future__ import annotations
 
@@ -11,6 +11,7 @@ import os
 import platform
 from pathlib import Path
 import subprocess
+import sys
 import time
 from typing import Any, Sequence
 
@@ -127,6 +128,8 @@ def main() -> int:
     parser.add_argument("--cadical-repo", required=True, type=Path)
     parser.add_argument("--checker", required=True, type=Path)
     parser.add_argument("--sat-control-cnf", required=True, type=Path)
+    parser.add_argument("--preregistration", required=True, type=Path)
+    parser.add_argument("--preregistration-audit", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--max-seconds", type=float, default=300.0)
     parser.add_argument("--max-verification-seconds", type=float, default=120.0)
@@ -143,6 +146,12 @@ def main() -> int:
 
     metadata = json.loads(
         args.encoding_metadata.read_text(encoding="utf-8")
+    )
+    preregistration = json.loads(
+        args.preregistration.read_text(encoding="utf-8")
+    )
+    preregistration_audit = json.loads(
+        args.preregistration_audit.read_text(encoding="utf-8")
     )
     formula = Path(metadata["cnf"]["path"])
     generator = Path(__file__).with_name(
@@ -164,9 +173,24 @@ def main() -> int:
             metadata["controls"]["lp63_positive_canonicalization"]["result"]
             == "PASS"
         ),
+        "random_semantic_equivalence": (
+            metadata["controls"]["random_semantic_cnf_equivalence"]["result"]
+            == "PASS"
+        ),
         "full_group_order": (
             metadata["symmetry"]["full_group_order"] == 72
             and metadata["symmetry"]["nonidentity_lex_leaders"] == 71
+        ),
+        "preregistration_schema": (
+            preregistration.get("schema")
+            == "computational-experiment-preregistration/v1"
+        ),
+        "preregistration_audit": (
+            preregistration_audit.get("status") == "pass"
+        ),
+        "preregistered_evidence_unit": (
+            f"ID{metadata['family_id']}"
+            in preregistration.get("evidence_unit", "")
         ),
     }
     if not all(binding_checks.values()):
@@ -186,6 +210,7 @@ def main() -> int:
     bogus_log = args.output_dir / "bogus-empty.log"
     fresh_bogus_proof = args.output_dir / "bogus-empty-fresh.drat"
     fresh_bogus_log = args.output_dir / "bogus-empty-fresh.log"
+    model_audit_path = args.output_dir / "model-audit.json"
     manifest_path = args.output_dir / "run-manifest.json"
 
     cadical_hash = sha256_file(args.cadical)
@@ -325,23 +350,73 @@ def main() -> int:
     fresh_bogus_rejected = bool(
         fresh_bogus and fresh_bogus["rejected"]
     )
+    model_audit = None
+    if termination == "sat" and model_path.is_file():
+        verifier = Path(__file__).with_name(
+            "verify_lp333_family_model.py"
+        )
+        verifier_command = [
+            sys.executable,
+            str(verifier),
+            str(args.encoding_metadata),
+            str(model_path),
+            "--cnf",
+            str(formula),
+            "--output",
+            str(model_audit_path),
+        ]
+        verification = subprocess.run(
+            verifier_command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=False,
+        )
+        model_audit = {
+            "command": verifier_command,
+            "returncode": verification.returncode,
+            "stdout_tail": verification.stdout[-4000:],
+            "exists": model_audit_path.is_file(),
+            "sha256": (
+                sha256_file(model_audit_path)
+                if model_audit_path.is_file()
+                else None
+            ),
+        }
+        if model_audit_path.is_file():
+            model_audit["result"] = json.loads(
+                model_audit_path.read_text(encoding="utf-8")
+            )
+
+    proof_volume_gate_applicable = family_id in (9, 10)
     volume_gate = proof_bytes <= PROMOTION_PROOF_BYTES
-    if accepted_twice and fresh_bogus_rejected and volume_gate:
-        status = "gate-pass"
-    elif accepted_twice and fresh_bogus_rejected:
-        status = "proof-certified-volume-gate-fail"
+    if accepted_twice and fresh_bogus_rejected:
+        if proof_volume_gate_applicable:
+            status = (
+                "gate-pass"
+                if volume_gate
+                else "proof-certified-volume-gate-fail"
+            )
+        else:
+            status = "proof-certified-unsat"
+    elif (
+        model_audit
+        and model_audit["returncode"] == 0
+        and model_audit["result"]["status"] == "pass"
+    ):
+        status = "directly-verified-sat"
     elif termination == "sat":
-        status = "sat-needs-direct-model-audit"
+        status = "sat-model-verification-failed"
     else:
         status = "unknown"
 
     manifest = {
-        "schema": "frontiermath-hadamard-lp333-symmetry-run-v1",
+        "schema": "frontiermath-hadamard-lp333-symmetry-run-v2",
         "status": status,
         "family_id": family_id,
         "claim_boundary": (
-            "Only gate-pass promotes this exact static mechanism to ID9; "
-            "resource ceilings remain UNKNOWN."
+            "Only proof-certified-unsat or directly-verified-sat decides "
+            "the named fixed family; resource ceilings remain UNKNOWN."
         ),
         "binding_checks": binding_checks,
         "budgets": {
@@ -380,10 +455,12 @@ def main() -> int:
             "fresh_replay_bindings": replay_bindings,
             "fresh_replay": fresh_replay,
             "fresh_bogus": fresh_bogus,
+            "sat_model_audit": model_audit,
         },
         "significance": {
             "accepted_twice": accepted_twice,
             "fresh_bogus_rejected": fresh_bogus_rejected,
+            "proof_volume_gate_applicable": proof_volume_gate_applicable,
             "proof_volume_gate_pass": volume_gate,
             "proof_reduction_over_drat": (
                 DRAT_BASELINE_BYTES / proof_bytes if proof_bytes else None
@@ -409,6 +486,16 @@ def main() -> int:
             "formula_sha256": sha256_file(formula),
             "sat_control_cnf_sha256": sha256_file(
                 args.sat_control_cnf
+            ),
+            "preregistration": str(args.preregistration),
+            "preregistration_sha256": sha256_file(
+                args.preregistration
+            ),
+            "preregistration_audit": str(
+                args.preregistration_audit
+            ),
+            "preregistration_audit_sha256": sha256_file(
+                args.preregistration_audit
             ),
         },
         "environment": {

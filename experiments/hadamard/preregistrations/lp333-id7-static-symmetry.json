@@ -1,0 +1,86 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID7 complete static symmetry transfer",
+  "hypothesis": "The unchanged complete prefix-encoded lex leaders for the exact decimation-by-sequence-swap group can produce terminal SAT or proof-certified UNSAT evidence for fixed multiplier family ID7 under the existing caps.",
+  "evidence_unit": "one exact source-pinned LP333 fixed multiplier family, ID7",
+  "claim_boundary": "A promoted result decides only fixed ID7 and, through the separately established affine normalization, its coherent translated versions. It does not decide any other fixed family, unrestricted LP333, or H668.",
+  "baseline": {
+    "evidence": "Code commit 35f981e2e0980bb0302dfcfa1eb1ee5efef2546b; ID7 source orbit signature 3x1 plus 54x2 plus 2x3 plus 36x6; ID9 and ID10 terminal proofs under the same 72-action static mechanism.",
+    "measurement": "ID7 is unresolved. The source model has 95 orbits per sequence; no complete ID7 proof or directly verified LP333 witness exists."
+  },
+  "intervention": {
+    "one_change": "Transfer the frozen complete static decimation-and-sequence-swap lex-leader mechanism from the 59-orbit ID9 and ID10 families to the 95-orbit ID7 family.",
+    "forbidden_confounds": [
+      "new random seed",
+      "partial symmetry group",
+      "changed lexicographic variable order",
+      "dynamic symmetry learning",
+      "solver change",
+      "cube splitting",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "source-and-formula-binding",
+      "purpose": "Bind ID7, the proof encoder, the serialized CNF, the generator, and the exact source family records.",
+      "expected": "Every recorded SHA-256 matches immediately before the solver run."
+    },
+    {
+      "name": "semantic-equivalence",
+      "purpose": "Detect a mismatch between direct length-333 arithmetic and the base CNF semantics.",
+      "expected": "All 1000 deterministic random orbit assignments agree, including all representative PAF and row-sum outputs."
+    },
+    {
+      "name": "exact-group-control",
+      "purpose": "Prove every static lex leader comes from a legal finite formula automorphism.",
+      "expected": "The full 72-action group is closed and every orbit size, PAF diagonal, and PAF coefficient is preserved."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect a bad decimation, sequence-swap, or lex orientation.",
+      "expected": "The published LP63 pair remains directly valid and has a lex-minimal representative under all decimation-and-swap actions."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after any decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "terminal exact family decision",
+    "direction": "decision",
+    "unit": "named-family decision",
+    "baseline": 1,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 300,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 120
+  },
+  "terminal_outcomes": {
+    "promote": "Either a complete SAT model passes the serialized CNF and direct 332-shift LP333 audit, or a complete UNSAT proof is accepted twice by pinned drat-trim with fresh bogus-proof rejection.",
+    "park": "All controls pass but the unchanged mechanism returns a valid nonterminal solver result without exhausting a declared resource, so this static transfer is archived without tuning.",
+    "unknown": "The wall, memory, proof-volume, or verification ceiling is reached, or an artifact is incomplete.",
+    "audit-failed": "Any source binding, semantic comparison, group invariant, positive fixture, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before solving on any failed source, semantic, group, positive-fixture, or tool binding control.",
+    "Terminate the target process at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not change the seed, group, lex order, solver, or decomposition after observing ID7."
+  ],
+  "next_actions": {
+    "promote": "If UNSAT, archive ID7 and preregister a matched ID4 versus ID5 comparison. If SAT, independently verify the LP333 pair, construct H668, assemble the full candidate packet, and invoke the FrontierMath candidate verifier.",
+    "park": "Archive the valid nonterminal run and select a structurally different exact direction from the campaign ledger.",
+    "unknown": "Preserve strict UNKNOWN and run workload characterization on proof growth, clause activity, and the dominant solver resource before selecting one structural pivot.",
+    "audit-failed": "Repair only the smallest failed control, regenerate from a fresh output directory, and repeat Gate A before any target run."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by the exact destination, artifact, account, and contract terms required by the campaign skill."
+  }
+}
