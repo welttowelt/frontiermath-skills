@@ -10,6 +10,7 @@ import importlib
 import json
 import math
 from pathlib import Path
+import random
 import sys
 from typing import Any, Sequence
 
@@ -111,9 +112,13 @@ def validate_decimation_group(
             if size != spec["sizes"][permutation[index]]:
                 raise ValueError("decimation changed an orbit size")
         for matrix_index, shift in enumerate(spec["reps"]):
-            target_index = spec["idx"][(unit * shift) % LENGTH] - 1
-            if target_index < 0:
+            target_orbit_index = spec["idx"][(unit * shift) % LENGTH] - 1
+            if target_orbit_index < 0:
                 raise ValueError("nonzero shift mapped to the zero orbit")
+            target_index = spec.get(
+                "paf_orbit_to_reduced_index",
+                list(range(spec["num_reps"])),
+            )[target_orbit_index]
             if spec["const"][matrix_index] != spec["const"][target_index]:
                 raise ValueError("decimation changed a PAF diagonal constant")
             source_matrix = spec["W"][matrix_index]
@@ -134,6 +139,109 @@ def validate_decimation_group(
         "closure_compositions_checked": len(actions) ** 2,
         "orbit_size_checks": len(actions) * spec["r"],
         "paf_coefficient_checks": coefficient_checks,
+    }
+
+
+def quotient_inverse_paf_rows(spec: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any]]:
+    """Remove PAF rows that are identical by the identity PAF(s)=PAF(-s)."""
+    classes = []
+    covered: set[int] = set()
+    retained = []
+    for index, shift in enumerate(spec["reps"]):
+        if index in covered:
+            continue
+        inverse_index = spec["idx"][(-shift) % LENGTH] - 1
+        if inverse_index < 0:
+            raise ValueError("nonzero PAF shift inverted to the zero orbit")
+        members = sorted({index, inverse_index})
+        if len(members) != 2:
+            raise ValueError(
+                "preregistered ID4/ID5 quotient requires size-two inverse classes"
+            )
+        left, right = members
+        if spec["const"][left] != spec["const"][right]:
+            raise ValueError("inverse PAF rows have different diagonal constants")
+        if spec["W"][left] != spec["W"][right]:
+            raise ValueError("inverse PAF rows have different coefficient matrices")
+        covered.update(members)
+        retained.append(left)
+        classes.append(
+            {
+                "original_indices": members,
+                "shifts": [spec["reps"][member] for member in members],
+                "retained_original_index": left,
+                "diagonal_constant": spec["const"][left],
+            }
+        )
+    if covered != set(range(spec["num_reps"])):
+        raise ValueError("inverse quotient did not cover every PAF representative")
+
+    reduced = dict(spec)
+    reduced["reps"] = [spec["reps"][index] for index in retained]
+    reduced["const"] = [spec["const"][index] for index in retained]
+    reduced["W"] = [spec["W"][index] for index in retained]
+    reduced["num_reps"] = len(retained)
+    original_to_reduced = [0] * spec["num_reps"]
+    for reduced_index, item in enumerate(classes):
+        for original_index in item["original_indices"]:
+            original_to_reduced[original_index] = reduced_index
+    reduced["paf_orbit_to_reduced_index"] = original_to_reduced
+    return reduced, {
+        "result": "PASS",
+        "identity": "PAF_x(s) = PAF_x(-s) by index substitution",
+        "original_representatives": spec["num_reps"],
+        "retained_representatives": len(retained),
+        "class_size_histogram": {"2": len(classes)},
+        "all_diagonal_constants_equal": True,
+        "all_coefficient_matrices_equal": True,
+        "classes": classes,
+    }
+
+
+def direct_random_equivalence(
+    model: Any,
+    full_spec: dict[str, Any],
+    samples: int,
+    seed: int,
+) -> dict[str, Any]:
+    """Compare the reduced predicate with direct length-333 arithmetic."""
+    rng = random.Random(seed)
+    comparisons = 0
+    direct_shift_checks = 0
+    for _ in range(samples):
+        za = [0] + [rng.randrange(2) for _ in range(model.spec["r"] - 1)]
+        zb = [0] + [rng.randrange(2) for _ in range(model.spec["r"] - 1)]
+        reduced = model.semantic_value(za, zb)
+        a_orbits = [1 - 2 * value for value in za]
+        b_orbits = [1 - 2 * value for value in zb]
+        a = [a_orbits[full_spec["idx"][position]] for position in range(LENGTH)]
+        b = [b_orbits[full_spec["idx"][position]] for position in range(LENGTH)]
+        direct = sum(a) in (-1, 1) and sum(b) in (-1, 1)
+        if direct:
+            for shift in range(1, LENGTH):
+                direct_shift_checks += 1
+                if (
+                    sum(
+                        a[position] * a[(position + shift) % LENGTH]
+                        for position in range(LENGTH)
+                    )
+                    + sum(
+                        b[position] * b[(position + shift) % LENGTH]
+                        for position in range(LENGTH)
+                    )
+                    != -2
+                ):
+                    direct = False
+                    break
+        if reduced != direct:
+            raise ValueError("reduced PAF predicate differs from direct arithmetic")
+        comparisons += 1
+    return {
+        "result": "PASS",
+        "samples": comparisons,
+        "seed": seed,
+        "direct_shift_checks": direct_shift_checks,
+        "predicate": "row sums plus all 332 direct periodic PAF equations",
     }
 
 
@@ -253,6 +361,20 @@ def lp63_control(
         if canonical_bits > bits:
             raise ValueError("LP63 canonical representative is not lex-minimal")
         comparisons += 1
+    inverse_checks = 0
+    for sequence in (canonical_a, canonical_b):
+        for shift in range(1, len(sequence)):
+            left = sum(
+                sequence[index] * sequence[(index + shift) % len(sequence)]
+                for index in range(len(sequence))
+            )
+            right = sum(
+                sequence[index] * sequence[(index - shift) % len(sequence)]
+                for index in range(len(sequence))
+            )
+            if left != right:
+                raise ValueError("LP63 positive fixture violates PAF inversion")
+            inverse_checks += 1
     return {
         "result": "PASS",
         "fixture_sha256": sha256_file(fixture_path),
@@ -261,6 +383,7 @@ def lp63_control(
         "orbit_assignments": len(orbit),
         "lex_comparisons": comparisons,
         "canonical_pair_directly_verified": True,
+        "inverse_paf_equalities_checked": inverse_checks,
         "canonical_prefix_sha256": hashlib.sha256(
             bytes(canonical_bits)
         ).hexdigest(),
@@ -276,6 +399,11 @@ def main() -> int:
     parser.add_argument(
         "--random-equivalence-samples", type=int, default=1000
     )
+    parser.add_argument(
+        "--deduplicate-inverse-paf",
+        action="store_true",
+        help="quotient exact duplicate PAF(s)=PAF(-s) rows before PB encoding",
+    )
     args = parser.parse_args()
     if args.family_id not in (4, 5, 7, 9, 10):
         raise ValueError(
@@ -288,7 +416,15 @@ def main() -> int:
         args.source_repo, args.family_id
     )
     encoder, encoder_path = load_encoder(args.source_repo)
-    model, subgroup = encoder.build_lp333_model(args.family_id)
+    subgroup_elements, subgroup = encoder.subgroup_by_id(args.family_id)
+    full_spec = encoder.spec_from_orbits(
+        LENGTH, encoder.orbits_on_ZL(subgroup_elements, LENGTH)
+    )
+    inverse_control = None
+    model_spec = full_spec
+    if args.deduplicate_inverse_paf:
+        model_spec, inverse_control = quotient_inverse_paf_rows(full_spec)
+    model = encoder.build_orbit_model(LENGTH, model_spec)
     if (
         subgroup["elements"]
         != source_family["classification"]["elements"]
@@ -307,6 +443,12 @@ def main() -> int:
     )
     if random_equivalence["result"] != "PASS":
         raise ValueError("base CNF semantic-equivalence control failed")
+    direct_equivalence = direct_random_equivalence(
+        model,
+        full_spec,
+        args.random_equivalence_samples,
+        20260786 + args.family_id,
+    )
     actions = unit_permutations(model.spec)
     group_control = validate_decimation_group(
         model.spec, actions, len(subgroup["elements"])
@@ -366,9 +508,10 @@ def main() -> int:
         "status": "generated",
         "family_id": args.family_id,
         "claim_boundary": (
-            "The lex-leaders preserve satisfiability by selecting the least "
-            "assignment in every explicitly verified finite symmetry orbit. "
-            "UNSAT still requires an accepted complete proof."
+            "The inverse quotient removes only identity-duplicate PAF rows, "
+            "and the lex-leaders preserve satisfiability by selecting the "
+            "least assignment in every explicitly verified finite symmetry "
+            "orbit. UNSAT still requires an accepted complete proof."
         ),
         "subgroup": {
             "elements": subgroup["elements"],
@@ -407,6 +550,7 @@ def main() -> int:
         },
         "controls": {
             "random_semantic_cnf_equivalence": random_equivalence,
+            "direct_full_length_semantic_equivalence": direct_equivalence,
             "exact_decimation_group": group_control,
             "lp63_positive_canonicalization": positive_control,
         },
@@ -450,6 +594,11 @@ def main() -> int:
         },
         "generator_sha256": sha256_file(Path(__file__).resolve()),
     }
+    if inverse_control is not None:
+        metadata["paf_inverse_deduplication"] = {
+            "enabled": True,
+            **inverse_control,
+        }
     metadata_path.write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

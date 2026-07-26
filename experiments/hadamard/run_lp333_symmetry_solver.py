@@ -130,6 +130,7 @@ def main() -> int:
     parser.add_argument("--sat-control-cnf", required=True, type=Path)
     parser.add_argument("--preregistration", required=True, type=Path)
     parser.add_argument("--preregistration-audit", required=True, type=Path)
+    parser.add_argument("--formula-audit", type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
     parser.add_argument("--max-seconds", type=float, default=300.0)
     parser.add_argument("--max-verification-seconds", type=float, default=120.0)
@@ -152,6 +153,11 @@ def main() -> int:
     )
     preregistration_audit = json.loads(
         args.preregistration_audit.read_text(encoding="utf-8")
+    )
+    formula_audit = (
+        json.loads(args.formula_audit.read_text(encoding="utf-8"))
+        if args.formula_audit is not None
+        else None
     )
     formula = Path(metadata["cnf"]["path"])
     generator = Path(__file__).with_name(
@@ -176,6 +182,22 @@ def main() -> int:
         "random_semantic_equivalence": (
             metadata["controls"]["random_semantic_cnf_equivalence"]["result"]
             == "PASS"
+        ),
+        "direct_full_length_semantic_equivalence": (
+            metadata["controls"]
+            .get("direct_full_length_semantic_equivalence", {})
+            .get("result")
+            == "PASS"
+        ),
+        "inverse_paf_formula_audit": (
+            (
+                formula_audit is not None
+                and formula_audit.get("status") == "pass"
+                and formula_audit.get("formula_sha256")
+                == metadata["cnf"]["sha256"]
+            )
+            if metadata.get("paf_inverse_deduplication", {}).get("enabled")
+            else args.formula_audit is None
         ),
         "full_group_order": (
             metadata["symmetry"]["full_group_order"]
@@ -499,6 +521,16 @@ def main() -> int:
             ),
             "preregistration_audit_sha256": sha256_file(
                 args.preregistration_audit
+            ),
+            "formula_audit": (
+                str(args.formula_audit)
+                if args.formula_audit is not None
+                else None
+            ),
+            "formula_audit_sha256": (
+                sha256_file(args.formula_audit)
+                if args.formula_audit is not None
+                else None
             ),
         },
         "environment": {
