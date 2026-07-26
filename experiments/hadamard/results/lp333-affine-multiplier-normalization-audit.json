@@ -1,0 +1,38 @@
+{
+  "adversarial_control": {
+    "mutation": "increment one nonidentity value in a valid nontrivial 333-cocycle",
+    "rejected": true
+  },
+  "auditor_sha256": "e2cc5cc9abe176581e5ed048082f54ad569056220884b17714cc5f5bf05ce12f",
+  "checks": {
+    "affine_class_count_134": true,
+    "all_nontrivial_cycle_gcds_divisible_by_3": true,
+    "census_status_pass": true,
+    "class_reconstruction": true,
+    "component_reconstruction": true,
+    "independent_additive_subgroup_count_80": true,
+    "mutated_cocycle_rejected": true,
+    "nontrivial_class_count_54": true,
+    "nontrivial_row_sum_feasible_count_zero": true,
+    "source_classification_hash": true,
+    "source_status_hash": true,
+    "stored_subgroups_complete": true
+  },
+  "counts": {
+    "affine_classes": 134,
+    "independent_subgroups": 80,
+    "nontrivial_classes": 54,
+    "nontrivial_row_sum_feasible": 0
+  },
+  "errors": {
+    "class": [],
+    "component": []
+  },
+  "inputs": {
+    "census_sha256": "e0b324f8ce9a4793e403bb3d13bed5112ffa90c8bc9fc3ccfb6ec2f1a71c57de",
+    "source_master_status_sha256": "d4514a48ce341bcc0bec4f1b816e1736e1aeac0bd085cedeb6aa3abee034e49e",
+    "source_subgroup_classification_sha256": "1e8073d58a920d2e5f59804f24f685e50f20dba41139c5520fb8863dc4ee3d3a"
+  },
+  "schema": "frontiermath-hadamard-lp333-affine-multiplier-normalization-audit-v1",
+  "status": "pass"
+}

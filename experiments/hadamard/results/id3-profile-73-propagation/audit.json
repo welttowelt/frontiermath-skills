@@ -1,0 +1,39 @@
+{
+  "adversarial_control": {
+    "mutation": "incremented one stored known-energy value by one",
+    "rejected": true
+  },
+  "checks": {
+    "all_boundary_equalities_recomputed": true,
+    "all_margin_prunes_recomputed": true,
+    "all_paf_prunes_recomputed": true,
+    "event_log_hash_matches": true,
+    "event_record_count_matches": true,
+    "event_type_counts_match": true,
+    "mutated_bound_rejected": true,
+    "no_audit_errors": true
+  },
+  "counts": {
+    "boundary_events_checked": 71012,
+    "event_types": {
+      "margin-prune": 18,
+      "paf-boundary-equality": 71012,
+      "paf-prune": 55499
+    },
+    "events": 126529,
+    "margin_prunes_checked": 18,
+    "paf_prunes_checked": 55499
+  },
+  "errors": [],
+  "inputs": {
+    "benchmark_manifest_sha256": "1424e6a207382145cbdc1fc0562ebea1e36e1d97a894ad4917dbe0e1e9cb155f",
+    "event_log_sha256": "8c93fcc8c2c4f55010dcbec0b271e932e7b1151934215ebb08919fe1e4dbd9d1",
+    "profile_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532"
+  },
+  "schema": "frontiermath-hadamard-id3-profile-propagation-audit-v1",
+  "source": {
+    "auditor_sha256": "3e6e1c25d81a735b3cbf4421df1a14089b81380d265425dbb84f2135e80720d3",
+    "kernel_sha256": "8f9732c0374992bd0570d5fcda2ff532df78e4c9f6adf6528cc4801f5ecd0c8b"
+  },
+  "status": "pass"
+}

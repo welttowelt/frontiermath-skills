@@ -1,0 +1,112 @@
+{
+  "auditor_sha256": "487ee9589763ff91f1a3b2748ca5cfc42e8afba2797fbab3ac68b7db788748b7",
+  "checks": {
+    "benchmark_hash": true,
+    "benchmark_pass": true,
+    "cnf_hash": true,
+    "deterministic_serialization_rebuild": true,
+    "event_audit_hash": true,
+    "event_audit_pass": true,
+    "event_log_hash": true,
+    "learned_clause_hash": true,
+    "learned_long_clause_count": true,
+    "ledger_hash": true,
+    "metadata_clause_count": true,
+    "metadata_variable_count": true,
+    "no_empty_clause": true,
+    "parsed_clause_count": true,
+    "positive_fixture": true,
+    "profile_margin_samples": true,
+    "small_exhaustive_equivalence": true,
+    "stored_margin_witness_rejected": true,
+    "transformation_truth_tables": true,
+    "variable_range": true
+  },
+  "deterministic_rebuild_sha256": "813e645a075234fe432ac8c89e320981560fc1ced75598891e31ef1c20e88d60",
+  "dimacs": {
+    "clauses_of_length_at_least_100": 55517,
+    "declared_clauses": 1135539,
+    "declared_variables": 161536,
+    "empty_clauses": 0,
+    "maximum_clause_length": 216,
+    "maximum_variable": 161536,
+    "parsed_clauses": 1135539
+  },
+  "inputs": {
+    "benchmark_sha256": "1424e6a207382145cbdc1fc0562ebea1e36e1d97a894ad4917dbe0e1e9cb155f",
+    "cnf_sha256": "813e645a075234fe432ac8c89e320981560fc1ced75598891e31ef1c20e88d60",
+    "encoding_metadata_sha256": "e0d513381dc0cb0977af90ae91b2480d52abed28dcef9862310eaf5bef766097",
+    "event_audit_sha256": "aba95ac1b174781b216bf0ea808529b0ebdec1a0f487f358998d520b8e134d15",
+    "event_log_sha256": "8c93fcc8c2c4f55010dcbec0b271e932e7b1151934215ebb08919fe1e4dbd9d1",
+    "profile_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+    "proof_encoder_sha256": "c24821d116bf9cf789e18330ba14dfb19f6d63c19a6874de36144867d78f5094"
+  },
+  "learned_prune_clauses": {
+    "canonical_semantic_clause_sha256": "0411d6df3f8ab3e0e7d3394022e453c006b514e8a4773252b7a8b95806bf07d7",
+    "clause_length": {
+      "maximum": 216,
+      "mean": 191.10780481654268,
+      "median": 191,
+      "minimum": 174
+    },
+    "duplicate_learned_clauses": 0,
+    "event_counts": {
+      "margin-prune": 18,
+      "paf-boundary-equality": 71012,
+      "paf-prune": 55499
+    },
+    "prune_events": 55517,
+    "unique_learned_clauses": 55517
+  },
+  "positive_fixture": {
+    "a": [
+      1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      -1
+    ],
+    "b": [
+      1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      -1
+    ],
+    "canonical_cnf_value": true,
+    "direct_semantic_value": true,
+    "length": 7
+  },
+  "profile_margin_assignment_audit": {
+    "canonical_cnf_true": 0,
+    "failures": [],
+    "full_semantic_true": 0,
+    "result": "PASS",
+    "samples": 100,
+    "seed": 20260726
+  },
+  "schema": "frontiermath-hadamard-id3-profile-full-cnf-audit-v1",
+  "small_exhaustive_audit": {
+    "assignments_checked": 4096,
+    "kind": "exhaustive-small-model-equivalence",
+    "result": "PASS",
+    "satisfying_assignments": 196
+  },
+  "status": "pass",
+  "stored_margin_witness_control": {
+    "canonical_cnf_value": false,
+    "correctly_rejected": true,
+    "direct_semantic_value": false
+  },
+  "transformation_audit": {
+    "kind": "exhaustive-xor-and-pb-transformation-truth-tables",
+    "result": "PASS",
+    "two_value_range_assignments": 8,
+    "unit_split_assignment_extensions": 4,
+    "xor_equality_assignments": 8
+  }
+}
