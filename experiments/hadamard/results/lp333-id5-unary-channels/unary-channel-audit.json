@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "channels_reconstructed": 3,
+    "coefficient_histogram": {
+      "1": 3,
+      "3": 108
+    },
+    "one_literal_mutation_rejected": true,
+    "parent_metadata_bound": true,
+    "raw_position_pairs_counted": 333,
+    "row_cardinality_implications": 2,
+    "serialized_block_sha256": "426a0c8e881b4305fffa8a56d69e4f14b302ef992a763294c1c44752b492aa9c",
+    "serialized_channel_clauses": 107797,
+    "shift111_cardinality_implication": true,
+    "source_channel_clauses": 107791,
+    "truth_table_control": "PASS",
+    "xor_definition_clauses_checked": 864
+  },
+  "family_id": 5,
+  "formula_sha256": "c8c083c7311e083ec5e0bb82d3fca863f2f07e821a30cf55aeb5d79a17778d8b",
+  "metadata_sha256": "170d61f0acedbbe5f445f76db1c115934f5f03d354ae8646a31b53c44921ab13",
+  "method": "Recompute raw shift-111 coefficients and row cases, reconstruct the uniquely extended sequential counters, bind their XOR inputs, and compare the exact DIMACS block without importing the generator or proof encoder.",
+  "schema": "frontiermath-hadamard-unary-channel-audit-v1",
+  "status": "pass"
+}

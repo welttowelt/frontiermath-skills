@@ -7,6 +7,7 @@ import argparse
 from collections import Counter
 import hashlib
 import importlib
+from itertools import product
 import json
 import math
 from pathlib import Path
@@ -20,6 +21,10 @@ PAPER_URL = "https://arxiv.org/abs/2203.12275"
 PAPER_PDF_SHA256 = (
     "026caf5d675eab8d6b8d163d91cfef5c719d0e1ce775f476e6973354ddc06509"
 )
+CARDINALITY_PAPER_URLS = [
+    "https://research.chalmers.se/publication/74331",
+    "https://arxiv.org/abs/1012.3853",
+]
 
 
 def sha256_file(path: Path) -> str:
@@ -412,6 +417,307 @@ def apply_translation_gauge(
     }
 
 
+def add_sequential_exact_cardinality(
+    builder: Any,
+    inputs: Sequence[int],
+    target: int,
+    name: str,
+) -> dict[str, Any]:
+    """Add a uniquely extended unary prefix counter and assert count=target."""
+    input_literals = list(inputs)
+    size = len(input_literals)
+    if not 0 <= target <= size:
+        builder.add_clause()
+        return {
+            "name": name,
+            "inputs": input_literals,
+            "target": target,
+            "auxiliary_variables": 0,
+            "source_clauses": 1,
+        }
+    start_variable = builder.num_vars + 1
+    rows: list[list[int]] = []
+    max_threshold = min(size, target + 1)
+    for prefix in range(size):
+        rows.append(
+            [
+                builder.new_var(f"{name}_prefix_{prefix}_ge_{threshold}")
+                for threshold in range(
+                    1, min(prefix + 1, max_threshold) + 1
+                )
+            ]
+        )
+    source_start = len(builder.clauses) + 1
+    for prefix, literal in enumerate(input_literals):
+        row = rows[prefix]
+        for threshold_index, output in enumerate(row):
+            threshold = threshold_index + 1
+            if prefix == 0:
+                builder.add_equivalence(output, literal)
+                continue
+            previous = rows[prefix - 1]
+            same = (
+                previous[threshold_index]
+                if threshold_index < len(previous)
+                else None
+            )
+            lower = (
+                previous[threshold_index - 1]
+                if threshold_index > 0
+                else None
+            )
+            if threshold == 1:
+                if same is None:
+                    raise AssertionError("missing previous threshold-one signal")
+                # output <-> (same OR literal)
+                builder.add_clause(-same, output)
+                builder.add_clause(-literal, output)
+                builder.add_clause(-output, same, literal)
+            elif same is None:
+                if lower is None:
+                    raise AssertionError("missing lower threshold signal")
+                # output <-> (literal AND lower)
+                builder.add_clause(-literal, -lower, output)
+                builder.add_clause(-output, literal)
+                builder.add_clause(-output, lower)
+            else:
+                if lower is None:
+                    raise AssertionError("missing lower threshold signal")
+                # output <-> (same OR (literal AND lower))
+                builder.add_clause(-same, output)
+                builder.add_clause(-literal, -lower, output)
+                builder.add_clause(-output, same, literal)
+                builder.add_clause(-output, same, lower)
+    if target:
+        builder.add_unit(rows[-1][target - 1])
+    if target < size:
+        builder.add_unit(-rows[-1][target])
+    source_end = len(builder.clauses)
+    return {
+        "name": name,
+        "inputs": input_literals,
+        "input_count": size,
+        "target": target,
+        "start_variable": start_variable,
+        "auxiliary_variables": builder.num_vars - start_variable + 1,
+        "source_clause_start": source_start,
+        "source_clause_end": source_end,
+        "source_clauses": source_end - source_start + 1,
+        "max_unary_threshold": max_threshold,
+        "asserted_at_least_variable": (
+            rows[-1][target - 1] if target else None
+        ),
+        "asserted_overflow_variable": (
+            rows[-1][target] if target < size else None
+        ),
+    }
+
+
+def sequential_cardinality_truth_table() -> dict[str, Any]:
+    """Exhaustively test small exact counters, including unique extensions."""
+    assignments_checked = 0
+    extensions_checked = 0
+    for size in range(1, 5):
+        for target in range(size + 1):
+            # Use the encoder module's builder interface through a tiny local
+            # import-free implementation supplied by the caller at runtime.
+            # The actual builder class is available as the global set in main.
+            builder_class = sequential_cardinality_truth_table.builder_class
+            builder = builder_class()
+            inputs = [
+                builder.new_var(f"truth_input_{index}")
+                for index in range(size)
+            ]
+            record = add_sequential_exact_cardinality(
+                builder, inputs, target, f"truth_{size}_{target}"
+            )
+            auxiliaries = list(
+                range(
+                    record["start_variable"],
+                    record["start_variable"]
+                    + record["auxiliary_variables"],
+                )
+            )
+            for input_values in product((False, True), repeat=size):
+                satisfying_extensions = 0
+                for auxiliary_values in product(
+                    (False, True), repeat=len(auxiliaries)
+                ):
+                    values: list[bool | None] = [
+                        None
+                    ] * (builder.num_vars + 1)
+                    values[builder.false] = False
+                    for variable, value in zip(inputs, input_values):
+                        values[variable] = value
+                    for variable, value in zip(
+                        auxiliaries, auxiliary_values
+                    ):
+                        values[variable] = value
+                    if builder.clauses_hold(values):
+                        satisfying_extensions += 1
+                    extensions_checked += 1
+                expected = sum(input_values) == target
+                if satisfying_extensions != int(expected):
+                    raise ValueError(
+                        "sequential exact counter failed unique-extension truth table"
+                    )
+                assignments_checked += 1
+    return {
+        "result": "PASS",
+        "input_sizes": [1, 2, 3, 4],
+        "targets": "all feasible targets for every input size",
+        "assignments_checked": assignments_checked,
+        "auxiliary_extensions_checked": extensions_checked,
+        "unique_satisfying_extension_for_valid_inputs": True,
+        "zero_satisfying_extensions_for_invalid_inputs": True,
+    }
+
+
+def add_unary_cardinality_channels(
+    model: Any, full_spec: dict[str, Any]
+) -> dict[str, Any]:
+    if full_spec["num_reps"] != 112:
+        raise ValueError("unary channels require the full 112-row PAF model")
+    triple_indices = [
+        index for index, size in enumerate(full_spec["sizes"]) if size == 3
+    ]
+    if len(triple_indices) != 110:
+        raise ValueError("expected 110 size-three orbit variables")
+    shift_index = full_spec["reps"].index(111)
+    matrix = full_spec["W"][shift_index]
+    singleton_pairs = []
+    triple_edge_pairs = []
+    coefficient_histogram: Counter[int] = Counter()
+    for left in range(full_spec["r"]):
+        for right in range(left + 1, full_spec["r"]):
+            coefficient = matrix[left][right]
+            if not coefficient:
+                continue
+            coefficient_histogram[coefficient] += 1
+            if coefficient == 1:
+                singleton_pairs.append((left, right))
+            elif coefficient == 3:
+                triple_edge_pairs.append((left, right))
+            else:
+                raise ValueError(
+                    f"unexpected shift-111 coefficient {coefficient}"
+                )
+    if (
+        len(singleton_pairs) != 3
+        or len(triple_edge_pairs) != 108
+        or full_spec["const"][shift_index] != 6
+        or model.paf_targets[shift_index] != 334
+    ):
+        raise ValueError("shift-111 cardinality decomposition changed")
+
+    block_start_variable = model.builder.num_vars + 1
+    block_start_clause = len(model.builder.clauses) + 1
+    channels = [
+        add_sequential_exact_cardinality(
+            model.builder,
+            [model.za[index] for index in triple_indices],
+            55,
+            "channel_row_a_triples",
+        ),
+        add_sequential_exact_cardinality(
+            model.builder,
+            [model.zb[index] for index in triple_indices],
+            55,
+            "channel_row_b_triples",
+        ),
+        add_sequential_exact_cardinality(
+            model.builder,
+            [model.wa[pair] for pair in triple_edge_pairs]
+            + [model.wb[pair] for pair in triple_edge_pairs],
+            110,
+            "channel_shift111_triple_edges",
+        ),
+    ]
+    return {
+        "enabled": True,
+        "kind": "redundant uniquely-extended sequential unary exact counters",
+        "block_start_variable": block_start_variable,
+        "block_auxiliary_variables": model.builder.num_vars
+        - block_start_variable
+        + 1,
+        "block_source_clause_start": block_start_clause,
+        "block_source_clause_end": len(model.builder.clauses),
+        "block_source_clauses": len(model.builder.clauses)
+        - block_start_clause
+        + 1,
+        "channels": channels,
+        "arithmetic_implication": {
+            "orbit_signature": {"1": 3, "3": 110},
+            "gauge_singleton_negative_count_per_sequence": 1,
+            "row_weighted_negative_domain": [166, 167],
+            "forced_triple_negative_orbits_per_sequence": 55,
+            "shift": 111,
+            "shift_diagonal_constant": full_spec["const"][shift_index],
+            "shift_weighted_xor_target": model.paf_targets[shift_index],
+            "coefficient_histogram": dict(
+                sorted(coefficient_histogram.items())
+            ),
+            "singleton_pairs": [list(pair) for pair in singleton_pairs],
+            "singleton_xor_contribution_across_sequences": 4,
+            "triple_edge_pairs": [list(pair) for pair in triple_edge_pairs],
+            "forced_active_triple_edges_across_sequences": 110,
+        },
+        "paper_to_levers": {
+            "sources": CARDINALITY_PAPER_URLS,
+            "adopted": (
+                "unary cardinality counters expose partial-assignment "
+                "deductions that binary counters can hide from unit propagation"
+            ),
+            "not_adopted": [
+                "literature runtime ratios",
+                "replacement of the full weighted PB layer",
+                "native PB proof logging",
+            ],
+        },
+    }
+
+
+def bind_serialized_channel_block(
+    builder: Any,
+    serialization: dict[str, Any],
+    channels: dict[str, Any],
+) -> None:
+    split_by_source = {
+        item["source_clause_index"]: item
+        for item in serialization["unit_split_map"]
+    }
+    source_start = channels["block_source_clause_start"]
+    source_end = channels["block_source_clause_end"]
+    prior_splits = sum(
+        1 for source in split_by_source if source < source_start
+    )
+    serialized_clauses = []
+    unit_gadgets = []
+    for source_index in range(source_start, source_end + 1):
+        clause = builder.clauses[source_index - 1]
+        if source_index in split_by_source:
+            item = split_by_source[source_index]
+            if len(clause) != 1 or clause[0] != item["source_literal"]:
+                raise ValueError("channel unit-split binding mismatch")
+            literal = clause[0]
+            mask = item["mask_variable"]
+            serialized_clauses.extend(
+                [(literal, mask), (literal, -mask)]
+            )
+            unit_gadgets.append(item)
+        else:
+            serialized_clauses.append(tuple(clause))
+    digest = hashlib.sha256()
+    for clause in serialized_clauses:
+        digest.update(
+            (" ".join(map(str, clause)) + " 0\n").encode("ascii")
+        )
+    channels["serialized_clause_start"] = source_start + prior_splits
+    channels["serialized_clauses"] = len(serialized_clauses)
+    channels["serialized_block_sha256"] = digest.hexdigest()
+    channels["serialized_unit_gadgets"] = unit_gadgets
+
+
 def variable_actions(
     za: Sequence[int],
     zb: Sequence[int],
@@ -605,6 +911,12 @@ def main() -> int:
         action="store_true",
         help="fix the normalized singleton translation gauge in each sequence",
     )
+    parser.add_argument(
+        "--add-unary-cardinality-channels",
+        action="store_true",
+        help="add the three preregistered redundant unary channels",
+    )
+    parser.add_argument("--parent-metadata", type=Path)
     args = parser.parse_args()
     if args.family_id not in (4, 5, 7, 9, 10):
         raise ValueError(
@@ -612,6 +924,14 @@ def main() -> int:
         )
     if args.random_equivalence_samples <= 0:
         raise ValueError("random-equivalence sample count must be positive")
+    if args.add_unary_cardinality_channels and (
+        not args.canonicalize_independent_translations
+        or args.deduplicate_inverse_paf
+        or args.parent_metadata is None
+    ):
+        raise ValueError(
+            "unary channels require the full PAF translation gauge and parent metadata"
+        )
 
     source_family, classification_path, status_path = load_source_family(
         args.source_repo, args.family_id
@@ -696,6 +1016,64 @@ def main() -> int:
                 **breaker,
             }
         )
+    parent_binding = None
+    unary_channels = None
+    truth_table = None
+    if args.add_unary_cardinality_channels:
+        parent_metadata = json.loads(
+            args.parent_metadata.read_text(encoding="utf-8")
+        )
+        expected_source_variables = (
+            parent_metadata["cnf"]["variables"]
+            - parent_metadata["cnf"]["unit_split_count"]
+        )
+        expected_source_clauses = (
+            parent_metadata["cnf"]["clauses"]
+            - parent_metadata["cnf"]["unit_split_count"]
+        )
+        parent_binding = {
+            "result": "PASS",
+            "path": str(args.parent_metadata),
+            "metadata_sha256": sha256_file(args.parent_metadata),
+            "formula_sha256": parent_metadata["cnf"]["sha256"],
+            "family_id_equal": (
+                parent_metadata["family_id"] == args.family_id
+            ),
+            "source_variables_equal_before_channels": (
+                model.builder.num_vars == expected_source_variables
+            ),
+            "source_clauses_equal_before_channels": (
+                len(model.builder.clauses) == expected_source_clauses
+            ),
+            "primary_variables_equal": (
+                parent_metadata["primary_variables"]["za"] == model.za
+                and parent_metadata["primary_variables"]["zb"] == model.zb
+            ),
+            "symmetry_equal": (
+                parent_metadata["symmetry"]["breakers"]
+                == breaker_records
+            ),
+            "translation_gauge_equal": (
+                parent_metadata["independent_translation_gauge"][
+                    "gauge_literals"
+                ]
+                == translation_gauge["gauge_literals"]
+            ),
+            "full_paf_representatives": full_spec["num_reps"],
+        }
+        if not all(
+            value is True
+            for key, value in parent_binding.items()
+            if key.endswith("_equal")
+        ) or parent_binding["full_paf_representatives"] != 112:
+            raise ValueError(f"parent formula binding failed: {parent_binding}")
+        sequential_cardinality_truth_table.builder_class = (
+            encoder.CNFBuilder
+        )
+        truth_table = sequential_cardinality_truth_table()
+        unary_channels = add_unary_cardinality_channels(
+            model, full_spec
+        )
 
     args.output_dir.mkdir(parents=True, exist_ok=False)
     cnf_path = args.output_dir / f"id{args.family_id}-symmetry.cnf"
@@ -712,6 +1090,10 @@ def main() -> int:
             split_by_source[index]
             for index in translation_gauge["gauge_source_clause_indices"]
         ]
+    if unary_channels is not None:
+        bind_serialized_channel_block(
+            model.builder, serialization, unary_channels
+        )
     in_memory_hash = encoder.dimacs_sha256(
         model.builder, split_unit_clauses=True
     )
@@ -825,6 +1207,12 @@ def main() -> int:
             translation_control
         )
         metadata["independent_translation_gauge"] = translation_gauge
+    if unary_channels is not None:
+        metadata["controls"]["sequential_cardinality_truth_table"] = (
+            truth_table
+        )
+        metadata["controls"]["parent_formula_binding"] = parent_binding
+        metadata["unary_cardinality_channels"] = unary_channels
     metadata_path.write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
