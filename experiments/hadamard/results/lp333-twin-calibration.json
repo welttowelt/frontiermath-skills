@@ -1,0 +1,61 @@
+{
+  "checks": {
+    "both_bogus_controls_rejected": true,
+    "family_ids": true,
+    "formula_audits_pass": true,
+    "id10_independent_run_audit": true,
+    "id10_proof_certified": true,
+    "id9_unknown_at_proof_ceiling": true,
+    "matched_budgets": true,
+    "matched_formula_size": true
+  },
+  "claim": "Fixed common-multiplier family ID10 is proof-certified infeasible. ID9 remains UNKNOWN at the matched proof ceiling.",
+  "claim_boundary": "Through the separately audited affine-normalization result, ID10's coherent translated versions are also excluded. This does not decide ID9, the other seven open fixed families, unrestricted LP(333), or H(668).",
+  "formula": {
+    "bytes_each": 10606358,
+    "clauses_each": 451186,
+    "id10_sha256": "f3e7b1d7e9f8825bdfcd3812f23f41c83be515373513c107cf10cc95b870fd61",
+    "id9_sha256": "efccbf497673cc8fe0b6eae8d9c3c475b20dbfc3347cfd02fea94bf0e63a7002",
+    "variables_each": 66552
+  },
+  "id10": {
+    "first_replay_seconds": 24.7090996659972,
+    "fresh_replay_seconds": 24.64956741599599,
+    "maximum_observed_rss_bytes": 652378112,
+    "proof_bytes": 712682070,
+    "proof_sha256": "98a3101b9540510ccea62022b6f923caa2b6ca34b29ee4949a55a4b96a0ce29a",
+    "solver_wall_seconds": 61.72057825000229,
+    "status": "proof-certified-unsat",
+    "termination": "unsat"
+  },
+  "id9": {
+    "maximum_observed_rss_bytes": 402292736,
+    "proof_bytes": 1078805387,
+    "proof_sha256": "055ce53e58e67f0c792938449867749dc1ff751973cb7f1982595f015f89a5b9",
+    "status": "unknown-resource-ceiling",
+    "termination": "proof-size-ceiling",
+    "wall_seconds": 94.14706358400144
+  },
+  "inputs": {
+    "id10_audit_sha256": "0e2e9ceb72f2b46aabc5dd5f3ae77be7ed02be3b4a8021d7da701dbf251a9b97",
+    "id10_encoding_sha256": "9645a32584e1cb5c04a36db1f3cd5f4730bd0e06366d3445799474409e188350",
+    "id10_run_audit_sha256": "6e3697a91addf86fce330f47f6d6b34dd718974558a1747531d24e3e850c8209",
+    "id10_run_sha256": "264f9cc6ec7e2ef736767122742c280d83fe2d02d6cb7d2451d410fe296c1a02",
+    "id9_audit_sha256": "fe53d76477daa657692b0c8d56e1a15917bfa1797f08cb9d1723fd0ab2b93385",
+    "id9_encoding_sha256": "690c4f3e7a93001944de1cb57026cad087f6776a5bc0adccd8bc01cdacb58699",
+    "id9_run_sha256": "b2944a23bbe923e7ace8f03fbcd2f169927086827e5eb124918c77a456915268"
+  },
+  "open_fixed_family_ids_after_result": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    7,
+    9
+  ],
+  "schema": "frontiermath-hadamard-lp333-twin-calibration-v1",
+  "source_sha256": "621523c2a4e86966e2fcb2f06ee99d490386170758fcc1e59893fff2bfe8528b",
+  "status": "id10-proof-certified"
+}
