@@ -189,14 +189,19 @@ def main() -> int:
             .get("result")
             == "PASS"
         ),
-        "inverse_paf_formula_audit": (
+        "formula_audit": (
             (
                 formula_audit is not None
                 and formula_audit.get("status") == "pass"
                 and formula_audit.get("formula_sha256")
                 == metadata["cnf"]["sha256"]
             )
-            if metadata.get("paf_inverse_deduplication", {}).get("enabled")
+            if (
+                metadata.get("paf_inverse_deduplication", {}).get("enabled")
+                or metadata.get("independent_translation_gauge", {}).get(
+                    "enabled"
+                )
+            )
             else args.formula_audit is None
         ),
         "full_group_order": (

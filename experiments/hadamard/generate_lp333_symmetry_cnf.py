@@ -245,6 +245,173 @@ def direct_random_equivalence(
     }
 
 
+def normalized_translation_control(
+    model: Any,
+    full_spec: dict[str, Any],
+    subgroup_elements: Sequence[int],
+    samples: int,
+    seed: int,
+) -> dict[str, Any]:
+    translations = [
+        translation
+        for translation in range(LENGTH)
+        if all(
+            ((unit - 1) * translation) % LENGTH == 0
+            for unit in subgroup_elements
+        )
+    ]
+    if translations != [0, 111, 222]:
+        raise ValueError(
+            f"expected normalized-translation annihilator [0,111,222], got {translations}"
+        )
+    singleton_indices = [
+        index for index, size in enumerate(full_spec["sizes"]) if size == 1
+    ]
+    if (
+        singleton_indices != [0, 1, 2]
+        or full_spec["orbits"][1:] [:2] != [[111], [222]]
+    ):
+        raise ValueError("unexpected singleton orbit layout")
+    triple_indices = [
+        index for index, size in enumerate(full_spec["sizes"]) if size == 3
+    ]
+    allowed_patterns = []
+    row_cases = []
+    for left in (0, 1):
+        for right in (0, 1):
+            pattern = (0, left, right)
+            for triple_negatives in range(len(triple_indices) + 1):
+                weighted = left + right + 3 * triple_negatives
+                if weighted in ((LENGTH - 1) // 2, (LENGTH + 1) // 2):
+                    allowed_patterns.append(pattern)
+                    row_cases.append(
+                        {
+                            "pattern": list(pattern),
+                            "triple_negative_orbits": triple_negatives,
+                            "weighted_negative_count": weighted,
+                        }
+                    )
+    allowed_patterns = sorted(set(allowed_patterns))
+    if allowed_patterns != [(0, 0, 1), (0, 1, 0), (0, 1, 1)]:
+        raise ValueError(f"unexpected row-feasible singleton patterns: {allowed_patterns}")
+
+    def normalized_singleton_translate(
+        pattern: tuple[int, int, int], offset: int
+    ) -> tuple[int, int, int]:
+        return tuple(
+            pattern[(index + offset) % 3] ^ pattern[offset]
+            for index in range(3)
+        )
+
+    pattern_orbits = {}
+    for pattern in allowed_patterns:
+        orbit = sorted(
+            {
+                normalized_singleton_translate(pattern, offset)
+                for offset in range(3)
+            }
+        )
+        pattern_orbits["".join(map(str, pattern))] = [
+            list(item) for item in orbit
+        ]
+        if orbit != allowed_patterns or min(orbit) != (0, 0, 1):
+            raise ValueError("normalized singleton translation has wrong orbit")
+
+    rng = random.Random(seed)
+    direct_paf_equalities = 0
+    orbit_invariance_checks = 0
+    row_magnitude_checks = 0
+    for _ in range(samples):
+        orbit_values = [1] + [
+            rng.choice((-1, 1)) for _ in range(full_spec["r"] - 1)
+        ]
+        sequence = [
+            orbit_values[full_spec["idx"][position]]
+            for position in range(LENGTH)
+        ]
+        base_row_magnitude = abs(sum(sequence))
+        base_pafs = [
+            sum(
+                sequence[position] * sequence[(position + shift) % LENGTH]
+                for position in range(LENGTH)
+            )
+            for shift in range(1, LENGTH)
+        ]
+        for translation in translations:
+            origin = sequence[translation]
+            transformed = [
+                origin * sequence[(position + translation) % LENGTH]
+                for position in range(LENGTH)
+            ]
+            if transformed[0] != 1:
+                raise ValueError("normalized translation changed the fixed origin")
+            for orbit in full_spec["orbits"]:
+                if len({transformed[position] for position in orbit}) != 1:
+                    raise ValueError("normalized translation broke H-invariance")
+                orbit_invariance_checks += 1
+            if abs(sum(transformed)) != base_row_magnitude:
+                raise ValueError("normalized translation changed row-sum magnitude")
+            row_magnitude_checks += 1
+            for shift, expected in enumerate(base_pafs, start=1):
+                actual = sum(
+                    transformed[position]
+                    * transformed[(position + shift) % LENGTH]
+                    for position in range(LENGTH)
+                )
+                if actual != expected:
+                    raise ValueError("normalized translation changed a PAF")
+                direct_paf_equalities += 1
+    return {
+        "result": "PASS",
+        "translations": translations,
+        "independent_pair_action_order": len(translations) ** 2,
+        "singleton_orbits": [
+            full_spec["orbits"][index] for index in singleton_indices
+        ],
+        "row_feasible_singleton_patterns": [
+            list(pattern) for pattern in allowed_patterns
+        ],
+        "row_cases": row_cases,
+        "pattern_orbits": pattern_orbits,
+        "canonical_pattern": [0, 0, 1],
+        "random_orbit_assignments": samples,
+        "seed": seed,
+        "orbit_invariance_checks": orbit_invariance_checks,
+        "row_magnitude_checks": row_magnitude_checks,
+        "direct_paf_equalities": direct_paf_equalities,
+    }
+
+
+def apply_translation_gauge(
+    model: Any, full_spec: dict[str, Any]
+) -> dict[str, Any]:
+    index_111 = full_spec["idx"][111]
+    index_222 = full_spec["idx"][222]
+    if (
+        full_spec["orbits"][index_111] != [111]
+        or full_spec["orbits"][index_222] != [222]
+    ):
+        raise ValueError("translation gauge positions are not singleton orbits")
+    literals = [
+        -model.za[index_111],
+        model.za[index_222],
+        -model.zb[index_111],
+        model.zb[index_222],
+    ]
+    clause_indices = []
+    for literal in literals:
+        model.builder.add_unit(literal)
+        clause_indices.append(len(model.builder.clauses))
+    return {
+        "enabled": True,
+        "canonical_pattern": [0, 0, 1],
+        "per_sequence_translations": [0, 111, 222],
+        "independent_pair_action_order": 9,
+        "gauge_literals": literals,
+        "gauge_source_clause_indices": clause_indices,
+    }
+
+
 def variable_actions(
     za: Sequence[int],
     zb: Sequence[int],
@@ -361,6 +528,31 @@ def lp63_control(
         if canonical_bits > bits:
             raise ValueError("LP63 canonical representative is not lex-minimal")
         comparisons += 1
+    normalized_translation_checks = 0
+    translations = [0, len(canonical_a) // 3, 2 * len(canonical_a) // 3]
+    translated_pairs = []
+    for left_translation in translations:
+        left_origin = canonical_a[left_translation]
+        left = [
+            left_origin
+            * canonical_a[(index + left_translation) % len(canonical_a)]
+            for index in range(len(canonical_a))
+        ]
+        for right_translation in translations:
+            right_origin = canonical_b[right_translation]
+            right = [
+                right_origin
+                * canonical_b[(index + right_translation) % len(canonical_b)]
+                for index in range(len(canonical_b))
+            ]
+            if not encoder.direct_is_legendre_pair(left, right):
+                raise ValueError(
+                    "LP63 positive fixture failed normalized translation"
+                )
+            translated_pairs.append(
+                [left_translation, right_translation]
+            )
+            normalized_translation_checks += 1
     inverse_checks = 0
     for sequence in (canonical_a, canonical_b):
         for shift in range(1, len(sequence)):
@@ -384,6 +576,10 @@ def lp63_control(
         "lex_comparisons": comparisons,
         "canonical_pair_directly_verified": True,
         "inverse_paf_equalities_checked": inverse_checks,
+        "normalized_independent_translation_pairs": translated_pairs,
+        "normalized_translation_legendre_checks": (
+            normalized_translation_checks
+        ),
         "canonical_prefix_sha256": hashlib.sha256(
             bytes(canonical_bits)
         ).hexdigest(),
@@ -403,6 +599,11 @@ def main() -> int:
         "--deduplicate-inverse-paf",
         action="store_true",
         help="quotient exact duplicate PAF(s)=PAF(-s) rows before PB encoding",
+    )
+    parser.add_argument(
+        "--canonicalize-independent-translations",
+        action="store_true",
+        help="fix the normalized singleton translation gauge in each sequence",
     )
     args = parser.parse_args()
     if args.family_id not in (4, 5, 7, 9, 10):
@@ -449,6 +650,17 @@ def main() -> int:
         args.random_equivalence_samples,
         20260786 + args.family_id,
     )
+    translation_control = None
+    translation_gauge = None
+    if args.canonicalize_independent_translations:
+        translation_control = normalized_translation_control(
+            model,
+            full_spec,
+            subgroup_elements,
+            samples=16,
+            seed=20260826 + args.family_id,
+        )
+        translation_gauge = apply_translation_gauge(model, full_spec)
     actions = unit_permutations(model.spec)
     group_control = validate_decimation_group(
         model.spec, actions, len(subgroup["elements"])
@@ -491,6 +703,15 @@ def main() -> int:
     serialization = encoder.write_dimacs(
         model.builder, cnf_path, split_unit_clauses=True
     )
+    if translation_gauge is not None:
+        split_by_source = {
+            item["source_clause_index"]: item
+            for item in serialization["unit_split_map"]
+        }
+        translation_gauge["serialized_unit_gadgets"] = [
+            split_by_source[index]
+            for index in translation_gauge["gauge_source_clause_indices"]
+        ]
     in_memory_hash = encoder.dimacs_sha256(
         model.builder, split_unit_clauses=True
     )
@@ -508,10 +729,10 @@ def main() -> int:
         "status": "generated",
         "family_id": args.family_id,
         "claim_boundary": (
-            "The inverse quotient removes only identity-duplicate PAF rows, "
-            "and the lex-leaders preserve satisfiability by selecting the "
-            "least assignment in every explicitly verified finite symmetry "
-            "orbit. UNSAT still requires an accepted complete proof."
+            "Every enabled quotient is an independently controlled formula "
+            "automorphism or identity. The lex-leaders preserve satisfiability "
+            "by selecting the least assignment in every verified finite "
+            "symmetry orbit. UNSAT still requires an accepted complete proof."
         ),
         "subgroup": {
             "elements": subgroup["elements"],
@@ -599,6 +820,11 @@ def main() -> int:
             "enabled": True,
             **inverse_control,
         }
+    if translation_gauge is not None:
+        metadata["controls"]["normalized_translation_automorphism"] = (
+            translation_control
+        )
+        metadata["independent_translation_gauge"] = translation_gauge
     metadata_path.write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
