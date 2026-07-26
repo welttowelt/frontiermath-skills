@@ -14,3 +14,8 @@ The independent audit recomputes the modular annihilator and row cases, checks
 15,936 direct PAF automorphism identities, and verifies all eight serialized
 unit-gadget clauses. The CNF and proof payloads are ignored; tracked metadata
 and manifests bind their hashes.
+
+The proof-producing run remained strictly **UNKNOWN** at 300 seconds. Its
+incomplete proof was 943,680,363 bytes, peak observed RSS was 747,454,464
+bytes, and it explored 2,180,469 conflicts. The factor-nine quotient improves
+the baseline workload but does not decide ID4.
