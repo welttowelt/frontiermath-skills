@@ -1,0 +1,321 @@
+{
+  "artifact_count": 10,
+  "errors": [],
+  "failed": 0,
+  "manifest_sha256": "81d68ce0292202e144024a570606ec51371b4dd98e49ced9652d3da64ea953ea",
+  "passed": 10,
+  "records": [
+    {
+      "actual": {
+        "bytes": 2386,
+        "executable": false,
+        "sha256": "722924fccc34ac58b839e892d9f846e30d68d49f1369858bc35c279a17724df3"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 2386,
+        "executable": null,
+        "sha256": "722924fccc34ac58b839e892d9f846e30d68d49f1369858bc35c279a17724df3"
+      },
+      "id": "certificate",
+      "path": "frontiermath-skills/experiments/hadamard/results/lp333-id7-direct-paf-obstruction.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 1601,
+        "executable": false,
+        "sha256": "a812431500b4c45132deda95256b6ab3403fb50ecb4905c28b5d228e2c039bdf"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 1601,
+        "executable": null,
+        "sha256": "a812431500b4c45132deda95256b6ab3403fb50ecb4905c28b5d228e2c039bdf"
+      },
+      "id": "certificate-audit",
+      "path": "frontiermath-skills/experiments/hadamard/results/lp333-id7-direct-paf-obstruction-audit.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 6624,
+        "executable": false,
+        "sha256": "1981a38a1be291f802994c45955fc86777925527ed0692e28013c53aeda18d7e"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 6624,
+        "executable": null,
+        "sha256": "1981a38a1be291f802994c45955fc86777925527ed0692e28013c53aeda18d7e"
+      },
+      "id": "certificate-generator",
+      "path": "frontiermath-skills/experiments/hadamard/certify_lp333_direct_paf_obstruction.py",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 6821,
+        "executable": false,
+        "sha256": "b0c9c4e042b8a096a21e200ce157e0c72af2e23703c4a0a327a4001172ef8922"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 6821,
+        "executable": null,
+        "sha256": "b0c9c4e042b8a096a21e200ce157e0c72af2e23703c4a0a327a4001172ef8922"
+      },
+      "id": "certificate-auditor",
+      "path": "frontiermath-skills/experiments/hadamard/audit_lp333_direct_paf_obstruction.py",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 5437,
+        "executable": false,
+        "sha256": "22fd2aa26c1436ffddd3f5095f270c3e18638088765377e3fee39f0c47980724"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 5437,
+        "executable": null,
+        "sha256": "22fd2aa26c1436ffddd3f5095f270c3e18638088765377e3fee39f0c47980724"
+      },
+      "id": "preregistration",
+      "path": "frontiermath-skills/experiments/hadamard/preregistrations/lp333-id7-static-symmetry.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 677,
+        "executable": false,
+        "sha256": "6409ce31804cd4da44eb5b1644ed5bf78fa0a26b1985116bf7a64e5fdef76912"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 677,
+        "executable": null,
+        "sha256": "6409ce31804cd4da44eb5b1644ed5bf78fa0a26b1985116bf7a64e5fdef76912"
+      },
+      "id": "preregistration-audit",
+      "path": "frontiermath-skills/experiments/hadamard/preregistrations/lp333-id7-static-symmetry-audit.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 33340,
+        "executable": false,
+        "sha256": "1e8073d58a920d2e5f59804f24f685e50f20dba41139c5520fb8863dc4ee3d3a"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 33340,
+        "executable": null,
+        "sha256": "1e8073d58a920d2e5f59804f24f685e50f20dba41139c5520fb8863dc4ee3d3a"
+      },
+      "id": "subgroup-classification",
+      "path": "hadamard-668-multiplier-obstructions/lp333/results/subgroup_classification.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 15999,
+        "executable": false,
+        "sha256": "d4514a48ce341bcc0bec4f1b816e1736e1aeac0bd085cedeb6aa3abee034e49e"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 15999,
+        "executable": null,
+        "sha256": "d4514a48ce341bcc0bec4f1b816e1736e1aeac0bd085cedeb6aa3abee034e49e"
+      },
+      "id": "source-master-status",
+      "path": "hadamard-668-multiplier-obstructions/lp333/results/master_status.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 201174,
+        "executable": false,
+        "sha256": "e0b324f8ce9a4793e403bb3d13bed5112ffa90c8bc9fc3ccfb6ec2f1a71c57de"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 201174,
+        "executable": null,
+        "sha256": "e0b324f8ce9a4793e403bb3d13bed5112ffa90c8bc9fc3ccfb6ec2f1a71c57de"
+      },
+      "id": "affine-normalization",
+      "path": "frontiermath-skills/experiments/hadamard/results/lp333-affine-multiplier-normalization.json",
+      "status": "pass"
+    },
+    {
+      "actual": {
+        "bytes": 1362,
+        "executable": false,
+        "sha256": "fc5c422a3d6a004f058e70a6a88235942f0bb4ce524aad44458eacc42ef6e94f"
+      },
+      "checks": {
+        "bytes_format": true,
+        "bytes_match": true,
+        "executable_format": true,
+        "executable_match": true,
+        "exists": true,
+        "id_format": true,
+        "id_unique": true,
+        "path_inside_root": true,
+        "path_relative": true,
+        "path_unique": true,
+        "regular_file": true,
+        "sha256_format": true,
+        "sha256_match": true
+      },
+      "errors": [],
+      "expected": {
+        "bytes": 1362,
+        "executable": null,
+        "sha256": "fc5c422a3d6a004f058e70a6a88235942f0bb4ce524aad44458eacc42ef6e94f"
+      },
+      "id": "affine-normalization-audit",
+      "path": "frontiermath-skills/experiments/hadamard/results/lp333-affine-multiplier-normalization-audit.json",
+      "status": "pass"
+    }
+  ],
+  "schema": "computational-certificate-binding-audit/v1",
+  "status": "pass"
+}

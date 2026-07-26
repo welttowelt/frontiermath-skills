@@ -287,6 +287,12 @@ def main() -> int:
         != source_family["classification"]["elements"]
     ):
         raise ValueError("proof encoder selected a different subgroup")
+    if model.direct_pb_obstructions:
+        raise ValueError(
+            "family has a direct PAF weighted-sum obstruction; certify that "
+            "obstruction instead of serializing an empty-clause CNF: "
+            f"{model.direct_pb_obstructions}"
+        )
     random_equivalence = encoder.random_equivalence_audit(
         model,
         args.random_equivalence_samples,

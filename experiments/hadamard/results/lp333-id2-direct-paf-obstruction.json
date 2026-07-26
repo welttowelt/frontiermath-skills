@@ -1,0 +1,53 @@
+{
+  "claim": "No pair of +/-1 sequences invariant under the named multiplier subgroup can have combined nonzero PAF -2.",
+  "claim_boundary": "This closes only the named fixed multiplier family and, through the separate affine-normalization theorem, its coherent translated versions. It does not decide unrestricted LP333 or H668.",
+  "derivation": {
+    "all_nonzero_shifts_checked": 332,
+    "bound": "Each off-diagonal coefficient contributes at most one XOR bit per sequence, so weighted_xor_sum is at most 2*off_diagonal.",
+    "identity": "For one shift, PAF_A+PAF_B = 2*diagonal + 2*off_diagonal - 2*weighted_xor_sum. Setting this to -2 requires weighted_xor_sum = diagonal+off_diagonal+1 = 334.",
+    "length": 333,
+    "obstructing_shifts": [
+      {
+        "diagonal_constant_per_sequence": 222,
+        "maximum_weighted_xor_sum": 222,
+        "off_diagonal_coefficient_sum_per_sequence": 111,
+        "required_weighted_xor_sum": 334,
+        "shift": 111,
+        "shortfall": 112
+      },
+      {
+        "diagonal_constant_per_sequence": 222,
+        "maximum_weighted_xor_sum": 222,
+        "off_diagonal_coefficient_sum_per_sequence": 111,
+        "required_weighted_xor_sum": 334,
+        "shift": 222,
+        "shortfall": 112
+      }
+    ],
+    "target_combined_paf": -2
+  },
+  "family_id": 2,
+  "generator_sha256": "1981a38a1be291f802994c45955fc86777925527ed0692e28013c53aeda18d7e",
+  "inputs": {
+    "master_status": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/results/master_status.json",
+    "master_status_sha256": "d4514a48ce341bcc0bec4f1b816e1736e1aeac0bd085cedeb6aa3abee034e49e",
+    "subgroup_classification": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions/lp333/results/subgroup_classification.json",
+    "subgroup_classification_sha256": "1e8073d58a920d2e5f59804f24f685e50f20dba41139c5520fb8863dc4ee3d3a"
+  },
+  "schema": "frontiermath-lp333-direct-paf-obstruction-v1",
+  "source_status_before_certificate": "OPEN",
+  "status": "exact-arithmetic-certified-infeasible",
+  "subgroup": {
+    "elements": [
+      1,
+      112,
+      223
+    ],
+    "orbit_count": 185,
+    "orbit_signature": {
+      "1": 111,
+      "3": 74
+    },
+    "order": 3
+  }
+}

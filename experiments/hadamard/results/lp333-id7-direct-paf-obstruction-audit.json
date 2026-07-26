@@ -1,0 +1,46 @@
+{
+  "auditor_sha256": "b0c9c4e042b8a096a21e200ce157e0c72af2e23703c4a0a327a4001172ef8922",
+  "checks": {
+    "alternate_union_find_orbit_signature": true,
+    "direct_same_orbit_counts_all_shifts": true,
+    "one_unit_shortfall_mutation_rejected": true,
+    "source_subgroup_group_axioms": true,
+    "weighted_xor_bound_recomputed": true
+  },
+  "family_id": 7,
+  "independent_path": "The audit does not import the proof encoder or certificate generator. It reconstructs orbits with union-find and counts same-orbit shifted positions directly from the group action.",
+  "inputs": {
+    "certificate_sha256": "722924fccc34ac58b839e892d9f846e30d68d49f1369858bc35c279a17724df3",
+    "subgroup_classification_sha256": "1e8073d58a920d2e5f59804f24f685e50f20dba41139c5520fb8863dc4ee3d3a"
+  },
+  "mutation_control": {
+    "change": "incremented the first recorded shortfall by one",
+    "rejected": true
+  },
+  "obstructing_shifts": [
+    {
+      "diagonal_constant_per_sequence": 222,
+      "maximum_weighted_xor_sum": 222,
+      "off_diagonal_coefficient_sum_per_sequence": 111,
+      "required_weighted_xor_sum": 334,
+      "shift": 111,
+      "shortfall": 112
+    },
+    {
+      "diagonal_constant_per_sequence": 222,
+      "maximum_weighted_xor_sum": 222,
+      "off_diagonal_coefficient_sum_per_sequence": 111,
+      "required_weighted_xor_sum": 334,
+      "shift": 222,
+      "shortfall": 112
+    }
+  ],
+  "schema": "frontiermath-lp333-direct-paf-obstruction-audit-v1",
+  "status": "pass",
+  "subgroup_checks": {
+    "all_units": true,
+    "closure": true,
+    "identity": true,
+    "unique": true
+  }
+}
