@@ -1,0 +1,102 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 pq2 CryptoMiniSat parity-recovery discovery",
+  "hypothesis": "CryptoMiniSat's CNF XOR recovery and Gauss-Jordan matrices may expose the parity structure hidden inside the exact prescribed-pq2 formula and reach a directly verifiable unrestricted Legendre pair where a parity-agnostic CDCL arm does not.",
+  "evidence_unit": "one proofless SAT-discovery run on the audited unrestricted ID0 pq2 slice with CryptoMiniSat 5.14.7, one thread, random seed zero, explicitly pinned default XOR/Gauss settings, and a 7200-second cap",
+  "claim_boundary": "The pq2-uncompression statement is conjectural. Only a complete assignment that satisfies all 4494772 serialized clauses and independently verifies two binary length-333 rows, the prescribed compression, and combined PAF minus two at all 332 nonzero shifts is a candidate. XOR recovery, a lower heuristic score, or proofless UNSAT is nondecisive.",
+  "baseline": {
+    "evidence": "Formula SHA-256 7a893f92b28a7eed54ccefe5bbb89d28d04132672905abc3635d01a6e3991735 and independent formula audit status pass; the distinct pinned Kissat seed-zero arm is already running on the identical formula.",
+    "measurement": "No directly verified SAT model exists in the campaign for the unrestricted prescribed [1,11,-11], [1,-11,11] compression slice."
+  },
+  "intervention": {
+    "one_change": "Replace parity-agnostic Kissat with pinned single-thread CryptoMiniSat 5.14.7 and explicitly enable its default CNF XOR discovery plus bounded Gauss-Jordan matrices; keep formula, seed, cap, compression, symmetry, and direct verifier unchanged.",
+    "forbidden_confounds": [
+      "common multiplier constraints",
+      "formula regeneration",
+      "changed compression margins",
+      "changed symmetry group",
+      "random seed sweep",
+      "thread-count sweep",
+      "CryptoMiniSat configuration sweep",
+      "proofless UNSAT claim",
+      "resource-cap extension",
+      "accepting a partial or unaudited model"
+    ]
+  },
+  "controls": [
+    {
+      "name": "formula-reconstruction",
+      "purpose": "Bind every structural addition to the unrestricted base equations.",
+      "expected": "The independent auditor reconstructs all 215 lex leaders and 848886 symmetry clauses, all six counters and 111444 serialized channel clauses, exact formula hash, functional truth tables, and a rejected one-literal mutation."
+    },
+    {
+      "name": "tool-and-package-pin",
+      "purpose": "Bind the executed parity solver and its dynamically linked implementation.",
+      "expected": "CryptoMiniSat 5.14.7 executable SHA-256 a3f85c3709b5e2a040bf82a4a604d1c7b9f10219bbf180a9e0f72319a2e892ac, libcryptominisat SHA-256 7952e5a5c77ac8b56253c7a2ad88c62648f20698004338bad9a443efb55b2f84, Homebrew arm64_tahoe bottle SHA-256 7793bdca8de1ecaf72fd743f85fe381db98d4d48012b24eeeaa6cb0daa7ed41d, and passing Homebrew package test."
+    },
+    {
+      "name": "parity-positive-control",
+      "purpose": "Check SAT status, complete-model extraction, CNF satisfaction, and actual XOR/Gauss activation before target search.",
+      "expected": "On known SAT ID3 cell 73, the pinned command returns SAT, its complete assignment satisfies every one of 92904 clauses, and its trace reports at least one recovered XOR and at least one used Gauss-Jordan matrix."
+    },
+    {
+      "name": "frozen-parity-settings",
+      "purpose": "Ensure the mechanism is parity recovery rather than a hidden portfolio.",
+      "expected": "Exactly one thread and seed zero with --xor=1, --maxxorsize=7, --xorfindtout=400, --maxxormat=400, --maxmatrixrows=2000, --maxmatrixcols=1000, --autodisablegauss=1, --minmatrixrows=3, --maxnummatrices=5, and --gaussusefulcutoff=0.2."
+    },
+    {
+      "name": "target-mechanism-trace",
+      "purpose": "Record whether the intervention actually fires on the target.",
+      "expected": "The target trace reports recovered XORs and used Gauss-Jordan matrices; counts are workload evidence and never mathematical evidence."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Separate a solver status from a mathematical result.",
+      "expected": "Any target SAT assignment satisfies every CNF clause, reconstructs two length-333 sign rows with row sums plus one and the prescribed compression, and has combined PAF minus two at all 332 nonzero shifts; a controlled coordinate mutation is rejected."
+    },
+    {
+      "name": "proofless-unsat-boundary",
+      "purpose": "Forbid an unsupported infeasibility conclusion.",
+      "expected": "Any UNSAT solver status is archived only as proofless evidence and closes no unrestricted slice."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified unrestricted pq2-slice SAT models",
+    "direction": "reach",
+    "unit": "models",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 3600,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "CryptoMiniSat returns SAT and the complete assignment passes the exact CNF and independent direct full-length mathematical audit.",
+    "park": "The run reaches its cap or returns proofless UNSAT without a SAT model, while the formula, tool, positive-control, and parity-mechanism controls remain valid.",
+    "unknown": "A wall, memory, tool, extraction, or verification ceiling interrupts the frozen arm without a valid terminal interpretation.",
+    "audit-failed": "Any tool pin, positive control, formula reconstruction, parity activation, complete-model, CNF, direct PAF, or mutation control fails."
+  },
+  "stop_rules": [
+    "Require the passing independent formula audit before launching CryptoMiniSat.",
+    "Require the parity-positive-control trace and direct complete-model audit before target search.",
+    "Run one CryptoMiniSat process with exactly the frozen parity settings, one thread, and seed zero.",
+    "Stop immediately on a directly verified SAT model.",
+    "Otherwise terminate at 7200 solver seconds or 4 GiB observed RSS.",
+    "Do not rerun with another seed, thread count, solver configuration, formula, or larger cap.",
+    "Do not promote a proofless UNSAT status or parity trace."
+  ],
+  "next_actions": {
+    "promote": "Freeze the audited LP333 pair, construct H668, independently verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the non-SAT parity manifest and move to a distinct structural search mechanism rather than another CryptoMiniSat configuration.",
+    "unknown": "Preserve the interrupted manifest and resume only the remaining frozen budget if the external interruption is reproducible.",
+    "audit-failed": "Repair only the smallest formula, tool, parity-activation, extraction, or direct-verification control before any new target run."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, the official open-source solver documentation, Homebrew's pinned bottle, and public primary literature are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
