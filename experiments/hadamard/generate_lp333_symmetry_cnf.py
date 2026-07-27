@@ -752,6 +752,155 @@ def add_sequential_exact_cardinality(
     }
 
 
+def add_sequential_prefix_counter(
+    builder: Any,
+    inputs: Sequence[int],
+    max_threshold: int,
+    name: str,
+) -> dict[str, Any]:
+    """Add a uniquely extended unary counter without asserting a count."""
+    input_literals = list(inputs)
+    size = len(input_literals)
+    if not 1 <= max_threshold <= size:
+        raise ValueError("prefix threshold must be between one and input size")
+    start_variable = builder.num_vars + 1
+    rows: list[list[int]] = []
+    for prefix in range(size):
+        rows.append(
+            [
+                builder.new_var(f"{name}_prefix_{prefix}_ge_{threshold}")
+                for threshold in range(
+                    1, min(prefix + 1, max_threshold) + 1
+                )
+            ]
+        )
+    source_start = len(builder.clauses) + 1
+    for prefix, literal in enumerate(input_literals):
+        row = rows[prefix]
+        for threshold_index, output in enumerate(row):
+            threshold = threshold_index + 1
+            if prefix == 0:
+                builder.add_equivalence(output, literal)
+                continue
+            previous = rows[prefix - 1]
+            same = (
+                previous[threshold_index]
+                if threshold_index < len(previous)
+                else None
+            )
+            lower = (
+                previous[threshold_index - 1]
+                if threshold_index > 0
+                else None
+            )
+            if threshold == 1:
+                if same is None:
+                    raise AssertionError("missing previous threshold-one signal")
+                builder.add_clause(-same, output)
+                builder.add_clause(-literal, output)
+                builder.add_clause(-output, same, literal)
+            elif same is None:
+                if lower is None:
+                    raise AssertionError("missing lower threshold signal")
+                builder.add_clause(-literal, -lower, output)
+                builder.add_clause(-output, literal)
+                builder.add_clause(-output, lower)
+            else:
+                if lower is None:
+                    raise AssertionError("missing lower threshold signal")
+                builder.add_clause(-same, output)
+                builder.add_clause(-literal, -lower, output)
+                builder.add_clause(-output, same, literal)
+                builder.add_clause(-output, same, lower)
+    source_end = len(builder.clauses)
+    return {
+        "name": name,
+        "inputs": input_literals,
+        "input_count": size,
+        "max_unary_threshold": max_threshold,
+        "start_variable": start_variable,
+        "auxiliary_variables": builder.num_vars - start_variable + 1,
+        "source_clause_start": source_start,
+        "source_clause_end": source_end,
+        "source_clauses": source_end - source_start + 1,
+        "terminal_variables": rows[-1],
+    }
+
+
+def sequential_prefix_truth_table() -> dict[str, Any]:
+    """Exhaustively test nonasserting counters and their terminal signals."""
+    assignments_checked = 0
+    extensions_checked = 0
+    for size in range(1, 5):
+        for max_threshold in range(1, size + 1):
+            builder_class = sequential_prefix_truth_table.builder_class
+            builder = builder_class()
+            inputs = [
+                builder.new_var(f"prefix_truth_input_{index}")
+                for index in range(size)
+            ]
+            record = add_sequential_prefix_counter(
+                builder,
+                inputs,
+                max_threshold,
+                f"prefix_truth_{size}_{max_threshold}",
+            )
+            auxiliaries = list(
+                range(
+                    record["start_variable"],
+                    record["start_variable"]
+                    + record["auxiliary_variables"],
+                )
+            )
+            for input_values in product((False, True), repeat=size):
+                satisfying_extensions = 0
+                for auxiliary_values in product(
+                    (False, True), repeat=len(auxiliaries)
+                ):
+                    values: list[bool | None] = [
+                        None
+                    ] * (builder.num_vars + 1)
+                    values[builder.false] = False
+                    for variable, value in zip(inputs, input_values):
+                        values[variable] = value
+                    for variable, value in zip(
+                        auxiliaries, auxiliary_values
+                    ):
+                        values[variable] = value
+                    if not builder.clauses_hold(values):
+                        extensions_checked += 1
+                        continue
+                    satisfying_extensions += 1
+                    count = sum(input_values)
+                    actual = [
+                        values[variable]
+                        for variable in record["terminal_variables"]
+                    ]
+                    expected = [
+                        count >= threshold
+                        for threshold in range(1, max_threshold + 1)
+                    ]
+                    if actual != expected:
+                        raise ValueError(
+                            "prefix counter terminal signal is incorrect"
+                        )
+                    extensions_checked += 1
+                if satisfying_extensions != 1:
+                    raise ValueError(
+                        "prefix counter failed unique-extension truth table"
+                    )
+                assignments_checked += 1
+    return {
+        "result": "PASS",
+        "input_sizes": [1, 2, 3, 4],
+        "thresholds": "all feasible maximum thresholds",
+        "assignments_checked": assignments_checked,
+        "auxiliary_extensions_checked": extensions_checked,
+        "unique_satisfying_extension_for_every_input": True,
+        "terminal_signals_equal_at_least_thresholds": True,
+    }
+
+
 def sequential_cardinality_truth_table() -> dict[str, Any]:
     """Exhaustively test small exact counters, including unique extensions."""
     assignments_checked = 0
@@ -809,6 +958,160 @@ def sequential_cardinality_truth_table() -> dict[str, Any]:
         "auxiliary_extensions_checked": extensions_checked,
         "unique_satisfying_extension_for_valid_inputs": True,
         "zero_satisfying_extensions_for_invalid_inputs": True,
+    }
+
+
+def add_id3_singleton_triple_unary_channel(
+    model: Any,
+    full_spec: dict[str, Any],
+    control: dict[str, Any],
+) -> dict[str, Any]:
+    singleton_indices = control["singleton_indices"]
+    triple_indices = [
+        index for index, size in enumerate(full_spec["sizes"]) if size == 3
+    ]
+    if (
+        len(singleton_indices) != 9
+        or len(triple_indices) != 108
+        or full_spec["num_reps"] != 116
+    ):
+        raise ValueError("ID3 singleton/triple orbit signature changed")
+    canonical_patterns = [
+        tuple(pattern) for pattern in control["canonical_patterns"]
+    ]
+    row_case_by_pattern = {
+        tuple(record["pattern"]): record for record in control["row_cases"]
+    }
+    feasible_patterns = [
+        pattern for pattern in canonical_patterns if pattern in row_case_by_pattern
+    ]
+    infeasible_patterns = [
+        pattern for pattern in canonical_patterns if pattern not in row_case_by_pattern
+    ]
+    if len(feasible_patterns) != 19 or len(infeasible_patterns) != 11:
+        raise ValueError("ID3 canonical row-case partition changed")
+
+    pattern_records = []
+    for pattern in feasible_patterns:
+        record = row_case_by_pattern[pattern]
+        cases = record["cases"]
+        if len(cases) != 1:
+            raise ValueError("ID3 canonical pattern has nonunique row case")
+        pattern_records.append(
+            {
+                "pattern": list(pattern),
+                "singleton_negative_count": sum(pattern),
+                "triple_negative_orbits": cases[0][
+                    "triple_negative_orbits"
+                ],
+                "weighted_negative_count": cases[0][
+                    "weighted_negative_count"
+                ],
+            }
+        )
+    allowed_pairs = sorted(
+        {
+            (
+                record["singleton_negative_count"],
+                record["triple_negative_orbits"],
+            )
+            for record in pattern_records
+        }
+    )
+    if allowed_pairs != [(1, 55), (2, 55), (4, 54), (5, 54)]:
+        raise ValueError("ID3 singleton/triple row implication changed")
+
+    block_start_variable = model.builder.num_vars + 1
+    block_start_clause = len(model.builder.clauses) + 1
+    sequence_records = []
+    for label, primary in (("a", model.za), ("b", model.zb)):
+        singleton_variables = [
+            primary[index] for index in singleton_indices
+        ]
+        counter = add_sequential_prefix_counter(
+            model.builder,
+            [primary[index] for index in triple_indices],
+            56,
+            f"id3_row_{label}_triple_prefix",
+        )
+        infeasible_start = len(model.builder.clauses) + 1
+        for pattern in infeasible_patterns:
+            mismatch = [
+                (-variable if value else variable)
+                for variable, value in zip(
+                    singleton_variables[1:], pattern[1:]
+                )
+            ]
+            model.builder.add_clause(*mismatch)
+        infeasible_end = len(model.builder.clauses)
+        conditional_start = infeasible_end + 1
+        for record in pattern_records:
+            pattern = record["pattern"]
+            target = record["triple_negative_orbits"]
+            mismatch = [
+                (-variable if value else variable)
+                for variable, value in zip(
+                    singleton_variables[1:], pattern[1:]
+                )
+            ]
+            terminals = counter["terminal_variables"]
+            model.builder.add_clause(*mismatch, terminals[target - 1])
+            model.builder.add_clause(*mismatch, -terminals[target])
+        conditional_end = len(model.builder.clauses)
+        sequence_records.append(
+            {
+                "sequence": label,
+                "singleton_variables": singleton_variables,
+                "triple_variables": [
+                    primary[index] for index in triple_indices
+                ],
+                "counter": counter,
+                "infeasible_clause_start": infeasible_start,
+                "infeasible_clause_end": infeasible_end,
+                "infeasible_clauses": len(infeasible_patterns),
+                "conditional_clause_start": conditional_start,
+                "conditional_clause_end": conditional_end,
+                "conditional_clauses": 2 * len(pattern_records),
+            }
+        )
+    return {
+        "enabled": True,
+        "kind": (
+            "redundant uniquely-extended unary prefix counters conditionally "
+            "bound by canonical singleton row cases"
+        ),
+        "block_start_variable": block_start_variable,
+        "block_auxiliary_variables": model.builder.num_vars
+        - block_start_variable
+        + 1,
+        "block_source_clause_start": block_start_clause,
+        "block_source_clause_end": len(model.builder.clauses),
+        "block_source_clauses": len(model.builder.clauses)
+        - block_start_clause
+        + 1,
+        "sequence_records": sequence_records,
+        "canonical_feasible_patterns": [
+            list(pattern) for pattern in feasible_patterns
+        ],
+        "canonical_infeasible_patterns": [
+            list(pattern) for pattern in infeasible_patterns
+        ],
+        "pattern_cases": pattern_records,
+        "allowed_singleton_triple_count_pairs": [
+            list(pair) for pair in allowed_pairs
+        ],
+        "paper_to_levers": {
+            "sources": CARDINALITY_PAPER_URLS,
+            "adopted": (
+                "unary cardinality counters expose partial-assignment "
+                "deductions that binary counters can hide from unit propagation"
+            ),
+            "not_adopted": [
+                "literature runtime ratios",
+                "replacement of the full weighted PB layer",
+                "native PB proof logging",
+            ],
+        },
     }
 
 
@@ -1160,6 +1463,11 @@ def main() -> int:
         action="store_true",
         help="add the three preregistered redundant unary channels",
     )
+    parser.add_argument(
+        "--add-id3-singleton-triple-unary-channel",
+        action="store_true",
+        help="add the preregistered conditional ID3 row-count channel",
+    )
     parser.add_argument("--parent-metadata", type=Path)
     args = parser.parse_args()
     if args.family_id not in (3, 4, 5, 7, 9, 10):
@@ -1186,6 +1494,18 @@ def main() -> int:
         raise ValueError(
             "ID3 singleton translation canonicalization requires full PAF ID3 "
             "and parent metadata"
+        )
+    if args.add_id3_singleton_triple_unary_channel and (
+        not args.canonicalize_id3_singleton_translations
+        or args.family_id != 3
+        or args.canonicalize_independent_translations
+        or args.deduplicate_inverse_paf
+        or args.add_unary_cardinality_channels
+        or args.parent_metadata is None
+    ):
+        raise ValueError(
+            "ID3 singleton/triple channel requires the full-PAF ID3 "
+            "singleton quotient and its parent metadata"
         )
 
     source_family, classification_path, status_path = load_source_family(
@@ -1339,6 +1659,9 @@ def main() -> int:
         )
     id3_parent_binding = None
     id3_singleton_canonicalization = None
+    id3_channel_parent_binding = None
+    id3_singleton_triple_channel = None
+    id3_prefix_truth_table = None
     if args.canonicalize_id3_singleton_translations:
         parent_metadata = json.loads(
             args.parent_metadata.read_text(encoding="utf-8")
@@ -1351,47 +1674,129 @@ def main() -> int:
             parent_metadata["cnf"]["clauses"]
             - parent_metadata["cnf"]["unit_split_count"]
         )
-        id3_parent_binding = {
-            "result": "PASS",
-            "path": str(args.parent_metadata),
-            "metadata_sha256": sha256_file(args.parent_metadata),
-            "formula_sha256": parent_metadata["cnf"]["sha256"],
-            "family_id_equal": parent_metadata["family_id"] == 3,
-            "source_variables_equal_before_canonicalization": (
-                model.builder.num_vars == expected_source_variables
-            ),
-            "source_clauses_equal_before_canonicalization": (
-                len(model.builder.clauses) == expected_source_clauses
-            ),
-            "primary_variables_equal": (
-                parent_metadata["primary_variables"]["za"] == model.za
-                and parent_metadata["primary_variables"]["zb"] == model.zb
-            ),
-            "symmetry_equal": (
-                parent_metadata["symmetry"]["breakers"] == breaker_records
-            ),
-            "full_paf_representatives": full_spec["num_reps"],
-            "no_profile_constraints": (
-                "profile" not in json.dumps(parent_metadata).lower()
-            ),
-        }
-        required = [
-            value
-            for key, value in id3_parent_binding.items()
-            if key.endswith("_equal") or key == "no_profile_constraints"
-        ]
-        if (
-            not all(required)
-            or id3_parent_binding["full_paf_representatives"] != 116
-        ):
-            raise ValueError(
-                f"ID3 parent formula binding failed: {id3_parent_binding}"
-            )
+        if not args.add_id3_singleton_triple_unary_channel:
+            id3_parent_binding = {
+                "result": "PASS",
+                "path": str(args.parent_metadata),
+                "metadata_sha256": sha256_file(args.parent_metadata),
+                "formula_sha256": parent_metadata["cnf"]["sha256"],
+                "family_id_equal": parent_metadata["family_id"] == 3,
+                "source_variables_equal_before_canonicalization": (
+                    model.builder.num_vars == expected_source_variables
+                ),
+                "source_clauses_equal_before_canonicalization": (
+                    len(model.builder.clauses) == expected_source_clauses
+                ),
+                "primary_variables_equal": (
+                    parent_metadata["primary_variables"]["za"] == model.za
+                    and parent_metadata["primary_variables"]["zb"] == model.zb
+                ),
+                "symmetry_equal": (
+                    parent_metadata["symmetry"]["breakers"] == breaker_records
+                ),
+                "full_paf_representatives": full_spec["num_reps"],
+                "no_profile_constraints": (
+                    "profile" not in json.dumps(parent_metadata).lower()
+                ),
+            }
+            required = [
+                value
+                for key, value in id3_parent_binding.items()
+                if key.endswith("_equal") or key == "no_profile_constraints"
+            ]
+            if (
+                not all(required)
+                or id3_parent_binding["full_paf_representatives"] != 116
+            ):
+                raise ValueError(
+                    f"ID3 parent formula binding failed: {id3_parent_binding}"
+                )
         id3_singleton_canonicalization = (
             apply_id3_singleton_translation_canonicalization(
                 model, id3_translation_control
             )
         )
+        if args.add_id3_singleton_triple_unary_channel:
+            expected_formula_sha256 = (
+                "0ea4f87736db6d1076214d8378e4f66e1fe499291d5f4d0d406209a7779172b8"
+            )
+            parent_block = parent_metadata[
+                "id3_singleton_translation_canonicalization"
+            ]
+            comparable_keys = [
+                "enabled",
+                "kind",
+                "independent_pair_action_order",
+                "block_source_clause_start",
+                "block_source_clause_end",
+                "block_source_clauses",
+                "sequence_records",
+                "canonical_patterns",
+                "noncanonical_patterns",
+            ]
+            id3_channel_parent_binding = {
+                "result": "PASS",
+                "path": str(args.parent_metadata),
+                "metadata_sha256": sha256_file(args.parent_metadata),
+                "formula_sha256": parent_metadata["cnf"]["sha256"],
+                "expected_formula_sha256": expected_formula_sha256,
+                "formula_sha256_equal": (
+                    parent_metadata["cnf"]["sha256"]
+                    == expected_formula_sha256
+                ),
+                "family_id_equal": parent_metadata["family_id"] == 3,
+                "source_variables_equal_before_channel": (
+                    model.builder.num_vars == expected_source_variables
+                ),
+                "source_clauses_equal_before_channel": (
+                    len(model.builder.clauses) == expected_source_clauses
+                ),
+                "primary_variables_equal": (
+                    parent_metadata["primary_variables"]["za"] == model.za
+                    and parent_metadata["primary_variables"]["zb"] == model.zb
+                ),
+                "symmetry_equal": (
+                    parent_metadata["symmetry"]["breakers"] == breaker_records
+                ),
+                "singleton_canonicalization_equal": all(
+                    parent_block[key]
+                    == id3_singleton_canonicalization[key]
+                    for key in comparable_keys
+                ),
+                "parent_no_profile_control": (
+                    parent_metadata["controls"][
+                        "id3_static_parent_binding"
+                    ]["no_profile_constraints"]
+                    is True
+                ),
+                "full_paf_representatives": full_spec["num_reps"],
+            }
+            required = [
+                value
+                for key, value in id3_channel_parent_binding.items()
+                if key.endswith("_equal")
+                or key == "parent_no_profile_control"
+            ]
+            if (
+                not all(required)
+                or id3_channel_parent_binding[
+                    "full_paf_representatives"
+                ]
+                != 116
+            ):
+                raise ValueError(
+                    "ID3 singleton channel parent formula binding failed: "
+                    f"{id3_channel_parent_binding}"
+                )
+            sequential_prefix_truth_table.builder_class = encoder.CNFBuilder
+            id3_prefix_truth_table = sequential_prefix_truth_table()
+            id3_singleton_triple_channel = (
+                add_id3_singleton_triple_unary_channel(
+                    model,
+                    full_spec,
+                    id3_translation_control,
+                )
+            )
 
     args.output_dir.mkdir(parents=True, exist_ok=False)
     cnf_path = args.output_dir / f"id{args.family_id}-symmetry.cnf"
@@ -1417,6 +1822,12 @@ def main() -> int:
             model.builder,
             serialization,
             id3_singleton_canonicalization,
+        )
+    if id3_singleton_triple_channel is not None:
+        bind_serialized_plain_clause_block(
+            model.builder,
+            serialization,
+            id3_singleton_triple_channel,
         )
     in_memory_hash = encoder.dimacs_sha256(
         model.builder, split_unit_clauses=True
@@ -1541,11 +1952,26 @@ def main() -> int:
         metadata["controls"]["id3_normalized_translation_automorphism"] = (
             id3_translation_control
         )
-        metadata["controls"]["id3_static_parent_binding"] = (
-            id3_parent_binding
-        )
+        if id3_parent_binding is not None:
+            metadata["controls"]["id3_static_parent_binding"] = (
+                id3_parent_binding
+            )
+        else:
+            metadata["controls"]["id3_static_parent_binding"] = (
+                parent_metadata["controls"]["id3_static_parent_binding"]
+            )
         metadata["id3_singleton_translation_canonicalization"] = (
             id3_singleton_canonicalization
+        )
+    if id3_singleton_triple_channel is not None:
+        metadata["controls"]["id3_sequential_prefix_truth_table"] = (
+            id3_prefix_truth_table
+        )
+        metadata["controls"]["id3_singleton_channel_parent_binding"] = (
+            id3_channel_parent_binding
+        )
+        metadata["id3_singleton_triple_unary_channel"] = (
+            id3_singleton_triple_channel
         )
     metadata_path.write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
