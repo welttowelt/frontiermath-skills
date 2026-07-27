@@ -1,0 +1,90 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID4 and ID5 Kissat SAT-discovery schedule",
+  "hypothesis": "Removing proof-logging overhead and using the pinned Kissat 4.0.4 satisfiable-target configuration on the strongest audited unary-channel formulas may discover at least one directly verifiable LP333 model within the fixed two-arm schedule.",
+  "evidence_unit": "a deterministic sequential portfolio over the full-PAF unary-channel formulas in order ID4 then ID5, each with at most 3600 solver seconds, stopping immediately on a directly verified SAT model",
+  "claim_boundary": "Only a complete model that satisfies the exact serialized CNF and independently passes all row, subgroup-invariance, and 332 direct PAF checks decides a named fixed family. An UNSAT solver status without a replayable proof makes no mathematical claim.",
+  "baseline": {
+    "evidence": "The proof-producing unary-channel runs remained UNKNOWN: ID4 after 300 seconds and ID5 after both 300 seconds and a preregistered one-hour follow-through.",
+    "measurement": "No directly verified SAT model exists for fixed families ID4 or ID5 in the campaign ledger."
+  },
+  "intervention": {
+    "one_change": "Replace the proof-producing CaDiCaL search arm with official pinned Kissat 4.0.4 commit 8af8e56f174b778aef3aa45af9f739b2a5f492c2 using its documented --sat target configuration, no proof output, and otherwise fixed default seed zero. Keep each exact audited formula unchanged and run the fixed order ID4 then ID5.",
+    "forbidden_confounds": [
+      "formula regeneration",
+      "changed unary cardinality channels",
+      "changed translation gauge or symmetry clauses",
+      "changed family order",
+      "random seed sweep",
+      "configuration sweep",
+      "per-family option tuning",
+      "claiming proofless UNSAT",
+      "resource-cap extension after observing an arm"
+    ]
+  },
+  "controls": [
+    {
+      "name": "official-tool-pin",
+      "purpose": "Bind the exact SAT implementation.",
+      "expected": "Kissat reports version 4.0.4, binary SHA-256 ca26c445800f6a88caebe925ee5b60d0907da4f1c8418f4044a51b1a22224983, source commit 8af8e56f174b778aef3aa45af9f739b2a5f492c2, and all 869 upstream build tests pass."
+    },
+    {
+      "name": "sat-positive-control",
+      "purpose": "Check status and complete-model extraction before target search.",
+      "expected": "The pinned solver returns SAT on the known SAT ID3 cell-73 CNF and its emitted complete assignment satisfies every serialized clause."
+    },
+    {
+      "name": "formula-and-audit-binding",
+      "purpose": "Hold the exact strongest ID4 and ID5 formulas fixed.",
+      "expected": "Each formula hash matches its generated metadata and passing independent unary-channel audit; generator, parent, translation gauge, primary variables, and all three redundant channels are unchanged."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Prevent solver status from being mistaken for a mathematical candidate.",
+      "expected": "Any target SAT assignment satisfies every CNF clause, reconstructs two length-333 sign sequences with row sums plus or minus one, is invariant under the named subgroup, has combined PAF minus two at every nonzero shift, and fails after a controlled coordinate mutation."
+    },
+    {
+      "name": "proofless-unsat-boundary",
+      "purpose": "Forbid an unsupported infeasibility claim.",
+      "expected": "Any Kissat UNSAT status is recorded only as proofless search evidence and triggers a separately preregistered proof-producing follow-up before family closure."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified fixed-family SAT models",
+    "direction": "reach",
+    "unit": "models",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 3600,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "At least one arm returns SAT and its complete assignment passes the exact CNF and direct full-length mathematical audit.",
+    "park": "Both fixed arms finish or reach their caps without a SAT model, including any proofless UNSAT statuses, and all binding controls remain valid.",
+    "unknown": "A wall, memory, tool, or model-extraction ceiling prevents completion of the frozen two-arm schedule.",
+    "audit-failed": "Any tool pin, positive control, formula binding, complete-model check, CNF check, direct PAF check, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run the positive control and all formula audits before the first target arm.",
+    "Run exactly ID4 then ID5 with Kissat --sat, seed zero, and no other option changes.",
+    "Stop the schedule immediately after a directly verified SAT model.",
+    "Terminate each target at 3600 solver seconds or 4 GiB observed RSS.",
+    "Do not promote or close a family from a proofless UNSAT status.",
+    "Do not rerun with another seed, mode, family order, or larger cap."
+  ],
+  "next_actions": {
+    "promote": "Archive the audited LP333 pair, construct the corresponding two-circulant H668 candidate, and independently verify and package the submission artifact.",
+    "park": "Archive both non-SAT manifests and move to a distinct structural family mechanism rather than another SAT configuration.",
+    "unknown": "Preserve the partial schedule and resume only the unexecuted frozen arm under the same remaining budget.",
+    "audit-failed": "Repair only the smallest failed tool, binding, extraction, or direct-check control before any new target run."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, and the official open-source Kissat checkout are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
