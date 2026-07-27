@@ -1,0 +1,93 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 exact weighted-shift tabu continuation from record 4512",
+  "hypothesis": "Collapsing the 166 independent PAF shifts to their 56 exact multiplier-and-reflection classes will preserve the complete ID5 objective while evaluating enough additional full neighborhoods to escape the independently audited objective-4512 basin.",
+  "evidence_unit": "one deterministic 3600-second ID5 run at seed 20260730, starting from the SHA-256-pinned and independently audited objective-4512 endpoint, enumerating all 6054 legal moves per sweep, and scoring the exact objective through one weight-1 and 55 weight-3 shift classes",
+  "claim_boundary": "Only a serialized zero-objective pair independently verifying both complete rows, subgroup {1,211,232} invariance, row sums one, forced orbit margins, the exact weighted objective, and all 332 nonzero combined PAF equations is a candidate. A lower nonzero score neither closes ID5 nor proves existence.",
+  "baseline": {
+    "evidence": "The reference full-neighborhood tabu arm completed 29446 exact sweeps and independently passed every result, mechanism, source, binary, and mutation check.",
+    "measurement": "The pinned continuation state has squared residual 4512, L1 residual 600, maximum absolute residual 12, row sums one, and the forced ID5 orbit margins. A five-second engineering smoke evaluated 125 complete neighborhoods and improved the older objective-8256 state to 5088; it is mechanism validation only."
+  },
+  "intervention": {
+    "one_change": "Replace 166-shift neighbor scoring by the mathematically identical weighted partition of ID5 PAF shifts into 56 classes under multiplication by {1,211,232} and reflection, retaining the complete 6054-move neighborhood and the reference tabu schedule.",
+    "forbidden_confounds": [
+      "changed multiplier subgroup",
+      "changed singleton or triple margins",
+      "unrestricted-coordinate moves",
+      "partial-neighborhood sampling",
+      "floating-point PAF scoring",
+      "changed start state",
+      "seed sweep",
+      "tabu-tenure tuning",
+      "stagnation-threshold tuning",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "pinned-record-start",
+      "purpose": "Bind the continuation to the independently audited campaign record.",
+      "expected": "Start SHA-256 ea5f0e1743f54d1c4d49dbd235a1fe263eed462719ba95e75a9da0dc5be7f089 and start-audit SHA-256 410707bc4fee81753665e6ffdd27ccff183578e5931985bcff5884c01fcedb61 reconstruct objective 4512, L1 600, maximum residual 12, and the exact ID5 margins."
+    },
+    {
+      "name": "complete-weighted-neighborhood-self-test",
+      "purpose": "Prove the 56-class score is the complete 166-shift objective for every legal neighbor.",
+      "expected": "The deterministic self-test reconstructs one weight-1 and 55 weight-3 shift classes, enumerates all 6054 legal swaps, and matches every predicted score to a fresh full-coordinate PAF recomputation."
+    },
+    {
+      "name": "mechanism-telemetry",
+      "purpose": "Show the exact weighted intervention fired as frozen.",
+      "expected": "The companion record reports 166 independent shifts, 56 weighted classes, weights {1:1,3:55}, 6054 legal neighbors, applied moves equal full-neighborhood sweeps, tenures 7 through 14, restart threshold 5000, perturbation length 64, and self-test PASS."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the endpoint and weighted reduction outside the search implementation.",
+      "expected": "A separate Python auditor reconstructs both full PAFs, the weighted and ordinary objectives, subgroup orbits, forced margins, stored arrays, telemetry, pins, and a legal mutation control."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the exact weighted-shift mechanism.",
+      "expected": "Intervention source SHA-256 13cb66830fc984f1024d0ca54034ee5ba3fe15a46f98b593bf907e558dc38575, auditor SHA-256 ee8315992e2ca089b6cf53f777f4e89015737053737155462c4f34cea719007c, included baseline SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d, and binary SHA-256 a92acc7743d1eb6ccf1eb7f051ece0ab0024ffa91b3504c90a7f9499144b6992."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero in ID5",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 4512,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is zero and the independent audit verifies the exact weighted reduction, ID5 invariance, forced margins, row sums, and every nonzero combined PAF equation.",
+    "park": "The frozen schedule completes with valid mechanism telemetry and an independently audited nonzero endpoint.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule.",
+    "audit-failed": "Any start hash, shift partition, subgroup, orbit margin, complete-neighborhood, source pin, binary pin, telemetry, stored-score, full-PAF, status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260730 from start SHA-256 ea5f0e1743f54d1c4d49dbd235a1fe263eed462719ba95e75a9da0dc5be7f089.",
+    "Enumerate all 6054 legal neighbors per sweep and compute the exact 166-shift objective through the frozen 56-class weight partition.",
+    "Use tenures 7 through 14 and perturb the global best with exactly 64 legal random moves only after 5000 stagnant sweeps.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 seconds without another start, seed, tenure, perturbation length, restart threshold, objective, or cap.",
+    "Run the independent full-result audit before interpretation.",
+    "Do not promote a lower nonzero score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, run a second direct LP audit, construct H668, verify exact orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the endpoint and use it only as a new independently audited heuristic or exact phase seed.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest shift-class, delta, serialization, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
