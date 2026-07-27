@@ -17,3 +17,11 @@ The independent audit reconstructs all 452 clauses, checks 23,904 direct PAF
 automorphism identities, binds the unrestricted parent, and rejects a
 one-literal mutation. The large CNF and proof payloads are ignored; tracked
 metadata and manifests bind their hashes.
+
+The preregistered 300-second CaDiCaL run remained strict `UNKNOWN`. It reached
+2,659,000 conflicts and 2,053,017,228 propagations, with a peak observed RSS of
+914,620,416 bytes. The incomplete proof payload is 1,064,658,979 bytes
+(`a21e95d0d2b016c6e34914ff01741f7d6c288508c75bd851b9a999a89d87280e`);
+it is retained only as a hash-bound resource-ceiling artifact and is not a
+certificate. Per the preregistration, this selects a structural propagation
+channel rather than a larger cap.
