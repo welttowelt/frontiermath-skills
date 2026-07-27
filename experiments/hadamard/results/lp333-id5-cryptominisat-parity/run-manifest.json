@@ -1,0 +1,187 @@
+{
+  "binding_checks": {
+    "cryptominisat_hash": true,
+    "cryptominisat_library_hash": true,
+    "cryptominisat_version": true,
+    "family_id": true,
+    "formula_audit": true,
+    "formula_hash": true,
+    "homebrew_bottle_install": true,
+    "homebrew_receipt_hash": true,
+    "metadata_schema": true,
+    "metadata_status": true,
+    "preregistration": true,
+    "sat_control_hash": true,
+    "subgroup": true
+  },
+  "budgets": {
+    "max_memory_bytes": 4294967296,
+    "max_seconds": 3600.0,
+    "progress_seconds": 60.0
+  },
+  "claim_boundary": "Only directly-verified-sat decides ID5. XOR/Gauss telemetry and proofless UNSAT are nondecisive.",
+  "family_id": 5,
+  "inputs": {
+    "encoding_metadata": "experiments/hadamard/results/lp333-id5-unary-channels/encoding.json",
+    "encoding_metadata_sha256": "170d61f0acedbbe5f445f76db1c115934f5f03d354ae8646a31b53c44921ab13",
+    "formula": "experiments/hadamard/results/lp333-id5-unary-channels/id5-symmetry.cnf",
+    "formula_audit": "experiments/hadamard/results/lp333-id5-unary-channels/unary-channel-audit.json",
+    "formula_audit_sha256": "3686cb9a632b61874752c8adb333438fef2a532acf8a191d1a2511e637ffba6d",
+    "formula_sha256": "c8c083c7311e083ec5e0bb82d3fca863f2f07e821a30cf55aeb5d79a17778d8b",
+    "preregistration": "experiments/hadamard/preregistrations/lp333-id5-cryptominisat-parity-recovery.json",
+    "preregistration_audit": "experiments/hadamard/preregistrations/lp333-id5-cryptominisat-parity-recovery-audit.json",
+    "preregistration_audit_sha256": "6409ce31804cd4da44eb5b1644ed5bf78fa0a26b1985116bf7a64e5fdef76912",
+    "preregistration_sha256": "46077890e953c494e3f61f9642bcc94b0db01b9835486780d441ef49398fa75c",
+    "sat_control_cnf": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf",
+    "sat_control_cnf_sha256": "255879dc8c072d6d0fa621d6dc1bfd752b13d71946baf94c7ae86d2e1b4f4da3",
+    "verifier_sha256": "5ee559052065b1f48066cd2beaf0871e0712c1a350caa359361d5eb5d7f52666"
+  },
+  "model_audit": null,
+  "model_extraction": null,
+  "parity_runner_sha256": "831cc8c135fce574fc9ea7bba9e47dab31b9b0f6f081dfd826504ee2bd6c2888",
+  "positive_control": {
+    "cnf_check": {
+      "clauses_checked": 92904,
+      "declared_clauses": 92904,
+      "declared_variables": 12728,
+      "satisfied": true,
+      "unsatisfied_clauses": 0
+    },
+    "model": {
+      "bytes": 76608,
+      "lines": 973,
+      "sha256": "d03c53b5f6f848354ff71d11c3012b5f5f10549e275d6bcebde298192ce5b864"
+    },
+    "solver": {
+      "command": [
+        "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+        "--threads=1",
+        "--random=0",
+        "--xor=1",
+        "--maxxorsize=7",
+        "--xorfindtout=400",
+        "--maxxormat=400",
+        "--maxmatrixrows=2000",
+        "--maxmatrixcols=1000",
+        "--autodisablegauss=1",
+        "--minmatrixrows=3",
+        "--maxnummatrices=5",
+        "--gaussusefulcutoff=0.2",
+        "--verb=1",
+        "--printsol=1",
+        "--maxtime=120",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf"
+      ],
+      "log_sha256": "5974387fe1c0e2462fdb27892688b8a22b9c2e3c0fd1fb362d172b17665c052c",
+      "maximum_observed_rss_bytes": 50003968,
+      "parity_trace": {
+        "fired": true,
+        "matrix_use_reports": [
+          {
+            "matrices": 5,
+            "recovered_xors": 834
+          }
+        ],
+        "recovered_xors": 1034,
+        "used_matrices": 5,
+        "xor_recovery_reports": [
+          1034
+        ]
+      },
+      "returncode": 10,
+      "statistics": {
+        "conflicts": "125022",
+        "decisions": "169037",
+        "propagations": "34M",
+        "solver_reported_seconds": "22.89"
+      },
+      "termination": "sat",
+      "wall_seconds": 24.91688612500002
+    },
+    "status": "pass"
+  },
+  "runner_sha256": "c76a9d6cafd6c54427d82a4cf47dade1d4532e6555448ec9d311d8f9eec2fdb4",
+  "schema": "frontiermath-hadamard-lp333-id5-cryptominisat-run-v1",
+  "scope": "fixed multiplier subgroup {1,211,232}",
+  "shared_runner_sha256": "661e1c17edf1f96cd993c616e99e0a9dc283c955c26b47f039a1bbfadd57ef4a",
+  "solver": {
+    "command": [
+      "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+      "--threads=1",
+      "--random=0",
+      "--xor=1",
+      "--maxxorsize=7",
+      "--xorfindtout=400",
+      "--maxxormat=400",
+      "--maxmatrixrows=2000",
+      "--maxmatrixcols=1000",
+      "--autodisablegauss=1",
+      "--minmatrixrows=3",
+      "--maxnummatrices=5",
+      "--gaussusefulcutoff=0.2",
+      "--verb=1",
+      "--printsol=1",
+      "--maxtime=3600",
+      "experiments/hadamard/results/lp333-id5-unary-channels/id5-symmetry.cnf"
+    ],
+    "log_sha256": "2b248b1c33416408298c9fe7b24717d3dfa5d6a242f6c82c5e53786959032251",
+    "maximum_observed_rss_bytes": 382025728,
+    "parity_trace": {
+      "fired": true,
+      "matrix_use_reports": [
+        {
+          "matrices": 5,
+          "recovered_xors": 82962
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 83019
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 83019
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 83019
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 83019
+        }
+      ],
+      "recovered_xors": 83376,
+      "used_matrices": 5,
+      "xor_recovery_reports": [
+        83376,
+        53,
+        0,
+        0,
+        0
+      ]
+    },
+    "returncode": -15,
+    "statistics": {
+      "conflicts": null,
+      "decisions": null,
+      "propagations": null,
+      "solver_reported_seconds": null
+    },
+    "termination": "external-wall-ceiling",
+    "wall_seconds": 3615.1311181659985
+  },
+  "status": "unknown",
+  "tools": {
+    "cryptominisat": {
+      "executable_sha256": "a3f85c3709b5e2a040bf82a4a604d1c7b9f10219bbf180a9e0f72319a2e892ac",
+      "homebrew_bottle_sha256": "7793bdca8de1ecaf72fd743f85fe381db98d4d48012b24eeeaa6cb0daa7ed41d",
+      "homebrew_receipt": "/opt/homebrew/Cellar/cryptominisat/5.14.7/INSTALL_RECEIPT.json",
+      "homebrew_receipt_sha256": "0309c0559340b1a766058556fad6691da0a97983d7a1195dcd4b7236f1ab33a3",
+      "library": "/opt/homebrew/Cellar/cryptominisat/5.14.7/lib/libcryptominisat5.5.14.dylib",
+      "library_sha256": "7952e5a5c77ac8b56253c7a2ad88c62648f20698004338bad9a443efb55b2f84",
+      "path": "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+      "version": "5.14.7",
+      "version_output": "c CMS SHA1: GIT-notfound\nc CryptoMiniSat version 5.14.7\nc CMS compilation env CMAKE_CXX_COMPILER = clang++ | CMAKE_CXX_FLAGS =  -fno-stack-protector -msse4.2 -Wno-bitfield-constant-conversion -Wlogical-op -Wrestrict -Wnull-dereference -Wdouble-promotion -Wshadow -Wformat=2 -Wextra-semi -pedantic | COMPILE_DEFINES =  -DNDEBUG -D_FORTIFY_SOURCE=0 -DUSE_ZLIB | BUILD_SHARED_LIBS = ON | ONLY_SIMPLE =  | STATS = OFF | SQLITE3_FOUND =  | ZLIB_FOUND = TRUE | VALGRIND_FOUND =  | ENABLE_TESTING = OFF | SLOW_DEBUG = OFF | ENABLE_ASSERTIONS = OFF | PYTHON_EXECUTABLE =  | PYTHON_LIBRARY =  | PYTHON_INCLUDE_DIRS =  | MY_TARGETS =  | LARGEMEM = OFF | LIMITMEM = OFF | BREAKID_LIBRARIES =  | BREAKID-VER = . | c c Using VMTF, picosat, CaDiCaL, and CadiBack code by Armin Biere\nc CMS is MIT licensed\nc Using code from 'When Boolean Satisfiability Meets Gauss-E. in a Simplex Way'\nc       by C.-S. Han and J.-H. Roland Jiang in CAV 2012. Fixes by M. Soos\nc Using CCAnr from 'CCAnr: A Conf. Checking Based Local Search Solver [...]'\nc       by Shaowei Cai, Chuan Luo, and Kaile Su, SAT 2015\nc Using Oracle code from 'Integrating Tree Decompositions [...]'\nc       by Tuukka Korhonen and Matti Jarvisalo, CP 2021\n"
+    }
+  }
+}
