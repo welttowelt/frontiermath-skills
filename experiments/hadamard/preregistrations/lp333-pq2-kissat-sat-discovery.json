@@ -1,0 +1,95 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 pq2-compression Kissat SAT discovery",
+  "hypothesis": "The exact prescribed pq2-compression slice, strengthened by six unary margin counters and quotiented by its full 216-action decimation/swap group, may yield a directly verifiable unrestricted Legendre pair under a two-hour pinned Kissat satisfiable-target search.",
+  "evidence_unit": "one proofless SAT-discovery run on the audited unrestricted ID0 identity-family pq2 slice, with Kissat 4.0.4 --sat, seed zero, and a 7200-second cap",
+  "claim_boundary": "The pq2-uncompression statement is conjectural. Only a complete assignment that satisfies all 4494772 serialized clauses and independently verifies two binary length-333 rows, the prescribed compression, and combined PAF minus two at all 332 nonzero shifts is a candidate. Proofless UNSAT is nondecisive.",
+  "baseline": {
+    "evidence": "Formula SHA-256 7a893f92b28a7eed54ccefe5bbb89d28d04132672905abc3635d01a6e3991735 and independent formula audit status pass.",
+    "measurement": "No directly verified SAT model exists in the campaign for the unrestricted prescribed [1,11,-11], [1,-11,11] compression slice."
+  },
+  "intervention": {
+    "one_change": "Search the newly audited unrestricted pq2 formula with official pinned Kissat 4.0.4 in its documented --sat target mode, default seed zero, no proof output, and no configuration portfolio.",
+    "forbidden_confounds": [
+      "common multiplier constraints",
+      "formula regeneration",
+      "changed compression margins",
+      "changed symmetry group",
+      "random seed sweep",
+      "configuration sweep",
+      "proofless UNSAT claim",
+      "resource-cap extension",
+      "accepting a partial or unaudited model"
+    ]
+  },
+  "controls": [
+    {
+      "name": "formula-reconstruction",
+      "purpose": "Bind every structural addition to the unrestricted base equations.",
+      "expected": "The independent auditor reconstructs all 215 lex leaders and 848886 symmetry clauses, all six counters and 111444 serialized channel clauses, exact formula hash, functional truth tables, and a rejected one-literal mutation."
+    },
+    {
+      "name": "compression-symmetry-group",
+      "purpose": "Ensure the quotient preserves the ordered pq2 seed.",
+      "expected": "All 216 units act once: units congruent to one modulo 3 decimate without swap and units congruent to two decimate with sequence swap; all six negative-count margins remain fixed."
+    },
+    {
+      "name": "official-tool-pin",
+      "purpose": "Bind the executed SAT implementation.",
+      "expected": "Kissat version 4.0.4, binary SHA-256 ca26c445800f6a88caebe925ee5b60d0907da4f1c8418f4044a51b1a22224983, source commit 8af8e56f174b778aef3aa45af9f739b2a5f492c2, with all 869 upstream tests passed."
+    },
+    {
+      "name": "sat-positive-control",
+      "purpose": "Check status and complete-model extraction before target search.",
+      "expected": "The pinned solver returns SAT on known SAT ID3 cell 73 and its emitted complete assignment satisfies every one of 92904 serialized clauses."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Separate a solver status from a mathematical result.",
+      "expected": "Any target SAT assignment satisfies every CNF clause, reconstructs two length-333 sign rows with row sums plus one and the prescribed compression, and has combined PAF minus two at all 332 nonzero shifts; a controlled coordinate mutation is rejected."
+    },
+    {
+      "name": "proofless-unsat-boundary",
+      "purpose": "Forbid an unsupported infeasibility conclusion.",
+      "expected": "Any UNSAT solver status is archived only as proofless evidence and closes no family or unrestricted slice."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified unrestricted pq2-slice SAT models",
+    "direction": "reach",
+    "unit": "models",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 3600,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "Kissat returns SAT and the complete assignment passes the exact CNF and independent direct full-length mathematical audit.",
+    "park": "The run reaches its cap or returns proofless UNSAT without a SAT model, while all controls remain valid.",
+    "unknown": "A wall, memory, tool, extraction, or verification ceiling interrupts the frozen arm without a valid terminal interpretation.",
+    "audit-failed": "Any tool pin, positive control, formula reconstruction, symmetry, counter, complete-model, CNF, direct PAF, or mutation control fails."
+  },
+  "stop_rules": [
+    "Require the passing independent formula audit before launching Kissat.",
+    "Run only Kissat 4.0.4 --sat with seed zero and the pinned binary.",
+    "Stop immediately on a directly verified SAT model.",
+    "Otherwise terminate at 7200 solver seconds or 4 GiB observed RSS.",
+    "Do not rerun with another seed, mode, formula, or larger cap.",
+    "Do not promote a proofless UNSAT status."
+  ],
+  "next_actions": {
+    "promote": "Freeze the audited LP333 pair, construct H668, independently verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the non-SAT manifest and move to a distinct structural repair mechanism rather than another Kissat configuration.",
+    "unknown": "Preserve the interrupted manifest and resume only the remaining frozen budget if the external interruption is reproducible.",
+    "audit-failed": "Repair only the smallest formula, tool, extraction, or direct-verification control before any new target run."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, the official open-source Kissat checkout, and public primary literature are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
