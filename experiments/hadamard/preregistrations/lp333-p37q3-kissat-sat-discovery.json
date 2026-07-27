@@ -1,0 +1,91 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Correct p37q3 unrestricted LP333 Kissat SAT discovery",
+  "hypothesis": "The exact prescribed length-37 compression, strengthened by 74 exact size-nine margins and quotiented by its full 216-action decimation and sequence-swap group, may yield a directly verifiable unrestricted Legendre pair under pinned Kissat SAT search.",
+  "evidence_unit": "one proofless SAT-discovery run on the audited unrestricted ID0 pq2 p37q3 slice with Kissat 4.0.4 --sat, seed zero, and a 7200-second cap",
+  "claim_boundary": "The uncompression statement is conjectural. Only a complete assignment satisfying all 4394496 serialized clauses and independently verifying two binary length-333 rows, all 74 prescribed compression margins, and combined PAF minus two at all 332 nonzero shifts is a candidate. Proofless UNSAT is nondecisive.",
+  "baseline": {
+    "evidence": "Correct formula SHA-256 99b7749b41a0eb81d235cda71e27d93241ee6fe4ee34361988fc5e3117cc1dea, 700291 variables, 4394496 clauses, and independent formula audit status pass.",
+    "measurement": "No directly verified SAT model exists in the campaign for the source-correct prescribed rows [1,3 chi_37] and [1,-3 chi_37]."
+  },
+  "intervention": {
+    "one_change": "Search the audited correct p37q3 unrestricted formula with official pinned Kissat 4.0.4 in --sat mode, default seed zero, no proof output, and no configuration portfolio.",
+    "forbidden_confounds": [
+      "the invalid length-three 3*11^2 slice",
+      "common multiplier constraints",
+      "formula regeneration",
+      "changed length-37 margins",
+      "changed symmetry group",
+      "random seed sweep",
+      "configuration sweep",
+      "proofless UNSAT claim",
+      "resource-cap extension",
+      "accepting a partial or unaudited model"
+    ]
+  },
+  "controls": [
+    {
+      "name": "correct-formula-reconstruction",
+      "purpose": "Bind the specialization and every structural addition.",
+      "expected": "The independent audit verifies 333=37*3^2, compressed energy 650, nonzero compressed PAF -18, all 215 lex leaders with 850182 clauses, all 74 counters with 9872 serialized clauses, the exact formula hash, and a rejected mutation."
+    },
+    {
+      "name": "compression-symmetry-group",
+      "purpose": "Ensure the quotient preserves the ordered p37q3 seed.",
+      "expected": "All 216 units act once, with sequence swap exactly for quadratic nonresidues modulo 37, and all 74 margins remain fixed."
+    },
+    {
+      "name": "official-tool-pin",
+      "purpose": "Bind the executed SAT implementation.",
+      "expected": "Kissat 4.0.4, binary SHA-256 ca26c445800f6a88caebe925ee5b60d0907da4f1c8418f4044a51b1a22224983, source revision 8af8e56f174b778aef3aa45af9f739b2a5f492c2, and the already passing upstream test suite."
+    },
+    {
+      "name": "sat-positive-control",
+      "purpose": "Check SAT status and complete-model extraction before target search.",
+      "expected": "The pinned solver returns SAT on known SAT ID3 cell 73 and its complete assignment satisfies every serialized control clause."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Separate solver status from mathematical evidence.",
+      "expected": "Any SAT assignment satisfies every CNF clause and independently verifies both full rows, all 74 margins, and every combined PAF equation; a controlled mutation is rejected."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified unrestricted correct-p37q3 SAT models",
+    "direction": "reach",
+    "unit": "models",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 3600,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "Kissat returns SAT and the complete assignment passes the exact CNF and independent direct full-length mathematical audit.",
+    "park": "The run reaches its cap or returns proofless UNSAT without a SAT model while all controls remain valid.",
+    "unknown": "A wall, memory, tool, extraction, or verification ceiling interrupts the frozen arm.",
+    "audit-failed": "Any factorization, formula, tool, positive-control, symmetry, margin, complete-model, CNF, direct-PAF, or mutation control fails."
+  },
+  "stop_rules": [
+    "Require the passing independent correct-p37q3 formula audit before launch.",
+    "Run only pinned Kissat 4.0.4 --sat with seed zero.",
+    "Stop immediately on a directly verified SAT model.",
+    "Otherwise terminate at 7200 solver seconds or 4 GiB observed RSS.",
+    "Do not rerun with another seed, mode, formula, or larger cap.",
+    "Do not promote proofless UNSAT."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, construct H668, independently verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the non-SAT manifest and move to a distinct structural search mechanism.",
+    "unknown": "Preserve the interrupted manifest and resume only the remaining frozen budget if the interruption is reproducible.",
+    "audit-failed": "Repair only the smallest formula, tool, extraction, or direct-verification defect before rerunning."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, official open-source solver code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
