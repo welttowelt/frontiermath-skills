@@ -1,0 +1,97 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 double-orbit variable-neighborhood anneal",
+  "hypothesis": "Occasional exact twelve-coordinate exchanges of two negative and two positive triple-orbits may cross energy barriers that trap single-orbit ID5 annealing and tabu search.",
+  "evidence_unit": "one deterministic 3600-second ID5 run at seed 20260729 with 2000000 proposals per restart, exact integer scoring of all 166 independent full-length PAF residuals, seven-eighths source single-orbit proposals and one-eighth double triple-orbit proposals",
+  "claim_boundary": "Only a serialized zero-objective pair independently verifying both full rows, subgroup {1,211,232} invariance, row sums one, forced orbit margins, and all 332 nonzero combined PAF equations is a candidate. Any nonzero improvement is search evidence only.",
+  "baseline": {
+    "evidence": "At seed 20260729 the invariant initializer has squared residual 110400, L1 residual 3384, and maximum absolute residual 80. The campaign's concurrent single-orbit ID5 record is 5376.",
+    "measurement": "A one-second mechanism smoke run at the separately frozen campaign seed reached objective 6912 and independently passed all stored PAF, score, orbit-margin, and source/binary checks."
+  },
+  "intervention": {
+    "one_change": "Add a one-in-eight proposal that simultaneously swaps two distinct negative and two distinct positive triple-orbits in one row, flipping twelve coordinates; all other proposals use the source ID5 equal-size orbit swap and the temperature/restart schedule is unchanged.",
+    "forbidden_confounds": [
+      "changed multiplier subgroup",
+      "changed orbit margins",
+      "unrestricted-coordinate moves",
+      "floating-point PAF scoring",
+      "changed temperature schedule",
+      "changed restart length",
+      "double-move-rate tuning",
+      "seed sweep",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "exact-orbit-reconstruction",
+      "purpose": "Bind the search to source family ID5.",
+      "expected": "Closure of generator 211 modulo 333 reconstructs subgroup {1,211,232}, exactly three singleton and 110 triple coordinate orbits."
+    },
+    {
+      "name": "forced-row-sum-profile",
+      "purpose": "Ensure single and double moves stay in the exact ID5 slice.",
+      "expected": "Every state has one negative singleton and 55 negative triple-orbits per row, hence row sum one; a double move exchanges exactly two negative and two positive triple-orbits."
+    },
+    {
+      "name": "twelve-coordinate-incremental-self-test",
+      "purpose": "Detect incorrect multi-orbit PAF updates.",
+      "expected": "Across 2000 deterministic mixed single and double proposals, every incremental PAF objective equals a fresh complete recomputation and all ID5 invariants remain true."
+    },
+    {
+      "name": "mechanism-telemetry",
+      "purpose": "Show the double-orbit intervention fired.",
+      "expected": "The endpoint reports a positive double_triple_proposals count strictly below total proposals plus incremental self-test PASS with 2000 trials."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the endpoint outside the C implementation.",
+      "expected": "A separate Python auditor reconstructs both PAF vectors, objective, L1, maximum residual, subgroup orbits, forced margins, status, source and binary pins, and a legal mutation control."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the exact variable-neighborhood mechanism.",
+      "expected": "Intervention source SHA-256 4f289cdc21bc8fd1758bd585b2f338fb56c415c0d7bc84d9bc95a3e90459f2ac, included exact-PAF baseline SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d, and binary SHA-256 4996b99299e8a556959b71856df96da92944c87888d68c76e1a72606c0a48a1a."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero in ID5",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 110400,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 2400,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is zero and the independent audit verifies ID5 invariance, row sums, forced margins, and all nonzero combined PAF equations.",
+    "park": "The frozen schedule completes with a valid independently audited nonzero endpoint and positive double-move telemetry.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule.",
+    "audit-failed": "Any subgroup, orbit margin, multi-flip delta, source pin, binary pin, telemetry, stored-score, full-PAF, status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260729.",
+    "Use 2000000 proposals per restart and the frozen 512-to-0.25 exponential temperature schedule.",
+    "Choose the double triple-orbit intervention on exactly the frozen deterministic one-in-eight RNG branch.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 seconds without another seed, proposal rate, temperature, restart length, or cap.",
+    "Run the independent audit before interpretation.",
+    "Do not promote a lower nonzero score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, independently verify the Legendre equations again, construct H668, verify exact orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the endpoint and compare its residual basin with the single-orbit and exhaustive-neighborhood endpoints before choosing another distinct move class.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest subgroup, orbit, delta, serialization, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
