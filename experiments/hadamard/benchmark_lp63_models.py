@@ -13,6 +13,8 @@ from pathlib import Path
 import ortools
 from ortools.sat.python import cp_model
 
+from py39_compat import int_bit_count
+
 
 LENGTH = 63
 ROWS = 9
@@ -137,7 +139,7 @@ def patterns_with_sum(target: int) -> list[tuple[int, ...]]:
             -1 if (mask >> row) & 1 else 1 for row in range(ROWS)
         )
         for mask in range(1 << ROWS)
-        if ROWS - 2 * mask.bit_count() == target
+        if ROWS - 2 * int_bit_count(mask) == target
     ]
 
 

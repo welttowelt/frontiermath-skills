@@ -9,6 +9,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from py39_compat import int_bit_count, strict_zip
+
 LENGTH = 333
 TARGET_PAF = -2
 
@@ -115,7 +117,7 @@ def sequence_from_orbits(
     orbits: list[list[int]], orbit_values: list[int]
 ) -> list[int]:
     sequence = [0] * LENGTH
-    for orbit, value in zip(orbits, orbit_values, strict=True):
+    for orbit, value in strict_zip(orbits, orbit_values):
         for position in orbit:
             if sequence[position] != 0:
                 raise ValueError("orbits overlap")
@@ -143,7 +145,7 @@ def paf(sequence: list[int]) -> list[int]:
             )
             & mask
         )
-        result.append(LENGTH - 2 * (negative ^ rotated).bit_count())
+        result.append(LENGTH - 2 * int_bit_count(negative ^ rotated))
     return result
 
 

@@ -8,6 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from py39_compat import int_bit_count
+
 
 LENGTH = 333
 HALF = 166
@@ -72,7 +74,7 @@ def paf(sequence: list[int]) -> list[int]:
             )
             & mask
         )
-        result.append(LENGTH - 2 * (negative ^ rotated).bit_count())
+        result.append(LENGTH - 2 * int_bit_count(negative ^ rotated))
     return result
 
 

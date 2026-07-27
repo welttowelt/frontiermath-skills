@@ -19,6 +19,7 @@ from classify_affine_multiplier_normalization import (  # noqa: E402
     row_sum_one_feasible,
     units,
 )
+from py39_compat import strict_zip  # noqa: E402
 
 
 def test_crt_9_37_round_trip() -> None:
@@ -54,8 +55,8 @@ def test_id3_has_three_mod9_affine_classes_and_no_new_row_sum_class() -> None:
     for class_9 in classes_9:
         cocycle = tuple(
             crt_9_37(residue_9, residue_37)
-            for residue_9, residue_37 in zip(
-                class_9, classes_37[0], strict=True
+            for residue_9, residue_37 in strict_zip(
+                class_9, classes_37[0]
             )
         )
         orbits = affine_orbits(group, cocycle)

@@ -14,6 +14,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from py39_compat import int_bit_count, strict_zip
+
 LENGTH = 333
 TARGET_PAF = -2
 
@@ -71,7 +73,7 @@ def sequence_from_orbits(
     if len(orbits) != len(values):
         raise ValueError("orbit values have the wrong length")
     sequence = [0] * LENGTH
-    for orbit, value in zip(orbits, values, strict=True):
+    for orbit, value in strict_zip(orbits, values):
         if value not in (-1, 1):
             raise ValueError("orbit value is not a sign")
         for position in orbit:
@@ -97,7 +99,7 @@ def paf_bitset(sequence: list[int]) -> list[int]:
             ) & mask
         else:
             rotated = negative
-        mismatches = (negative ^ rotated).bit_count()
+        mismatches = int_bit_count(negative ^ rotated)
         result.append(LENGTH - 2 * mismatches)
     return result
 
@@ -196,11 +198,11 @@ def random_arithmetic_audit(
 
         weighted_a = sum(
             len(orbit) * value
-            for orbit, value in zip(orbits, values_a, strict=True)
+            for orbit, value in strict_zip(orbits, values_a)
         )
         weighted_b = sum(
             len(orbit) * value
-            for orbit, value in zip(orbits, values_b, strict=True)
+            for orbit, value in strict_zip(orbits, values_b)
         )
         if weighted_a != sum(first) or weighted_b != sum(second):
             raise AssertionError("weighted orbit row sum disagrees")

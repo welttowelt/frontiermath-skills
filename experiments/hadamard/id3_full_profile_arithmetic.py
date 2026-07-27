@@ -12,6 +12,8 @@ from collections import Counter
 from math import gcd
 from typing import Iterable, Sequence
 
+from py39_compat import int_bit_count
+
 
 LENGTH = 333
 MOD9 = 9
@@ -292,7 +294,7 @@ def periodic_autocorrelations_bitset(sequence: Sequence[int]) -> list[int]:
             rotated = (
                 (mask >> shift) | (mask << (length - shift))
             ) & low_mask
-        disagreements = (mask ^ rotated).bit_count()
+        disagreements = int_bit_count(mask ^ rotated)
         profile.append(length - 2 * disagreements)
     return profile
 
@@ -308,4 +310,3 @@ def combined_paf_profile(
         first_value + second_value
         for first_value, second_value in zip(first_paf, second_paf)
     ]
-

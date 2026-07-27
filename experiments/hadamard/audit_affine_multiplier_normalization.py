@@ -11,6 +11,8 @@ import math
 from collections import Counter
 from pathlib import Path
 
+from py39_compat import strict_zip
+
 LENGTH = 333
 
 
@@ -87,7 +89,7 @@ def verify_cocycle(
 ) -> bool:
     if len(elements) != len(values):
         return False
-    lookup = dict(zip(elements, values, strict=True))
+    lookup = dict(strict_zip(elements, values))
     if lookup.get(1) != 0:
         return False
     for left in elements:
@@ -115,8 +117,8 @@ def cocycles_from_generators(
         while changed and not contradiction:
             changed = False
             for left, left_value in tuple(lookup.items()):
-                for generator, generator_value in zip(
-                    generators, assigned, strict=True
+                for generator, generator_value in strict_zip(
+                    generators, assigned
                 ):
                     product = left * generator % LENGTH
                     candidate = (
@@ -153,7 +155,7 @@ def canonical_cohomology_classes(
             min(
                 tuple(
                     (value + delta) % modulus
-                    for value, delta in zip(cocycle, coboundary, strict=True)
+                    for value, delta in strict_zip(cocycle, coboundary)
                 )
                 for coboundary in coboundaries
             )
@@ -167,7 +169,7 @@ def graph_orbits(
     generators: tuple[int, ...],
     cocycle: tuple[int, ...],
 ) -> list[list[int]]:
-    lookup = dict(zip(elements, cocycle, strict=True))
+    lookup = dict(strict_zip(elements, cocycle))
     unseen = set(range(LENGTH))
     orbits = []
     while unseen:
@@ -260,9 +262,7 @@ def main() -> int:
         reconstructed = {
             tuple(
                 crt(residue_9, residue_37)
-                for residue_9, residue_37 in zip(
-                    class_9, class_37, strict=True
-                )
+                for residue_9, residue_37 in strict_zip(class_9, class_37)
             )
             for class_9, class_37 in itertools.product(
                 component_classes[9], component_classes[37]

@@ -12,6 +12,8 @@ from collections import Counter
 from pathlib import Path
 from typing import Iterable
 
+from py39_compat import strict_zip
+
 LENGTH = 333
 CRT_FACTORS = (9, 37)
 
@@ -108,8 +110,8 @@ def enumerate_cocycles(
         consistent = True
         while frontier and consistent:
             left = frontier.pop()
-            for generator, generator_value in zip(
-                generators, generator_values, strict=True
+            for generator, generator_value in strict_zip(
+                generators, generator_values
             ):
                 product = left * generator % action_modulus
                 candidate = (
@@ -148,9 +150,7 @@ def quotient_by_coboundaries(
         coset = {
             tuple(
                 (left + right) % coefficient_modulus
-                for left, right in zip(
-                    representative, coboundary, strict=True
-                )
+                for left, right in strict_zip(representative, coboundary)
             )
             for coboundary in coboundaries
         }
@@ -177,7 +177,7 @@ def affine_orbits(
     ordered = tuple(sorted(group))
     if len(ordered) != len(cocycle):
         raise ValueError("cocycle length does not match group")
-    offsets = dict(zip(ordered, cocycle, strict=True))
+    offsets = dict(strict_zip(ordered, cocycle))
     unseen = set(range(LENGTH))
     orbits: list[list[int]] = []
     while unseen:
@@ -236,9 +236,7 @@ def classify_subgroup(
     ):
         cocycle = tuple(
             crt_9_37(residue_9, residue_37)
-            for residue_9, residue_37 in zip(
-                class_9, class_37, strict=True
-            )
+            for residue_9, residue_37 in strict_zip(class_9, class_37)
         )
         orbits = affine_orbits(group, cocycle)
         sizes = [len(orbit) for orbit in orbits]
