@@ -1,0 +1,53 @@
+{
+  "auditor_sha256": "929e0554da3906af933643e4d93e65ba869d4ed72b2105343555cafcf3c55851",
+  "checks": {
+    "checker_hash": true,
+    "cnf_audit_hash": true,
+    "cnf_hash": true,
+    "family_id": true,
+    "first_bogus_proof_rejected": true,
+    "first_replay_accepted": true,
+    "formula_audit_pass": true,
+    "fresh_bogus_proof_rejected": true,
+    "fresh_replay_accepted": true,
+    "manifest_status": true,
+    "metadata_hash": true,
+    "proof_hash": true,
+    "proof_size": true,
+    "solver_unsat": true
+  },
+  "claim_boundary": "This closes only the named fixed family and, through the separate affine-normalization theorem, its coherent translated versions. It does not close another multiplier family, unrestricted LP(333), or H(668).",
+  "family_id": 10,
+  "fresh_bogus_control": {
+    "accepted": false,
+    "empty_proof_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "log_sha256": "7874c87949584fcda50d7a0512cae3e714c7027846a4e09a77fce0a75a6787c3",
+    "maximum_resident_set_size_bytes": 0,
+    "rejected": true,
+    "returncode": 1,
+    "timed_out": false,
+    "verified_marker": true,
+    "wall_seconds": 0.09082012499857228
+  },
+  "fresh_replay": {
+    "accepted": true,
+    "log_sha256": "b09684244f8b2769241839c4612326bde7a53b475277609c9d98ad2765605c1c",
+    "maximum_resident_set_size_bytes": 548159488,
+    "returncode": 0,
+    "timed_out": false,
+    "verified_marker": true,
+    "wall_seconds": 24.64956741599599
+  },
+  "inputs": {
+    "checker_sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47",
+    "cnf_audit_sha256": "0e2e9ceb72f2b46aabc5dd5f3ae77be7ed02be3b4a8021d7da701dbf251a9b97",
+    "cnf_sha256": "f3e7b1d7e9f8825bdfcd3812f23f41c83be515373513c107cf10cc95b870fd61",
+    "encoding_metadata_sha256": "9645a32584e1cb5c04a36db1f3cd5f4730bd0e06366d3445799474409e188350",
+    "proof_sha256": "98a3101b9540510ccea62022b6f923caa2b6ca34b29ee4949a55a4b96a0ce29a",
+    "run_manifest_sha256": "264f9cc6ec7e2ef736767122742c280d83fe2d02d6cb7d2451d410fe296c1a02",
+    "sat_control_cnf_sha256": "255879dc8c072d6d0fa621d6dc1bfd752b13d71946baf94c7ae86d2e1b4f4da3"
+  },
+  "result": "family ID10 is proof-certified infeasible",
+  "schema": "frontiermath-hadamard-lp333-family-run-audit-v1",
+  "status": "pass"
+}

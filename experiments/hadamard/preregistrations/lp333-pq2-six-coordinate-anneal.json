@@ -1,0 +1,96 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 pq2 six-coordinate escape anneal",
+  "hypothesis": "Periodic simultaneous three-swap proposals may cross exact-PAF barriers that reject every intermediate one-swap state and thereby reach a directly verifiable Legendre pair inside the prescribed pq2-compression slice.",
+  "evidence_unit": "one deterministic 3600-second mixed-neighborhood run from seed 20260727 with the same exact margins, squared integer PAF objective, temperature endpoints, and 2000000-proposal restart length as the baseline, replacing every eighth proposal by three sequential same-residue swaps accepted or rejected atomically",
+  "claim_boundary": "The six-coordinate mechanism is an inferred transfer from a different 37-compression landscape, where a public technical report found local minima under changes of up to four entries. No quantitative rate transfers. Only a serialized zero objective that independently verifies all 332 nonzero PAF equations is a candidate; any lower score is workload evidence.",
+  "baseline": {
+    "evidence": "The frozen single-swap pq2 run uses source SHA-256 7aa7e3652bb92920972a7d2828cb65b152c45e2c8090b76f3203150ab18c8032, seed 20260727, 2000000 proposals per restart, and an initial exact squared residual of 130304.",
+    "measurement": "The active baseline first reached best objective 5568, L1 residual 720, and maximum absolute residual 20; it had not reached zero after more than 1.8 billion proposals."
+  },
+  "intervention": {
+    "one_change": "Keep seven of every eight proposals as one exact same-residue opposite-sign swap, but make every eighth proposal an atomic composition of three such swaps, affecting at most six coordinates across the two rows.",
+    "forbidden_confounds": [
+      "changed pq2 compression margins",
+      "changed exact squared PAF objective",
+      "floating-point PSD acceptance",
+      "changed seed",
+      "temperature tuning",
+      "restart-length tuning",
+      "neighborhood-frequency tuning",
+      "parallel replica exchange",
+      "runtime extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "cross-regime-paper-boundary",
+      "purpose": "Prevent the source report's 37-compression behavior from being cited as evidence for this full-length landscape.",
+      "expected": "The report supplies only the qualitative hypothesis that coordinated changes beyond four entries can escape isolated local minima; its energy values, rates, and success projections are not transferred."
+    },
+    {
+      "name": "matched-initial-state",
+      "purpose": "Bind the new mechanism to the baseline start.",
+      "expected": "Seed 20260727 reconstructs the same initial objective 130304, L1 residual 3864, maximum residual 64, and six exact pq2 margins."
+    },
+    {
+      "name": "mixed-delta-self-test",
+      "purpose": "Detect incorrect atomic composition of incremental PAF updates.",
+      "expected": "Across 2000 deterministic mixed proposals, including every eighth as three swaps, every stored PAF and objective equals a fresh O(333^2) recomputation and all six margins remain exact."
+    },
+    {
+      "name": "mechanism-telemetry",
+      "purpose": "Prove the intervention fired at its frozen cadence.",
+      "expected": "The companion mechanism result records triple_proposal_period 8, triple_proposal_coordinates 6, self-test PASS, and triple_swap_proposals equal floor(total_proposals/8)."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the mathematical endpoint outside the C implementation.",
+      "expected": "The existing independent Python bit-rotation auditor recomputes both 333-entry PAF vectors, all six margins, row sums, objective, L1 and maximum residual, and exact candidate status."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the executed implementation.",
+      "expected": "Source SHA-256 029ef4f8b64726001c253f1b404da9cf5fc262fba48f6038cd813e1c7c3d3a1f and compiled binary SHA-256 c7e913737463e3e13e58486d6bf53c92192fa8761e41628762637a8e527b825f."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 5568,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is exactly zero and the independent full result audit verifies both row sums, the prescribed compression, and all 332 nonzero combined PAF equations.",
+    "park": "The frozen 3600-second schedule completes with valid mechanism telemetry and an independently audited nonzero best residual.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule before it writes and audits its best state.",
+    "audit-failed": "Any matched-start, mixed-delta, cadence, source pin, binary pin, stored-score, full PAF, candidate-status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260727.",
+    "Use 2000000 proposals per restart, the baseline 512-to-0.25 exponential cooling schedule, and exactly one triple-swap proposal every eight proposals.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 wall seconds without another seed, frequency, temperature, restart length, or cap.",
+    "Run the independent full bit-rotation audit before interpreting the endpoint.",
+    "Do not promote a lower nonzero heuristic score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, perform a second direct Legendre-pair audit, construct H668, verify orthogonality and artifact hashes, then package it for the gated submission workflow.",
+    "park": "Archive the endpoint and retire this exact cadence; use any improved score only to characterize the neighborhood, not to justify parameter tuning in this campaign.",
+    "unknown": "Preserve the interrupted state and resume only the remaining frozen wall budget if the interruption is reproducible.",
+    "audit-failed": "Repair only the smallest source, cadence, delta, serialization, or verifier defect before any target rerun."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary or technical literature are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

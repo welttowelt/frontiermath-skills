@@ -1,0 +1,86 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 unary-channel one-hour follow-through",
+  "hypothesis": "The hash-frozen ID5 unary-channel formula will reach SAT or proof-producing UNSAT within a 3600-second run now that the matched calibration reduced conflicts by 85.56 percent and removed proof-volume pressure.",
+  "evidence_unit": "one hash-frozen ID5 full-PAF translation-gauged unary-channel formula under a one-hour proof-producing capacity window",
+  "claim_boundary": "A verified terminal result decides only fixed multiplier family ID5 and its separately normalized coherent translated version. A timeout or artifact ceiling remains UNKNOWN and does not decide ID5, unrestricted LP333, or H668.",
+  "baseline": {
+    "evidence": "Code commit 597e49a; formula c8c083c7311e083ec5e0bb82d3fca863f2f07e821a30cf55aeb5d79a17778d8b; encoding metadata 170d61f0acedbbe5f445f76db1c115934f5f03d354ae8646a31b53c44921ab13; unary audit formula-bound at code commit 4277d0c.",
+    "measurement": "The exact formula is UNKNOWN after 300 seconds, 279414 conflicts, 2146395219 propagations, and a 266805565-byte incomplete proof. The parent translation-only run had 1901171 conflicts."
+  },
+  "intervention": {
+    "one_change": "Increase only the proof-producing wall ceiling from 300 to 3600 seconds for the already frozen and audited ID5 unary-channel formula.",
+    "forbidden_confounds": [
+      "formula regeneration",
+      "new random seed",
+      "solver option change",
+      "proof format change",
+      "new clause or assumption",
+      "preprocessing change",
+      "unrecorded restart"
+    ]
+  },
+  "controls": [
+    {
+      "name": "exact-input-binding",
+      "purpose": "Prevent the capacity follow-through from silently changing the successful structural mechanism.",
+      "expected": "Formula, metadata, generator, parent, channel audit, CaDiCaL, drat-trim, and SAT-control SHA-256 values equal the 300-second calibration bindings."
+    },
+    {
+      "name": "calibration-justification",
+      "purpose": "Require local evidence before allocating the longer capacity window.",
+      "expected": "Matched aggregate conflicts equal 589442 versus 4081640 baseline, a reduction of at least 20 percent; ID5 proof bytes remain below 300000000 at 300 seconds."
+    },
+    {
+      "name": "semantic-and-channel-controls",
+      "purpose": "Carry forward every correctness gate from the frozen formula.",
+      "expected": "Direct arithmetic, translation automorphism, sequential truth table, parent binding, exact clause reconstruction, XOR binding, and mutation rejection all remain PASS."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    },
+    {
+      "name": "terminal-model-or-proof",
+      "purpose": "Keep the board claim tied to independently checkable evidence.",
+      "expected": "SAT requires direct verification of both 333-entry sequences and all 332 PAF shifts; UNSAT requires two accepted complete replays with fresh bogus-proof rejection."
+    }
+  ],
+  "primary_metric": {
+    "name": "terminally decided selected families",
+    "direction": "reach",
+    "unit": "families",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 8589934592,
+    "verification_wall_seconds": 1800
+  },
+  "terminal_outcomes": {
+    "promote": "All bindings and carried controls pass, and ID5 yields either a directly audited SAT model or a complete UNSAT proof accepted twice with fresh bogus-proof rejection.",
+    "park": "The solver returns a valid nonterminal result before any resource ceiling without SAT or UNSAT, so the fixed capacity experiment ends without tuning.",
+    "unknown": "The formula reaches 3600 seconds, 4 GiB RSS, 8 GiB proof bytes, or 1800-second replay ceiling without complete terminal evidence.",
+    "audit-failed": "Any input hash, carried semantic/channel gate, model verification, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before launch if any frozen formula, metadata, audit, tool, parent, or calibration binding differs.",
+    "Terminate at 3600 solver seconds, 4 GiB observed RSS, or 8 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not restart with a new seed or solver option after a nonterminal result."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck the terminal ID5 result; if SAT, construct and verify H668 before any submission preparation.",
+    "park": "Archive the nonterminal return and move to a different fixed family or proof-logged programmatic propagator.",
+    "unknown": "Preserve the strict-UNKNOWN manifest and partial artifact hashes, then transfer the proven unary mechanism to a different family rather than raising this cap again.",
+    "audit-failed": "Repair only the smallest failed binding or evidence checker without rerunning the target until Gate A passes."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

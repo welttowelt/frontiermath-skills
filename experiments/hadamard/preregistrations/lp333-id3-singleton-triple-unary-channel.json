@@ -1,0 +1,95 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID3 singleton-to-triple unary row channel",
+  "hypothesis": "Exposing the exact row-sum relation between each canonical singleton pattern and the number of negative size-three orbits with a uniquely extended unary counter will reduce the 300-second conflict count by at least 20 percent and may produce terminal evidence.",
+  "evidence_unit": "one unrestricted fixed-ID3 full-PAF formula with the existing singleton-translation quotient and one redundant conditional unary row channel per sequence",
+  "claim_boundary": "A terminal result decides only fixed multiplier family ID3 and its separately normalized coherent translates. Workload performance alone decides no family and no result decides unrestricted LP333 or H668.",
+  "baseline": {
+    "evidence": "Code commit 79cb507 and the hash-bound singleton-translation run manifest.",
+    "measurement": "The parent formula remains UNKNOWN at 300 seconds after 2659000 conflicts and 2053017228 propagations, with 914620416 bytes peak observed RSS and a 1064658979-byte incomplete proof payload."
+  },
+  "intervention": {
+    "one_change": "Retain every parent PAF PB equation, singleton-translation blocking clause, and lex leader, then append one uniquely extended sequential unary prefix counter up to threshold 56 over the 108 size-three orbit bits in each sequence. Block the 11 canonical singleton patterns incompatible with row magnitude 1, and condition the counter terminal signals on each of the 19 row-feasible canonical patterns so the exact triple-negative count is 55, 54, or 53 as forced by the row sum.",
+    "forbidden_confounds": [
+      "prescribed profile assumptions",
+      "inverse-PAF deduplication",
+      "changed singleton translation quotient",
+      "changed PAF or row-sum encoding",
+      "changed decimation or sequence-swap lex leaders",
+      "new random seed",
+      "solver option change",
+      "larger resource cap",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "row-arithmetic-implication",
+      "purpose": "Prove that every case clause follows from the existing normalized row constraint.",
+      "expected": "For singleton negative count k and size-three negative count t, k+3t is 166 or 167; the 19 canonical feasible patterns have exactly the allowed pairs (1,55), (2,55), (4,54), (5,54), (7,53), or (8,53), while the remaining 11 canonical patterns are impossible."
+    },
+    {
+      "name": "prefix-counter-truth-table",
+      "purpose": "Detect a broken nonasserting unary counter or nonunique auxiliary extension.",
+      "expected": "Exhaustive small input assignments have exactly one auxiliary extension and every terminal signal equals the corresponding at-least threshold."
+    },
+    {
+      "name": "independent-clause-reconstruction",
+      "purpose": "Bind the exact added block without importing the generator.",
+      "expected": "An independent auditor reconstructs every counter and conditional clause, matches the serialized contiguous block, and rejects a one-literal mutation."
+    },
+    {
+      "name": "parent-formula-binding",
+      "purpose": "Hold the unrestricted full-PAF singleton-canonicalized formula fixed.",
+      "expected": "The parent hash is 0ea4f87736db6d1076214d8378e4f66e1fe499291d5f4d0d406209a7779172b8, has all 116 PAF representatives and no prescribed profile, with identical primary variables, lex leaders, and singleton block before the channel."
+    },
+    {
+      "name": "paper-to-levers-boundary",
+      "purpose": "Keep the imported mechanism separate from local performance evidence.",
+      "expected": "Metadata cites the primary unary-cardinality sources and adopts only their unit-propagation mechanism, not published runtime ratios."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "conflicts at the 300-second ceiling",
+    "direction": "decrease",
+    "unit": "conflicts",
+    "baseline": 2659000,
+    "promotion_threshold": 2127200
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 300,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 120
+  },
+  "terminal_outcomes": {
+    "promote": "Every implication, truth-table, reconstruction, parent-binding, paper-boundary, and proof control passes, and the run yields a direct-audited SAT model or a complete independently replayed UNSAT proof.",
+    "park": "The run is valid but nonterminal and its conflict count exceeds 2127200, so the channel misses its preregistered workload floor.",
+    "unknown": "The conflict floor passes but the formula reaches a wall, memory, proof-volume, or verification ceiling without terminal evidence.",
+    "audit-failed": "Any arithmetic implication, truth table, clause reconstruction, parent binding, semantic comparison, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before the target run unless the exact 19 feasible singleton cases and their triple counts are independently rederived.",
+    "Stop before the target run unless exhaustive small truth tables and exact serialized clause reconstruction pass.",
+    "Stop before the target run if any parent PAF row, singleton quotient clause, lex leader, solver option, or source binding changes.",
+    "Terminate at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not raise the cap after a nonterminal result."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck the terminal result; if a direct LP333 pair appears, construct and verify H668.",
+    "park": "Archive the valid negative workload result and move to another fixed family or a proof-logged programmatic PAF propagator.",
+    "unknown": "Preserve the strict-UNKNOWN manifest and select a distinct structural mechanism.",
+    "audit-failed": "Repair only the smallest implication or encoding gate and regenerate in a fresh directory."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

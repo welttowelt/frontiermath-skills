@@ -1,0 +1,93 @@
+{
+  "binding_checks": {
+    "direct_paf_control": true,
+    "formula_hash": true,
+    "generator_hash": true,
+    "lp63_formula_hash": true,
+    "lp63_positive_control": true,
+    "semantic_control": true
+  },
+  "budgets": {
+    "drat_baseline_bytes": 712682070,
+    "max_memory_bytes": 4294967296,
+    "max_proof_bytes": 1073741824,
+    "max_verification_seconds": 120.0,
+    "max_wall_seconds": 300.0,
+    "promotion_proof_bytes": 237560690
+  },
+  "claim_boundary": "Only gate-b-pass authorizes the identical static ID9 run; resource ceilings remain UNKNOWN.",
+  "environment": {
+    "machine": "arm64",
+    "platform": "macOS-26.5-arm64-arm-64bit-Mach-O",
+    "python": "3.14.6"
+  },
+  "family_id": 10,
+  "inputs": {
+    "encoding_metadata": "experiments/hadamard/results/lp333-id10-native-pb/encoding.json",
+    "encoding_metadata_sha256": "c7a56cb88e6e95000e33330892e49f690ef31561be5912b4b4dc2802b0badcde",
+    "formula_sha256": "01ba7ae6f363b679c1f2371a9ba893c2f9926c8f818d64c5bb3dbb8662453af0",
+    "lp63_formula_sha256": "c9273edc348695651756c54f50321d12f674dc93ed99f9a156760c729ac31e1f"
+  },
+  "proof_checks": {
+    "first_bogus_lp63": {
+      "accepted_unsat": false,
+      "log_sha256": "32772aa6186aedd3153613100b4bd834db44909bb0a76739afd5c13819ae2cb1",
+      "proof_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "rejected_as_unsat": true,
+      "returncode": 1,
+      "timed_out": false,
+      "verified_no_conclusion_marker": false,
+      "verified_unsat_marker": false,
+      "wall_seconds": 0.0207105830004366
+    },
+    "first_replay": null,
+    "fresh_bogus_lp63": null,
+    "fresh_replay": null,
+    "fresh_replay_bindings": null
+  },
+  "runner_sha256": "bf800fc6c2b7681b04226e55f1a1efb0ee9954832c14333a052bb79bdd61883d",
+  "schema": "frontiermath-hadamard-lp333-native-pb-run-v1",
+  "significance": {
+    "accepted_twice": false,
+    "fresh_bogus_rejected": false,
+    "proof_reduction_over_drat": 0.6625525786395603,
+    "proof_volume_gate_pass": false
+  },
+  "solver": {
+    "command": [
+      "/tmp/frontiermath-pb-tools.QsIPUs/roundingsat/build/roundingsat",
+      "experiments/hadamard/results/lp333-id10-native-pb/id10.opb",
+      "--proof-log=experiments/hadamard/results/lp333-id10-native-pb/calibration/id10.pbp",
+      "--time-limit=300.0",
+      "--lp=0",
+      "--verbosity=1"
+    ],
+    "log_sha256": "a05c38f01e7de5b181f78cf6f839de9e264b4aba863e56b64940d499edeff68a",
+    "maximum_observed_rss_bytes": 83853312,
+    "proof": {
+      "bytes": 1075661152,
+      "exists": true,
+      "sha256": "f60f574710666637bfd4cdfb046dc7e0a0c0414c299fb24acafb935db1c8e51c"
+    },
+    "returncode": 2,
+    "termination": "proof-size-ceiling",
+    "wall_seconds": 144.15395487500064
+  },
+  "status": "unknown",
+  "tools": {
+    "roundingsat": {
+      "path": "/tmp/frontiermath-pb-tools.QsIPUs/roundingsat/build/roundingsat",
+      "sha256": "9a54631235723a8b22366a7203d4c89e463f35a08b18508b57176f4212c33bb7",
+      "source_repo": "/tmp/frontiermath-pb-tools.QsIPUs/roundingsat",
+      "source_revision": "d4edbf7908a9bb951fd181940919e0f3ac7ab1ee",
+      "version": "Usage: /tmp/frontiermath-pb-tools.QsIPUs/roundingsat/build/roundingsat [OPTIONS] instance.(opb|cnf|wcnf)"
+    },
+    "veripb": {
+      "path": "/tmp/frontiermath-pb-tools.QsIPUs/VeriPB/target/release/veripb",
+      "sha256": "28e660ef2a40f19c8a75f1afaee82f634695fd89df6c2b7e027bb963e438a314",
+      "source_repo": "/tmp/frontiermath-pb-tools.QsIPUs/VeriPB",
+      "source_revision": "c648bac06be995b82bd218e248f005140fc8ce11",
+      "version": "Running VeriPB version 3.0.2"
+    }
+  }
+}

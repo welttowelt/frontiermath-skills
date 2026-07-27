@@ -1,0 +1,92 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID4 and ID5 inverse-PAF deduplication",
+  "hypothesis": "Removing the second serialization of every identity-duplicate PAF(s)=PAF(-s) equation will reduce each matched ID4/ID5 static-symmetry CNF below 900000 clauses and may produce terminal evidence under the unchanged solver and resource caps.",
+  "evidence_unit": "one matched pair of source-pinned LP333 fixed multiplier families, ID4 and ID5, with exactly the redundant inverse-shift PAF encodings removed",
+  "claim_boundary": "A promoted solver result decides only the named fixed family or families and, through the separately established affine normalization, their coherent translated versions. Formula reduction alone decides no family and no result decides unrestricted LP333 or H668.",
+  "baseline": {
+    "evidence": "Code commits 4cf4d2da0c7d9a35d877838d6c92769076964fa8 and 1967171; ID4 CNF 9588cfbd9d3c8849c95c8cc96268391f87cbbe145d80e440bf24a201023e55d2 and ID5 CNF ce1af710fc3937d0169d573a063c736dbdb06da26af03b9d6a841f79a4f6024a.",
+    "measurement": "Each baseline has 190897 variables, 1258456 clauses, and 112 serialized PAF PB equalities. ID4 is UNKNOWN at 300 seconds; ID5 is UNKNOWN at the 1 GiB proof ceiling."
+  },
+  "intervention": {
+    "one_change": "Before constructing the PB layer, quotient the PAF shift representatives by exact equality of their independently recomputed diagonal constants and coefficient matrices, which for ID4 and ID5 removes only the duplicate inverse-shift equation in each of 56 pairs.",
+    "forbidden_confounds": [
+      "new random seed",
+      "changed fixed multiplier family",
+      "changed static lex-leader group or variable order",
+      "new mathematical pruning constraint",
+      "solver option change",
+      "larger resource cap",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "inverse-identity-coverage",
+      "purpose": "Prove that the removed equation in every pair is an identity duplicate, not a merely conjectured or solution-dependent equality.",
+      "expected": "An independent direct position-pair recomputation partitions all 112 original shift representatives into 56 size-two classes with exactly equal diagonal constants and W coefficients and binds every class to PAF(s)=PAF(-s)."
+    },
+    {
+      "name": "source-and-formula-binding",
+      "purpose": "Bind each family, proof encoder, generated formula, generator, source classification, and preregistration.",
+      "expected": "All recorded SHA-256 values match immediately before both runs."
+    },
+    {
+      "name": "semantic-equivalence",
+      "purpose": "Detect any difference between the full 112-equation predicate and the 56-equation quotient.",
+      "expected": "Coefficient identity proves exact implication in both directions; 1000 deterministic random assignments per family agree with direct length-333 arithmetic."
+    },
+    {
+      "name": "static-symmetry-control",
+      "purpose": "Hold the previous complete 144-action lex-leader intervention fixed.",
+      "expected": "The exact same 143 nonidentity actions, variable order, support counts, and clause construction are used."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect an invalid inversion quotient or canonicalization orientation.",
+      "expected": "The published LP63 pair passes direct PAF verification and every retained inverse-quotiented PAF equation before canonicalization."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "serialized CNF clauses per family",
+    "direction": "decrease",
+    "unit": "clauses",
+    "baseline": 1258456,
+    "promotion_threshold": 900000
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 2147483648,
+    "verification_wall_seconds": 240
+  },
+  "terminal_outcomes": {
+    "promote": "All identity, semantic, binding, symmetry, positive, and proof controls pass; both formulas are below 900000 clauses; and at least one family yields either a direct-audited SAT model or a complete independently replayed UNSAT proof.",
+    "park": "All controls pass but either formula remains at or above 900000 clauses, so the quotient misses its structural significance floor without a solver run.",
+    "unknown": "Both reduced formulas pass the structural gate but each reaches a wall, memory, proof-volume, or verification ceiling without terminal evidence.",
+    "audit-failed": "Any inverse identity, source binding, semantic comparison, symmetry invariant, positive fixture, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before either target run if all 112 original PAF representatives do not partition into 56 exact size-two identity classes.",
+    "Stop before either target run if the retained equations, 143 lex leaders, source hashes, or semantic controls differ on any non-preregistered axis.",
+    "Do not run if either reduced formula has 900000 or more clauses.",
+    "Terminate each target process at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck every terminal family result; if a direct LP333 pair appears, construct and verify H668.",
+    "park": "Archive the failed reduction gate and choose a different exact search reduction.",
+    "unknown": "Preserve both strict-UNKNOWN manifests and use the reduced traces to select one new structural mechanism rather than a seed or cap change.",
+    "audit-failed": "Repair only the smallest failed identity or binding gate and regenerate in fresh directories."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

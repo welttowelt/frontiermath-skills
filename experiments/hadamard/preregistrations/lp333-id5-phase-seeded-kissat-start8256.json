@@ -1,0 +1,91 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 phase-seeded Kissat pilot from objective 8256",
+  "hypothesis": "A semantics-preserving literal renaming that maps Kissat's forced all-true initial primary phases to an invariant objective-8256 ID5 state may find a SAT model more quickly than the completed default-phase ID5 run.",
+  "evidence_unit": "one deterministic 1200-second Kissat 4.0.4 run at seed 0 on the exact ID5 CNF after the SHA-256-pinned 114-variable literal renaming, with phase true, forcephase true, and rephase false",
+  "claim_boundary": "Only a complete transformed model that satisfies the renamed CNF, decodes through the inverse literal map, satisfies the original ID5 CNF, and independently verifies both length-333 rows plus all 332 nonzero combined PAF equations decides ID5. UNKNOWN and proofless UNSAT decide nothing.",
+  "baseline": {
+    "evidence": "The completed default-phase one-hour ID5 Kissat arm returned UNKNOWN after 4,368,042 conflicts. The phase seed is an independently reconstructed invariant ID5 pair with objective 8256, row sums one, one negative singleton and 55 negative triple-orbits per row.",
+    "measurement": "The renamed CNF has 218018 variables and 1366261 clauses, identical to the original dimensions. A full independent stream audit verified all 4679477 literal occurrences and all 226 primary phase mappings."
+  },
+  "intervention": {
+    "one_change": "Rename exactly the 114 primary orbit variables whose heuristic signs are positive so that renamed phase true represents every one of the 226 heuristic orbit signs, then freeze Kissat phase true with forcephase true and rephase false; all clauses and auxiliary variables remain semantically equivalent.",
+    "forbidden_confounds": [
+      "added or removed clauses",
+      "changed auxiliary-variable literals",
+      "changed ID5 subgroup",
+      "changed unary cardinality channels",
+      "changed static symmetry breakers",
+      "different heuristic input",
+      "phase option tuning",
+      "solver seed sweep",
+      "resource-cap extension",
+      "accepting a transformed or decoded model without direct verification"
+    ]
+  },
+  "controls": [
+    {
+      "name": "full-literal-renaming-audit",
+      "purpose": "Prove semantic equivalence of the transformed formula.",
+      "expected": "Formula SHA-256 1095fafc923ebe7dd1f7de3beb6a3b7d3fd85eaac2860ead6d6f23395f228bdd has the original 218018 variables and 1366261 clauses; an independent line-by-line audit verifies each of 4679477 literal occurrences against the 114-variable flip set."
+    },
+    {
+      "name": "heuristic-phase-map",
+      "purpose": "Bind the intended initial primary phases.",
+      "expected": "Heuristic SHA-256 4549360df931e68cf924aa3a7f91f567fa27d2df4b1d521cdce3ab906facd16c reconstructs objective 8256 and all-true renamed primary phases invert to all 226 exact orbit signs; deleting one flip breaks the mapping."
+    },
+    {
+      "name": "sat-positive-control",
+      "purpose": "Show the pinned solver can return and serialize a SAT model.",
+      "expected": "Before the target, Kissat solves the pinned profile-cell SAT fixture and its complete model satisfies every fixture clause."
+    },
+    {
+      "name": "bidirectional-model-check",
+      "purpose": "Prevent a transformed-model false positive.",
+      "expected": "Any SAT model satisfies the transformed CNF; after inverse-renaming all 114 flipped primaries, it satisfies the original CNF and the independent family verifier confirms both full rows, subgroup invariance, and every nonzero combined PAF equation."
+    },
+    {
+      "name": "source-and-artifact-pins",
+      "purpose": "Bind the exact phase runner and formula artifacts.",
+      "expected": "Phase metadata SHA-256 48c817c957311f81f060158fe7463f1330b375841ceab307f93e90d2c0d96bbd, phase audit SHA-256 ccff29ed7f429ce23447b8ef6b1e1551d21265ab451417e7af09e28460a0d082, runner SHA-256 dd91e085ce0a14b263eb6a37d2bff933c5df94bd0eb72426acc7403220408620, shared phase runner SHA-256 268f8e040650a2c0179f8b6e24e0d78a1ddd6230bd46f4a756e081931846a1aa, and shared solver runner SHA-256 661e1c17edf1f96cd993c616e99e0a9dc283c955c26b47f039a1bbfadd57ef4a."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified SAT model for fixed family ID5",
+    "direction": "reach",
+    "unit": "verified model",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 1200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "Kissat returns SAT and the transformed-CNF, inverse-renaming, original-CNF, and direct LP333 audits all pass.",
+    "park": "The frozen 1200-second run returns no SAT model; preserve UNKNOWN or proofless UNSAT as nondecisive workload evidence.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule before a terminal manifest is written.",
+    "audit-failed": "Any formula hash, literal-renaming, heuristic mapping, tool pin, positive control, transformed model, decoded model, original CNF, or direct LP333 check fails."
+  },
+  "stop_rules": [
+    "Run only the pinned transformed formula and scripts with Kissat seed 0, phase true, forcephase true, and rephase false.",
+    "Use exactly the objective-8256 heuristic and 114-variable flip set.",
+    "Stop immediately after a directly verified SAT model.",
+    "Otherwise stop at 1200 seconds without a second phase policy, seed, heuristic, or cap.",
+    "Do not interpret UNKNOWN or proofless UNSAT as a family decision.",
+    "Do not promote a SAT marker until both transformed and decoded direct audits pass."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, construct H668, verify exact orthogonality and artifact hashes independently, and package it for the gated submission workflow.",
+    "park": "Archive the pilot and preregister at most one stronger phase-seeded exact arm from the final independently audited ID5 heuristic endpoint.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest formula map, phase runner, decoder, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local source-pinned formulas, solver binaries, public prompt artifacts, and generated local results are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

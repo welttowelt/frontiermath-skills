@@ -1,0 +1,57 @@
+{
+  "checks": {
+    "annihilator": [
+      0,
+      111,
+      222
+    ],
+    "direct_paf_automorphism_checks": 15936,
+    "independent_pair_action_order": 9,
+    "one_size_three_singleton_orbit": true,
+    "orbit_signature": {
+      "1": 3,
+      "3": 110
+    },
+    "row_sum_cases": [
+      {
+        "pattern": [
+          0,
+          0,
+          1
+        ],
+        "triple_negative_orbits": 55,
+        "weighted_negative_count": 166
+      },
+      {
+        "pattern": [
+          0,
+          1,
+          0
+        ],
+        "triple_negative_orbits": 55,
+        "weighted_negative_count": 166
+      },
+      {
+        "pattern": [
+          0,
+          1,
+          1
+        ],
+        "triple_negative_orbits": 55,
+        "weighted_negative_count": 167
+      }
+    ],
+    "serialized_gauge_clauses_checked": 8,
+    "unique_canonical_pattern": [
+      0,
+      0,
+      1
+    ]
+  },
+  "family_id": 5,
+  "formula_sha256": "59538c923cf9fe92f085b987dce948b5656fb263feac5851ed6f7248ac150fb8",
+  "metadata_sha256": "43d1b94d4e3dc44ead3147a528bb12efcf28bfd2b6aa973db6e54d192a211bb8",
+  "method": "Recompute the modular annihilator, weighted row-sum cases, three-point normalized action, and exact DIMACS gauge gadgets without importing the generator or proof encoder.",
+  "schema": "frontiermath-hadamard-translation-gauge-audit-v1",
+  "status": "pass"
+}

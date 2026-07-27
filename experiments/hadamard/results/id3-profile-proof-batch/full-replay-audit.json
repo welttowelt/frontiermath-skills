@@ -1,0 +1,548 @@
+{
+  "auditor_sha256": "b2aacedc11d7bde133119213f447e5723cfd156b2d90f4be9990d90f6cf9e43a",
+  "cells_checked": 52,
+  "cells_expected": 52,
+  "checker_binary_sha256": "f58f63b0f76945d4c4c9ff6e87afaf870f579e67c0f7cca589492df8fc7ebd47",
+  "checker_source_sha256": "d834b649f437e091597f5347f259b9f681087f89ca0844d0cee250a1a1a0c2ee",
+  "errors": [],
+  "fresh_bogus_proof_control": {
+    "accepted": false,
+    "maximum_resident_set_size_bytes": 57262080,
+    "output_sha256": "437c4f1d8ff456017fd88a6c55128cc69c009bc19c6214050b06a42727126165",
+    "rejected": true,
+    "returncode": 1,
+    "timed_out": false,
+    "verified_marker": false,
+    "wall_seconds": 0.06321454200224252
+  },
+  "fresh_replay_count": 52,
+  "fresh_replays": [
+    {
+      "accepted": true,
+      "cell_id": 2,
+      "maximum_resident_set_size_bytes": 58982400,
+      "output_sha256": "6a6e1e82306a1359594e5135829bcf20c0e894ffaf23e67455331e0455c9e40b",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.09481262500048615
+    },
+    {
+      "accepted": true,
+      "cell_id": 0,
+      "maximum_resident_set_size_bytes": 57131008,
+      "output_sha256": "d499b801608932961c865ed6c60738a8041c62d4d6dc8e8ddc432d11a716350a",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.07310945800418267
+    },
+    {
+      "accepted": true,
+      "cell_id": 93,
+      "maximum_resident_set_size_bytes": 67715072,
+      "output_sha256": "8fd1d30149474152ca3b03f60b393e58c4cedb52c7281ad3f208c71c214b9204",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 1.0554904579985305
+    },
+    {
+      "accepted": true,
+      "cell_id": 94,
+      "maximum_resident_set_size_bytes": 62062592,
+      "output_sha256": "7c846a7c92fce118b5b0459f2c28e358adb079d449040283f7807bb044675d27",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.11571591699612327
+    },
+    {
+      "accepted": true,
+      "cell_id": 10,
+      "maximum_resident_set_size_bytes": 61472768,
+      "output_sha256": "12ec0b0940750091a8444bfa8f3d5fc2a3aa1bfe8824dba7038206dcd7e9c76f",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.11170124999625841
+    },
+    {
+      "accepted": true,
+      "cell_id": 92,
+      "maximum_resident_set_size_bytes": 65650688,
+      "output_sha256": "8e01f46fad74bbfe4bb1e3ffaafac29e901187db26f770c1dd551b51c9cf29ba",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.27464770899678115
+    },
+    {
+      "accepted": true,
+      "cell_id": 90,
+      "maximum_resident_set_size_bytes": 64618496,
+      "output_sha256": "800f0f0e77615093c3ab82a77abd3dd00d98eb9ddad90304296350c78a94ec7b",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.15011087500170106
+    },
+    {
+      "accepted": true,
+      "cell_id": 3,
+      "maximum_resident_set_size_bytes": 59785216,
+      "output_sha256": "e4f01766ae99a1a8b0e8a03768b5e2c55f5c7926e98bfb578d03c84538c09381",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.08820445900346385
+    },
+    {
+      "accepted": true,
+      "cell_id": 71,
+      "maximum_resident_set_size_bytes": 66207744,
+      "output_sha256": "32ef0771e7b4655852797d4407b02adaf4b90e6146793b53ed1673ee3b64eb31",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.1566129170023487
+    },
+    {
+      "accepted": true,
+      "cell_id": 1,
+      "maximum_resident_set_size_bytes": 60997632,
+      "output_sha256": "6c1bc417822aa6c64b28c57906fff38b022f61ae2cbff081cb25ff37c977516f",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.10256449999724282
+    },
+    {
+      "accepted": true,
+      "cell_id": 91,
+      "maximum_resident_set_size_bytes": 125943808,
+      "output_sha256": "04bf3572e4616649a9a248f6933bb62f1e5c3035df97e951102a3a0d70dd5af2",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 20.649342207994778
+    },
+    {
+      "accepted": true,
+      "cell_id": 52,
+      "maximum_resident_set_size_bytes": 63504384,
+      "output_sha256": "deef1d9a96f0e17d1b235fd98abda9c4ad8dc0780eff882d7deec74cb97f14a8",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.12104429199825972
+    },
+    {
+      "accepted": true,
+      "cell_id": 68,
+      "maximum_resident_set_size_bytes": 67616768,
+      "output_sha256": "6d7d232d5c6663bac01e519021f45a9801da0716f619b2d06150980a60fedeed",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.19270966600015527
+    },
+    {
+      "accepted": true,
+      "cell_id": 78,
+      "maximum_resident_set_size_bytes": 60768256,
+      "output_sha256": "3684033ee8d649a31a52213b6fb6813b1a921832279dac98329b71e9c3cdc0d1",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.11672191600519
+    },
+    {
+      "accepted": true,
+      "cell_id": 65,
+      "maximum_resident_set_size_bytes": 60522496,
+      "output_sha256": "47d4d02b667c954ba1be4b63ac9e44d3340b032fbce738dbf85315dcafa67af5",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.10567116699530743
+    },
+    {
+      "accepted": true,
+      "cell_id": 27,
+      "maximum_resident_set_size_bytes": 67813376,
+      "output_sha256": "460be6c7dae76aaa181092d3f8db711302304a4040c9256dc938f29d5762e980",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.19129291600256693
+    },
+    {
+      "accepted": true,
+      "cell_id": 16,
+      "maximum_resident_set_size_bytes": 68141056,
+      "output_sha256": "9d8ad0cdf34575687b11a0a2b63ca7aade1130658c56057f2164aba2adfb80ed",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2170000420010183
+    },
+    {
+      "accepted": true,
+      "cell_id": 66,
+      "maximum_resident_set_size_bytes": 60506112,
+      "output_sha256": "e198465d4664a2855cc0707e8c99c6169538ed7ffa33584fbf6f43d13681b6b5",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.1059880829998292
+    },
+    {
+      "accepted": true,
+      "cell_id": 55,
+      "maximum_resident_set_size_bytes": 66961408,
+      "output_sha256": "c6df4a64a3d73d2f02b7472af58228a707f491fe1c7ab4e0a172079f9542a8e2",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.16084516699629603
+    },
+    {
+      "accepted": true,
+      "cell_id": 35,
+      "maximum_resident_set_size_bytes": 67862528,
+      "output_sha256": "d2e5165fdc44cf7ad7c7903cd845454678661ad413b60182a6ddca801f14f1c2",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.18494883400126128
+    },
+    {
+      "accepted": true,
+      "cell_id": 43,
+      "maximum_resident_set_size_bytes": 68780032,
+      "output_sha256": "b92b7e4bf31a7b7ae97b94b145ce6a00381743b94842acafd5e95178b6e543dc",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.26835783400019864
+    },
+    {
+      "accepted": true,
+      "cell_id": 48,
+      "maximum_resident_set_size_bytes": 61440000,
+      "output_sha256": "d1eb18682622956980267c77d3564c99896619cc1e8813230d8c674d80759308",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.11505008299718611
+    },
+    {
+      "accepted": true,
+      "cell_id": 88,
+      "maximum_resident_set_size_bytes": 68845568,
+      "output_sha256": "c630c00b31d7d04037e383a9a6d5afc93aa475fd268fee1673fa0c8164b128b9",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2458374170018942
+    },
+    {
+      "accepted": true,
+      "cell_id": 40,
+      "maximum_resident_set_size_bytes": 68730880,
+      "output_sha256": "d34e6a5c3d532b60c747464d156607ba3988f5cd7a3d06a2cefaa41df7258c0d",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2038117920019431
+    },
+    {
+      "accepted": true,
+      "cell_id": 81,
+      "maximum_resident_set_size_bytes": 64159744,
+      "output_sha256": "e9faed2ce22927bf50eea2bb0662b7cce4765348c88b1cb4761ab8a457781166",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.12544362499465933
+    },
+    {
+      "accepted": true,
+      "cell_id": 22,
+      "maximum_resident_set_size_bytes": 67977216,
+      "output_sha256": "12e221d0d05ccf8fb38fcbdf967aa1dd4576cd2a9b1bea54dd41f874dc69f769",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2444252499990398
+    },
+    {
+      "accepted": true,
+      "cell_id": 86,
+      "maximum_resident_set_size_bytes": 549552128,
+      "output_sha256": "8f019fe8d2dafa9b6532f372065a5b6d02922bf41124972b230e94cf278248fe",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 179.73853433300246
+    },
+    {
+      "accepted": true,
+      "cell_id": 39,
+      "maximum_resident_set_size_bytes": 64405504,
+      "output_sha256": "c444e025e8de849c3e223633e4c91dc71ca727e7a3ba5414f3f064802f1b9ffa",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.13559254199935822
+    },
+    {
+      "accepted": true,
+      "cell_id": 74,
+      "maximum_resident_set_size_bytes": 71729152,
+      "output_sha256": "dd1190a03e40ade93d926b02667f0f541fa2bcab53474e849d22a36b1bc09510",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.23311112500232412
+    },
+    {
+      "accepted": true,
+      "cell_id": 8,
+      "maximum_resident_set_size_bytes": 67371008,
+      "output_sha256": "c51e2fc51d8951f342d96c3df1c90fef9a33125b97259fdcfd947f5fcfa4c633",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.18455125000036787
+    },
+    {
+      "accepted": true,
+      "cell_id": 7,
+      "maximum_resident_set_size_bytes": 65896448,
+      "output_sha256": "a5097ba0447902fcfb110c7bb87428ffa75c8ba1ee4872d8be25daff025d07d6",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.15643966700008605
+    },
+    {
+      "accepted": true,
+      "cell_id": 24,
+      "maximum_resident_set_size_bytes": 62750720,
+      "output_sha256": "335a46a60134e1b8d11274d1326ffdd2d92e1aa634a28f277a0ded4ea58004d6",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.12830525000026682
+    },
+    {
+      "accepted": true,
+      "cell_id": 15,
+      "maximum_resident_set_size_bytes": 67452928,
+      "output_sha256": "0f043611e9451a52585e891117cd85b712898156c5f2648f7994b75e88ce14bd",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.23581016700336477
+    },
+    {
+      "accepted": true,
+      "cell_id": 30,
+      "maximum_resident_set_size_bytes": 61341696,
+      "output_sha256": "da24d70b63e36fba077363728d9766534fdef3ea647bd93ab459734e97bdec84",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.1042105000014999
+    },
+    {
+      "accepted": true,
+      "cell_id": 19,
+      "maximum_resident_set_size_bytes": 61325312,
+      "output_sha256": "0fdd872b7a89f511e6a3b428e64a025991421399f12bacdcfcd1b89328bfcecd",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.10565766600484494
+    },
+    {
+      "accepted": true,
+      "cell_id": 87,
+      "maximum_resident_set_size_bytes": 145424384,
+      "output_sha256": "fae61dc99cf1123d6d45d4c047d28ab8e38a34076bb5477c3345ab0fbdf650d1",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 19.627498124995327
+    },
+    {
+      "accepted": true,
+      "cell_id": 89,
+      "maximum_resident_set_size_bytes": 70287360,
+      "output_sha256": "0b5cda0cd07b657fea8c280b9808c1adb2037cbb2de0ad6c596fe5221d2bcbc8",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2865812919990276
+    },
+    {
+      "accepted": true,
+      "cell_id": 38,
+      "maximum_resident_set_size_bytes": 67518464,
+      "output_sha256": "8e250652a3b62b14567c77c2810983a9b46654c6969b869cb41e3efccce892c3",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.19665050000185147
+    },
+    {
+      "accepted": true,
+      "cell_id": 80,
+      "maximum_resident_set_size_bytes": 68894720,
+      "output_sha256": "089341a38e9a12d4036e19f5222820c4503dc033932c5c443d7f2a487c947c19",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2451123330029077
+    },
+    {
+      "accepted": true,
+      "cell_id": 13,
+      "maximum_resident_set_size_bytes": 68435968,
+      "output_sha256": "481b6bd36c7731ae118bc4185961b6f14570154878237fa28d42b292361dd385",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.26758916700055124
+    },
+    {
+      "accepted": true,
+      "cell_id": 51,
+      "maximum_resident_set_size_bytes": 69140480,
+      "output_sha256": "3f3be6c0420e5d63a57141356f3679bbea85880203e9f0fb46c42e7e8fbe6b55",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2846280840021791
+    },
+    {
+      "accepted": true,
+      "cell_id": 23,
+      "maximum_resident_set_size_bytes": 74072064,
+      "output_sha256": "5dfe7abb8e7cd055fe802707d77f6c9b1f6d155391f8735a50fafb3d0b359ce6",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2657588340007351
+    },
+    {
+      "accepted": true,
+      "cell_id": 49,
+      "maximum_resident_set_size_bytes": 76906496,
+      "output_sha256": "2224c5c5abc373a62811b81b47299945d04de0013c85d2ddbf01d5eca495fd18",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.4232250839995686
+    },
+    {
+      "accepted": true,
+      "cell_id": 26,
+      "maximum_resident_set_size_bytes": 67043328,
+      "output_sha256": "410ee4120ae6a77cbd6fe706ac524aa4a0c886dd65fdcebc6ab31d40dadcfd4e",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.17722941700048978
+    },
+    {
+      "accepted": true,
+      "cell_id": 57,
+      "maximum_resident_set_size_bytes": 67928064,
+      "output_sha256": "5a0496c9c666adbe69565ea471916f8a214e5b969ab2492e0806538d42ea67be",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.19526329200016335
+    },
+    {
+      "accepted": true,
+      "cell_id": 62,
+      "maximum_resident_set_size_bytes": 63799296,
+      "output_sha256": "183ab06c31ef2d93aca39477fb99e0f748ce3c0977816f12c18ed24e09c4e240",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.12781195899879094
+    },
+    {
+      "accepted": true,
+      "cell_id": 46,
+      "maximum_resident_set_size_bytes": 64471040,
+      "output_sha256": "35e43a20d44abbf33af5cd3e354c5e0edc4f2da519bc01e19c209952f36b2576",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.12727108300168766
+    },
+    {
+      "accepted": true,
+      "cell_id": 75,
+      "maximum_resident_set_size_bytes": 75350016,
+      "output_sha256": "024cc272f1521a9a7edbe2e477700b93edc816fb8cce0cd02336e6002ca9ee84",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.4807853329984937
+    },
+    {
+      "accepted": true,
+      "cell_id": 79,
+      "maximum_resident_set_size_bytes": 71876608,
+      "output_sha256": "fb956eb8af665236f67f2a3203909890e79163dc35c90db404d9c5d283d46361",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.2271065000022645
+    },
+    {
+      "accepted": true,
+      "cell_id": 63,
+      "maximum_resident_set_size_bytes": 75776000,
+      "output_sha256": "3028bf467775f9b9e3e82a232264ddb7b6d387f26fd2a9eb1164c28e0a1029a3",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.4570414580011857
+    },
+    {
+      "accepted": true,
+      "cell_id": 36,
+      "maximum_resident_set_size_bytes": 74530816,
+      "output_sha256": "c3e5042f22cdd76bd2c74e5be1b948c27e60bea12cedb7f2ea010333b1c011d9",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.42052091599907726
+    },
+    {
+      "accepted": true,
+      "cell_id": 60,
+      "maximum_resident_set_size_bytes": 72613888,
+      "output_sha256": "fe7953a9588d83db427bc4a7ca2440225c0c59e810a83b3e5e79a9e1b701169a",
+      "returncode": 0,
+      "timed_out": false,
+      "verified_marker": true,
+      "wall_seconds": 0.3255933750042459
+    }
+  ],
+  "manifest_sha256": "614f4f333ebb00d3aa8b637744d18f25e8a5a44cad36ae1ae3875bc866734748",
+  "mode": "full-replay",
+  "refined_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+  "runtime_seconds": 231.31811675000063,
+  "schema": "frontiermath-hadamard-id3-profile-proof-batch-audit-v1",
+  "status": "pass",
+  "total_proof_bytes": 1127906114
+}

@@ -1,0 +1,67 @@
+{
+  "checks": {
+    "all_true_phase_maps_to_heuristic": true,
+    "binary_length_333_heuristic": true,
+    "flipped_count": true,
+    "formula_dimensions_preserved": true,
+    "full_stream_literal_renaming": true,
+    "generator_hash": true,
+    "heuristic_input_hash": true,
+    "heuristic_prescribed_compressions": true,
+    "heuristic_row_sums_one": true,
+    "heuristic_stored_objective": true,
+    "heuristic_stored_residual": true,
+    "mapping_mutation_rejected": true,
+    "metadata_input_hash": true,
+    "metadata_schema": true,
+    "phase_metadata_schema": true,
+    "primary_map_length": true,
+    "source_formula_hash": true,
+    "transformed_formula_hash": true
+  },
+  "formula_audit": {
+    "changed_literal_occurrences": 1159988,
+    "exact_literal_renaming": true,
+    "source_header": [
+      "p",
+      "cnf",
+      "700291",
+      "4394496"
+    ],
+    "streamed_clauses": 4394496,
+    "streamed_lines": 4394497,
+    "streamed_literals": 15073645,
+    "transformed_header": [
+      "p",
+      "cnf",
+      "700291",
+      "4394496"
+    ]
+  },
+  "inputs": {
+    "auditor_sha256": "6ac8f5c41051bc920839dae92e6c77c1eedc4d4be392732e77d287f5e4f01f70",
+    "encoding_metadata": "experiments/hadamard/results/lp333-p37q3-sat/encoding.json",
+    "encoding_metadata_sha256": "549e87c019d0330df543699293f384f0c29a58a37ceb75f280e94957f3924efe",
+    "generator": "experiments/hadamard/generate_lp333_pq2_phase_seeded_cnf.py",
+    "generator_sha256": "d0cfb7390a5bdc8924a844815c88b7757a50143cdbabc8ae060b9af6c3c9507d",
+    "heuristic": "experiments/hadamard/results/lp333-p37q3-tabu/result.json",
+    "heuristic_sha256": "832c3043902f63d2b488dab5a69b61087de943ed94a6fd5450e4c9508eefc28f",
+    "phase_metadata": "experiments/hadamard/results/lp333-p37q3-phase-seeded-tabu6368/encoding.json",
+    "phase_metadata_sha256": "73a0902e544f20cbc9e169952dae809b3c86920c306316b00d454d9c7c2a4554",
+    "source_formula": "experiments/hadamard/results/lp333-p37q3-sat/lp333-pq2.cnf",
+    "source_formula_sha256": "99b7749b41a0eb81d235cda71e27d93241ee6fe4ee34361988fc5e3117cc1dea",
+    "transformed_formula": "experiments/hadamard/results/lp333-p37q3-phase-seeded-tabu6368/lp333-pq2-phase-seeded.cnf",
+    "transformed_formula_sha256": "29d65fe5a09c835035549faae714a9bd2b776bb1e3b5aace09c1a22ecea14257"
+  },
+  "l1_residual": 784,
+  "maximum_absolute_residual": 20,
+  "objective": 6368,
+  "phase_mapping": {
+    "flipped_variables": 334,
+    "mutation_variable": 3,
+    "primary_variables": 666,
+    "unchanged_variables": 332
+  },
+  "schema": "frontiermath-lp333-pq2-phase-seeded-cnf-audit-v1",
+  "status": "pass"
+}

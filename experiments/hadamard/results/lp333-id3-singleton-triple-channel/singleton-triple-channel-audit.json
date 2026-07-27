@@ -1,0 +1,38 @@
+{
+  "checks": {
+    "allowed_singleton_triple_count_pairs": [
+      [
+        1,
+        55
+      ],
+      [
+        2,
+        55
+      ],
+      [
+        4,
+        54
+      ],
+      [
+        5,
+        54
+      ]
+    ],
+    "canonical_feasible_patterns": 19,
+    "canonical_infeasible_patterns": 11,
+    "canonical_patterns": 30,
+    "counters_reconstructed": 2,
+    "one_literal_mutation_rejected": true,
+    "parent_metadata_and_formula_bound": true,
+    "serialized_block_sha256": "c4e845b92977fc29190071328be566e69d9ca31e9c150f69eb7340b2ef9bead2",
+    "serialized_channel_clauses": 35834,
+    "source_channel_clauses": 35834,
+    "truth_table_control": "PASS"
+  },
+  "family_id": 3,
+  "formula_sha256": "8662a1054eedc5a7aedddc1a3346fdcd79181d3347045bae2b8fd8ccf248ad03",
+  "metadata_sha256": "9a76067a6329227b9a16004f411745040900168327aaa3213f91106c069604a8",
+  "method": "Recompute all normalized singleton translation orbits and exact row cases, independently reconstruct both unary prefix counters and every conditional clause, bind the parent formula, and compare the exact DIMACS block without importing the generator or proof encoder.",
+  "schema": "frontiermath-hadamard-id3-singleton-triple-channel-audit-v1",
+  "status": "pass"
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 pq2 CryptoMiniSat parity-recovery discovery",
+  "hypothesis": "CryptoMiniSat's CNF XOR recovery and Gauss-Jordan matrices may expose parity structure hidden inside the exact source-correct p37q3 formula and reach a directly verifiable unrestricted Legendre pair.",
+  "evidence_unit": "one proofless SAT-discovery run on the audited unrestricted ID0 pq2 p37q3 slice with CryptoMiniSat 5.14.7, one thread, seed zero, frozen XOR and Gauss settings, and a 7200-second cap",
+  "claim_boundary": "The uncompression statement is conjectural. Only a complete assignment satisfying all 4394496 serialized clauses and independently verifying two binary length-333 rows, all 74 prescribed length-37 margins, and combined PAF minus two at all 332 nonzero shifts is a candidate. XOR telemetry and proofless UNSAT are nondecisive.",
+  "baseline": {
+    "evidence": "Correct formula SHA-256 99b7749b41a0eb81d235cda71e27d93241ee6fe4ee34361988fc5e3117cc1dea, 700291 variables, 4394496 clauses, and independent formula audit status pass.",
+    "measurement": "No directly verified SAT model exists in the campaign for the source-correct prescribed rows [1,3 chi_37] and [1,-3 chi_37]."
+  },
+  "intervention": {
+    "one_change": "Replace parity-agnostic CDCL with pinned single-thread CryptoMiniSat 5.14.7 and its frozen CNF XOR recovery plus bounded Gauss-Jordan matrices while keeping the exact p37q3 formula, seed, cap, compression, symmetry, and direct verifier fixed.",
+    "forbidden_confounds": [
+      "the invalid length-three 3*11^2 slice",
+      "common multiplier constraints",
+      "formula regeneration",
+      "changed length-37 margins",
+      "changed symmetry group",
+      "seed sweep",
+      "thread-count sweep",
+      "solver-configuration sweep",
+      "proofless UNSAT claim",
+      "resource-cap extension",
+      "accepting a partial or unaudited model"
+    ]
+  },
+  "controls": [
+    {
+      "name": "correct-formula-reconstruction",
+      "purpose": "Bind the specialization and all structural additions.",
+      "expected": "The independent audit verifies 333=37*3^2, energy 650, nonzero compressed PAF -18, all 215 lex leaders and 74 counters, exact formula hash, and a rejected mutation."
+    },
+    {
+      "name": "tool-and-package-pin",
+      "purpose": "Bind the parity solver and its dynamically linked implementation.",
+      "expected": "CryptoMiniSat 5.14.7 executable SHA-256 a3f85c3709b5e2a040bf82a4a604d1c7b9f10219bbf180a9e0f72319a2e892ac, library SHA-256 7952e5a5c77ac8b56253c7a2ad88c62648f20698004338bad9a443efb55b2f84, and Homebrew bottle receipt SHA-256 0309c0559340b1a766058556fad6691da0a97983d7a1195dcd4b7236f1ab33a3."
+    },
+    {
+      "name": "parity-positive-control",
+      "purpose": "Check SAT status, model extraction, CNF satisfaction, and actual XOR and Gauss activation.",
+      "expected": "On known SAT ID3 cell 73, the pinned command returns SAT, its complete assignment satisfies every clause, and its trace reports recovered XORs and a used Gauss matrix."
+    },
+    {
+      "name": "frozen-parity-settings",
+      "purpose": "Ensure the mechanism is a single parity-recovery arm.",
+      "expected": "One thread and seed zero with xor enabled, maximum XOR size 7, bounded XOR discovery and matrices, at most five matrices, and Gauss-useful cutoff 0.2."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Separate solver telemetry from mathematical evidence.",
+      "expected": "Any SAT assignment satisfies every CNF clause and independently verifies both full rows, all 74 margins, and every combined PAF equation; a controlled mutation is rejected."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified unrestricted correct-p37q3 SAT models",
+    "direction": "reach",
+    "unit": "models",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 3600,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "CryptoMiniSat returns SAT and the complete assignment passes the exact CNF and independent direct full-length mathematical audit.",
+    "park": "The run reaches its cap or returns proofless UNSAT without a SAT model while formula, tool, positive-control, and parity controls remain valid.",
+    "unknown": "A wall, memory, tool, extraction, or verification ceiling interrupts the frozen arm.",
+    "audit-failed": "Any factorization, formula, tool, parity activation, complete-model, CNF, direct-PAF, or mutation control fails."
+  },
+  "stop_rules": [
+    "Require the passing independent correct-p37q3 formula audit.",
+    "Require the parity-positive-control trace and complete-model audit before target search.",
+    "Run one CryptoMiniSat process with the frozen settings, one thread, and seed zero.",
+    "Stop immediately on a directly verified SAT model.",
+    "Otherwise terminate at 7200 solver seconds or 4 GiB observed RSS.",
+    "Do not rerun with another seed, thread count, configuration, formula, or larger cap.",
+    "Do not promote a proofless UNSAT status or parity trace."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, construct H668, independently verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the non-SAT parity manifest and move to a distinct structural mechanism.",
+    "unknown": "Preserve the interrupted manifest and resume only the remaining frozen budget if the interruption is reproducible.",
+    "audit-failed": "Repair only the smallest formula, tool, parity, extraction, or direct-verification defect before rerunning."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, official open-source solver code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

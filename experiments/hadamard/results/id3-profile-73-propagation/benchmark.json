@@ -1,0 +1,120 @@
+{
+  "claim_boundary": "UNKNOWN and benchmark-pass are not SAT/UNSAT claims; only a directly verified full pair or a replayed proof can decide the profile",
+  "configuration": {
+    "archived_cpsat_profile73": {
+      "branches": 5878941,
+      "seconds": 300.187
+    },
+    "branch_policy": "minimum exact line-completion count, deterministic ties",
+    "margin_feasibility": "Gale-Ryser on the residual complete core",
+    "max_candidate_children_per_variant": 100000,
+    "max_seconds_per_variant": 60.0,
+    "paf_bound": "known energy +/- (sum absolute assigned-neighbor fields + unassigned-edge weight), plus exact edge-weight congruence"
+  },
+  "event_log": {
+    "bytes": 48728282,
+    "path": "experiments/hadamard/results/id3-profile-73-propagation/events.jsonl",
+    "records": 126529,
+    "sha256": "8c93fcc8c2c4f55010dcbec0b271e932e7b1151934215ebb08919fe1e4dbd9d1"
+  },
+  "profile_id": 73,
+  "profile_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+  "promotion_checks": {
+    "complete_event_log": true,
+    "paf_prunes_at_least_half_of_margin_feasible_children": true,
+    "structural_reduction_at_least_3x": true
+  },
+  "results": [
+    {
+      "boundary_equality_events": 0,
+      "candidate_children": 100000,
+      "candidate_children_per_second": 5344.0473288068,
+      "event_log_overflow": false,
+      "event_records": 0,
+      "forced_lines": 0,
+      "leaves": 17659,
+      "logged_event_counts": {},
+      "margin_feasible_children": 100000,
+      "margin_prunes": 0,
+      "max_candidates": 100000,
+      "max_seconds": 60.0,
+      "maximum_branch_depth": 42,
+      "nodes_entered": 100000,
+      "nodes_per_second": 5344.0473288068,
+      "paf_prune_fraction_of_margin_feasible": 0.0,
+      "paf_prunes": 0,
+      "paf_survivors": 0,
+      "solution": null,
+      "status": "UNKNOWN",
+      "structural_reduction_margin_feasible_over_paf_survivors": null,
+      "termination": "candidate-ceiling",
+      "variant": "margins",
+      "wall_seconds": 18.712409125000704
+    },
+    {
+      "boundary_equality_events": 0,
+      "candidate_children": 99013,
+      "candidate_children_per_second": 1649.569404252386,
+      "event_log_overflow": false,
+      "event_records": 0,
+      "forced_lines": 231086,
+      "leaves": 58333,
+      "logged_event_counts": {},
+      "margin_feasible_children": 99013,
+      "margin_prunes": 0,
+      "max_candidates": 100000,
+      "max_seconds": 60.0,
+      "maximum_branch_depth": 30,
+      "nodes_entered": 99013,
+      "nodes_per_second": 1649.569404252386,
+      "paf_prune_fraction_of_margin_feasible": 0.0,
+      "paf_prunes": 0,
+      "paf_survivors": 0,
+      "solution": null,
+      "status": "UNKNOWN",
+      "structural_reduction_margin_feasible_over_paf_survivors": null,
+      "termination": "time-ceiling",
+      "variant": "forced",
+      "wall_seconds": 60.02354295900295
+    },
+    {
+      "boundary_equality_events": 71012,
+      "candidate_children": 66897,
+      "candidate_children_per_second": 1114.563780430053,
+      "event_log_overflow": false,
+      "event_records": 126529,
+      "forced_lines": 15613,
+      "leaves": 0,
+      "logged_event_counts": {
+        "margin-prune": 18,
+        "paf-boundary-equality": 71012,
+        "paf-prune": 55499
+      },
+      "margin_feasible_children": 66879,
+      "margin_prunes": 18,
+      "max_candidates": 100000,
+      "max_seconds": 60.0,
+      "maximum_branch_depth": 24,
+      "nodes_entered": 11381,
+      "nodes_per_second": 189.61762687526243,
+      "paf_prune_fraction_of_margin_feasible": 0.8298419533784895,
+      "paf_prunes": 55499,
+      "paf_survivors": 11380,
+      "solution": null,
+      "status": "UNKNOWN",
+      "structural_reduction_margin_feasible_over_paf_survivors": 5.87688927943761,
+      "termination": "time-ceiling",
+      "variant": "paf",
+      "wall_seconds": 60.020791249997274
+    }
+  ],
+  "schema": "frontiermath-hadamard-id3-profile-propagation-benchmark-v1",
+  "scope": "three deterministic bounded variants over the exact profile-73 fixed margins; only the PAF variant contains the complete 116-equation full-ID3 predicate",
+  "source": {
+    "benchmark_sha256": "84efff4740ca599459478ac60fcd5d1d75464c4cf0453d6240c675a16da4cbbb",
+    "kernel_sha256": "8f9732c0374992bd0570d5fcda2ff532df78e4c9f6adf6528cc4801f5ecd0c8b",
+    "machine": "arm64",
+    "python": "3.12.12"
+  },
+  "status": "benchmark-pass"
+}

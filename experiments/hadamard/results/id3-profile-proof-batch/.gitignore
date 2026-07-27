@@ -1,0 +1,5 @@
+# Large reproducible local proof payloads. Keep manifests and audit JSON.
+*.cnf
+*.drat
+*.log
+*.model

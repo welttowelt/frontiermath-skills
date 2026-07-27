@@ -1,0 +1,26 @@
+{
+  "checks": {
+    "authority": true,
+    "baseline": true,
+    "budgets": true,
+    "claim_boundary_present": true,
+    "control_names_unique": true,
+    "controls": true,
+    "evidence_unit_present": true,
+    "forbidden_confounds": true,
+    "hypothesis_present": true,
+    "name_present": true,
+    "next_actions": true,
+    "no_placeholders": true,
+    "one_intervention": true,
+    "primary_metric_direction": true,
+    "primary_metric_fields": true,
+    "primary_metric_threshold": true,
+    "schema": true,
+    "stop_rules": true,
+    "terminal_outcomes": true
+  },
+  "errors": [],
+  "schema": "computational-experiment-preregistration-audit/v1",
+  "status": "pass"
+}

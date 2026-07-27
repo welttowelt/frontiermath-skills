@@ -1,0 +1,229 @@
+{
+  "binding_checks": {
+    "common_generator_hash": true,
+    "cryptominisat_hash": true,
+    "cryptominisat_library_hash": true,
+    "cryptominisat_version": true,
+    "formula_audit": true,
+    "formula_hash": true,
+    "generator_hash": true,
+    "homebrew_bottle_install": true,
+    "homebrew_receipt_hash": true,
+    "identity_family": true,
+    "metadata_schema": true,
+    "metadata_status": true,
+    "pq2_channels_enabled": true,
+    "pq2_seed_identity": true,
+    "pq2_symmetry_control": true,
+    "preregistration_audit": true,
+    "preregistration_name": true,
+    "preregistration_schema": true,
+    "sat_control_hash": true,
+    "unrestricted_scope": true
+  },
+  "budgets": {
+    "max_memory_bytes": 4294967296,
+    "max_seconds": 7200.0,
+    "progress_seconds": 60.0
+  },
+  "claim_boundary": "Only directly-verified-sat decides this slice. XOR/Gauss telemetry and proofless UNSAT are explicitly nondecisive.",
+  "family_id": 0,
+  "inputs": {
+    "base_verifier_sha256": "5ee559052065b1f48066cd2beaf0871e0712c1a350caa359361d5eb5d7f52666",
+    "encoding_metadata": "experiments/hadamard/results/lp333-p37q3-sat/encoding.json",
+    "encoding_metadata_sha256": "549e87c019d0330df543699293f384f0c29a58a37ceb75f280e94957f3924efe",
+    "formula": "experiments/hadamard/results/lp333-p37q3-sat/lp333-pq2.cnf",
+    "formula_audit": "experiments/hadamard/results/lp333-p37q3-sat/formula-audit.json",
+    "formula_audit_sha256": "a300f61bd443798a3dd47063b5e78879767d9e3ad2a852af708c4004755d8e5d",
+    "formula_sha256": "99b7749b41a0eb81d235cda71e27d93241ee6fe4ee34361988fc5e3117cc1dea",
+    "preregistration": "experiments/hadamard/preregistrations/lp333-p37q3-cryptominisat-parity-recovery.json",
+    "preregistration_audit": "experiments/hadamard/preregistrations/lp333-p37q3-cryptominisat-parity-recovery-audit.json",
+    "preregistration_audit_sha256": "6409ce31804cd4da44eb5b1644ed5bf78fa0a26b1985116bf7a64e5fdef76912",
+    "preregistration_sha256": "196d1521f1653d8bb0bf4c19e952c4083c8b00a346ad77d6910b0dfc89b66054",
+    "sat_control_cnf": "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf",
+    "sat_control_cnf_sha256": "255879dc8c072d6d0fa621d6dc1bfd752b13d71946baf94c7ae86d2e1b4f4da3",
+    "verifier_sha256": "9c436ef3588e37ee5cc634ff751132133658e4fafdf6edaa6e690b1e8bb21278"
+  },
+  "model_audit": null,
+  "model_extraction": null,
+  "positive_control": {
+    "cnf_check": {
+      "clauses_checked": 92904,
+      "declared_clauses": 92904,
+      "declared_variables": 12728,
+      "satisfied": true,
+      "unsatisfied_clauses": 0
+    },
+    "model": {
+      "bytes": 76608,
+      "lines": 973,
+      "sha256": "d03c53b5f6f848354ff71d11c3012b5f5f10549e275d6bcebde298192ce5b864"
+    },
+    "solver": {
+      "command": [
+        "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+        "--threads=1",
+        "--random=0",
+        "--xor=1",
+        "--maxxorsize=7",
+        "--xorfindtout=400",
+        "--maxxormat=400",
+        "--maxmatrixrows=2000",
+        "--maxmatrixcols=1000",
+        "--autodisablegauss=1",
+        "--minmatrixrows=3",
+        "--maxnummatrices=5",
+        "--gaussusefulcutoff=0.2",
+        "--verb=1",
+        "--printsol=1",
+        "--maxtime=120",
+        "experiments/hadamard/results/id3-profile-proof-pilot/id3-profile-cell-73.cnf"
+      ],
+      "log_sha256": "b2ce3d590175701d2a4951a39e9f013f996604f25cdf1cc954211010c7891fde",
+      "maximum_observed_rss_bytes": 48824320,
+      "parity_trace": {
+        "fired": true,
+        "matrix_use_reports": [
+          {
+            "matrices": 5,
+            "recovered_xors": 834
+          }
+        ],
+        "recovered_xors": 1034,
+        "used_matrices": 5,
+        "xor_recovery_reports": [
+          1034
+        ]
+      },
+      "returncode": 10,
+      "statistics": {
+        "conflicts": "125022",
+        "decisions": "169037",
+        "propagations": "34M",
+        "solver_reported_seconds": "16.94"
+      },
+      "termination": "sat",
+      "wall_seconds": 17.420633124998858
+    },
+    "status": "pass"
+  },
+  "runner_sha256": "831cc8c135fce574fc9ea7bba9e47dab31b9b0f6f081dfd826504ee2bd6c2888",
+  "schema": "frontiermath-hadamard-lp333-pq2-cryptominisat-run-v1",
+  "scope": "unrestricted prescribed pq2-compression slice",
+  "shared_runner_sha256": "661e1c17edf1f96cd993c616e99e0a9dc283c955c26b47f039a1bbfadd57ef4a",
+  "solver": {
+    "command": [
+      "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+      "--threads=1",
+      "--random=0",
+      "--xor=1",
+      "--maxxorsize=7",
+      "--xorfindtout=400",
+      "--maxxormat=400",
+      "--maxmatrixrows=2000",
+      "--maxmatrixcols=1000",
+      "--autodisablegauss=1",
+      "--minmatrixrows=3",
+      "--maxnummatrices=5",
+      "--gaussusefulcutoff=0.2",
+      "--verb=1",
+      "--printsol=1",
+      "--maxtime=7200",
+      "experiments/hadamard/results/lp333-p37q3-sat/lp333-pq2.cnf"
+    ],
+    "log_sha256": "b1867d6016fdd15cb96b8708d87e2d2b38ee705a01392eacb069f1721cea4b8b",
+    "maximum_observed_rss_bytes": 1290928128,
+    "parity_trace": {
+      "fired": true,
+      "matrix_use_reports": [
+        {
+          "matrices": 5,
+          "recovered_xors": 325191
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325197
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325198
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325198
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325198
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        },
+        {
+          "matrices": 5,
+          "recovered_xors": 325199
+        }
+      ],
+      "recovered_xors": 326016,
+      "used_matrices": 5,
+      "xor_recovery_reports": [
+        326016,
+        6,
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "returncode": -15,
+    "statistics": {
+      "conflicts": null,
+      "decisions": null,
+      "propagations": null,
+      "solver_reported_seconds": null
+    },
+    "termination": "external-wall-ceiling",
+    "wall_seconds": 7215.541927540999
+  },
+  "status": "unknown",
+  "tools": {
+    "cryptominisat": {
+      "executable_sha256": "a3f85c3709b5e2a040bf82a4a604d1c7b9f10219bbf180a9e0f72319a2e892ac",
+      "homebrew_bottle_sha256": "7793bdca8de1ecaf72fd743f85fe381db98d4d48012b24eeeaa6cb0daa7ed41d",
+      "homebrew_receipt": "/opt/homebrew/Cellar/cryptominisat/5.14.7/INSTALL_RECEIPT.json",
+      "homebrew_receipt_sha256": "0309c0559340b1a766058556fad6691da0a97983d7a1195dcd4b7236f1ab33a3",
+      "library": "/opt/homebrew/Cellar/cryptominisat/5.14.7/lib/libcryptominisat5.5.14.dylib",
+      "library_sha256": "7952e5a5c77ac8b56253c7a2ad88c62648f20698004338bad9a443efb55b2f84",
+      "path": "/opt/homebrew/opt/cryptominisat/bin/cryptominisat5",
+      "version": "5.14.7",
+      "version_output": "c CMS SHA1: GIT-notfound\nc CryptoMiniSat version 5.14.7\nc CMS compilation env CMAKE_CXX_COMPILER = clang++ | CMAKE_CXX_FLAGS =  -fno-stack-protector -msse4.2 -Wno-bitfield-constant-conversion -Wlogical-op -Wrestrict -Wnull-dereference -Wdouble-promotion -Wshadow -Wformat=2 -Wextra-semi -pedantic | COMPILE_DEFINES =  -DNDEBUG -D_FORTIFY_SOURCE=0 -DUSE_ZLIB | BUILD_SHARED_LIBS = ON | ONLY_SIMPLE =  | STATS = OFF | SQLITE3_FOUND =  | ZLIB_FOUND = TRUE | VALGRIND_FOUND =  | ENABLE_TESTING = OFF | SLOW_DEBUG = OFF | ENABLE_ASSERTIONS = OFF | PYTHON_EXECUTABLE =  | PYTHON_LIBRARY =  | PYTHON_INCLUDE_DIRS =  | MY_TARGETS =  | LARGEMEM = OFF | LIMITMEM = OFF | BREAKID_LIBRARIES =  | BREAKID-VER = . | c c Using VMTF, picosat, CaDiCaL, and CadiBack code by Armin Biere\nc CMS is MIT licensed\nc Using code from 'When Boolean Satisfiability Meets Gauss-E. in a Simplex Way'\nc       by C.-S. Han and J.-H. Roland Jiang in CAV 2012. Fixes by M. Soos\nc Using CCAnr from 'CCAnr: A Conf. Checking Based Local Search Solver [...]'\nc       by Shaowei Cai, Chuan Luo, and Kaile Su, SAT 2015\nc Using Oracle code from 'Integrating Tree Decompositions [...]'\nc       by Tuukka Korhonen and Matti Jarvisalo, CP 2021\n"
+    }
+  }
+}

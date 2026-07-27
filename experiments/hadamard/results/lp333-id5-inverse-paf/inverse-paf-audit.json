@@ -1,0 +1,21 @@
+{
+  "checks": {
+    "all_original_representatives_covered": true,
+    "class_sizes": {
+      "2": 56
+    },
+    "coefficient_matrices_equal": true,
+    "diagonal_constants_equal": true,
+    "direct_position_pairs_counted": 37296,
+    "formula_header_bound": true,
+    "inverse_classes": 56,
+    "metadata_classes_exact": true,
+    "subgroup_orbits_recomputed": true
+  },
+  "family_id": 5,
+  "formula_sha256": "255148c3e800ee306d99965af3f8f74f9b31e064c9296d78253e0a5a37f794c0",
+  "metadata_sha256": "f9e7cee98af014532b5d7f46b80f1c73aca24b515ab06230a45cd667d97c68df",
+  "method": "Directly count ordered position pairs for every retained and removed shift using only subgroup elements from metadata; do not import the generator or proof encoder.",
+  "schema": "frontiermath-hadamard-inverse-paf-audit-v1",
+  "status": "pass"
+}

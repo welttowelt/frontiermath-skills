@@ -1,0 +1,49 @@
+{
+  "checks": {
+    "channels_reconstructed": 6,
+    "lex_truth_table": {
+      "auxiliary_extensions": 128,
+      "functional_extensions": true,
+      "primary_assignments": 16,
+      "result": "PASS"
+    },
+    "one_literal_mutation_rejected": true,
+    "pq2_compressed_rows": [
+      [
+        1,
+        11,
+        -11
+      ],
+      [
+        1,
+        -11,
+        11
+      ]
+    ],
+    "pq2_negative_targets": [
+      [
+        55,
+        50,
+        61
+      ],
+      [
+        55,
+        61,
+        50
+      ]
+    ],
+    "serialized_channel_clauses": 111444,
+    "serialized_channel_sha256": "c68de199c38cb5d06ff2e84b347ca3f549f48d531cfb72a1204df1d850767813",
+    "singleton_orbits": 333,
+    "source_channel_clauses": 111432,
+    "symmetry_actions": 216,
+    "symmetry_breakers_reconstructed": 215,
+    "symmetry_clauses_reconstructed": 848886
+  },
+  "family_id": 0,
+  "formula_sha256": "7a893f92b28a7eed54ccefe5bbb89d28d04132672905abc3635d01a6e3991735",
+  "metadata_sha256": "1d43f15483c3ced112de2dafcd2ba5c07167c53b0dca88c57d66278fafff9b5b",
+  "method": "Reconstruct all 216 compression-preserving unit actions, every lex-leader clause, and all six sequential exact-cardinality counters directly from arithmetic, then compare the exact serialized DIMACS blocks without importing either generator.",
+  "schema": "frontiermath-hadamard-lp333-pq2-cnf-audit-v1",
+  "status": "pass"
+}

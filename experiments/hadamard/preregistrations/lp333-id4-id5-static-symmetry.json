@@ -1,0 +1,92 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID4 and ID5 matched complete static symmetry",
+  "hypothesis": "The complete prefix-encoded lex leaders for each exact decimation-by-sequence-swap group can produce terminal evidence for at least one of the matched fixed multiplier families ID4 and ID5 under identical caps.",
+  "evidence_unit": "one matched pair of exact source-pinned LP333 fixed multiplier families, ID4 and ID5",
+  "claim_boundary": "A promoted result decides only the named fixed family or families and, through the separately established affine normalization, their coherent translated versions. It does not decide any other fixed family, unrestricted LP333, or H668.",
+  "baseline": {
+    "evidence": "Code commit 0f94dc07a3a4577ff0f69a27367722a341127ae6; source records give order-3 subgroups and 113 multiplier orbits per sequence for both IDs 4 and 5.",
+    "measurement": "Both families are unresolved. No complete proof or directly verified LP333 witness exists for either family."
+  },
+  "intervention": {
+    "one_change": "Apply the frozen complete static decimation-and-sequence-swap lex-leader mechanism to the matched order-3 ID4 and ID5 pair, generalizing only the exact group cardinality.",
+    "forbidden_confounds": [
+      "new random seed",
+      "partial symmetry group",
+      "family-specific lexicographic variable order",
+      "dynamic symmetry learning",
+      "solver change between families",
+      "cube splitting",
+      "different resource caps",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "source-and-formula-binding",
+      "purpose": "Bind each family, proof encoder, serialized CNF, generator, and exact source records.",
+      "expected": "All SHA-256 values match immediately before both solver runs."
+    },
+    {
+      "name": "direct-obstruction-stop",
+      "purpose": "Prevent a direct weighted-sum contradiction from being disguised as a solver result.",
+      "expected": "Both models have no direct PAF obstruction before symmetry clauses are added."
+    },
+    {
+      "name": "semantic-equivalence",
+      "purpose": "Detect any mismatch between direct length-333 arithmetic and each base CNF.",
+      "expected": "All 1000 deterministic random assignments per family agree, including representative PAF and row-sum outputs."
+    },
+    {
+      "name": "exact-group-control",
+      "purpose": "Prove every lex leader is induced by a legal finite formula automorphism.",
+      "expected": "Each 72-action decimation quotient is closed and preserves every orbit size, PAF diagonal, and PAF coefficient; sequence swap yields 144 actions."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect a bad decimation, sequence swap, or lex orientation.",
+      "expected": "The published LP63 pair remains valid and has a lex-minimal representative under all decimation-and-swap actions."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "unresolved families in the matched pair",
+    "direction": "decrease",
+    "unit": "families",
+    "baseline": 2,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 2147483648,
+    "verification_wall_seconds": 240
+  },
+  "terminal_outcomes": {
+    "promote": "At least one family yields either a complete SAT model passing the serialized CNF and direct 332-shift LP333 audit or a complete UNSAT proof accepted twice with fresh bogus-proof rejection.",
+    "park": "Both controls pass but both solvers return valid nonterminal results without exhausting a declared resource, so the unchanged mechanism is archived without tuning.",
+    "unknown": "Either family reaches a wall, memory, proof-volume, or verification ceiling, or has an incomplete artifact; that family remains UNKNOWN.",
+    "audit-failed": "Any source binding, direct-obstruction stop, semantic comparison, group invariant, positive fixture, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop both target runs on any failed shared source, semantic, group, positive-fixture, or tool-binding control.",
+    "Terminate each target process at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not tune ID5 from the observed ID4 result or ID4 from the observed ID5 result."
+  ],
+  "next_actions": {
+    "promote": "Archive every terminal family result. If a direct LP333 pair appears, construct and verify H668. Otherwise continue with the smallest remaining fixed formula under a new preregistration.",
+    "park": "Archive the matched nonterminal pair and select a structurally different exact mechanism.",
+    "unknown": "Preserve each ceiling distinctly and run workload characterization on paired proof growth before selecting one structural pivot.",
+    "audit-failed": "Repair only the shared failed gate, regenerate both families in fresh directories, and repeat Gate A before either target run."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by the exact destination, artifact, account, and contract terms required by the campaign skill."
+  }
+}

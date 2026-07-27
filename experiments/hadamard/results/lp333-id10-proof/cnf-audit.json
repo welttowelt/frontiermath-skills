@@ -1,0 +1,91 @@
+{
+  "adversarial_control": {
+    "mutation": "swapped one coordinate across equal-sized orbits",
+    "rejected": true
+  },
+  "auditor_sha256": "c2ec527365d73624aa30d4ff367d5e904fdac7fbd2f1bdd51a2adebabb786f52",
+  "checks": {
+    "cnf_hash": true,
+    "corrupted_orbit_map_rejected": true,
+    "deterministic_cnf_rebuild": true,
+    "dimacs_clauses": true,
+    "dimacs_no_empty_clause": true,
+    "dimacs_variable_range": true,
+    "dimacs_variables": true,
+    "encoder_hash": true,
+    "independent_orbit_partition": true,
+    "metadata_generated": true,
+    "orbit_signature": true,
+    "random_direct_arithmetic": true,
+    "shift_representatives": true,
+    "small_exhaustive": true,
+    "small_positive_fixture": true,
+    "source_family": true,
+    "subgroup_elements": true,
+    "transformation_truth_tables": true
+  },
+  "deterministic_rebuild_sha256": "f3e7b1d7e9f8825bdfcd3812f23f41c83be515373513c107cf10cc95b870fd61",
+  "dimacs": {
+    "declared_clauses": 451186,
+    "declared_variables": 66552,
+    "empty_clauses": 0,
+    "maximum_clause_length": 4,
+    "maximum_variable": 66552,
+    "parsed_clauses": 451186
+  },
+  "family_id": 10,
+  "inputs": {
+    "cnf_sha256": "f3e7b1d7e9f8825bdfcd3812f23f41c83be515373513c107cf10cc95b870fd61",
+    "encoding_metadata_sha256": "9645a32584e1cb5c04a36db1f3cd5f4730bd0e06366d3445799474409e188350",
+    "proof_encoder_sha256": "c24821d116bf9cf789e18330ba14dfb19f6d63c19a6874de36144867d78f5094"
+  },
+  "positive_fixture": {
+    "a": [
+      1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      -1
+    ],
+    "b": [
+      1,
+      1,
+      1,
+      -1,
+      1,
+      -1,
+      -1
+    ],
+    "canonical_cnf": true,
+    "direct": true,
+    "length": 7
+  },
+  "random_arithmetic_audit": {
+    "canonical_cnf_checks": 20,
+    "direct_paf_checks": 116000,
+    "result": "PASS",
+    "row_sum_checks": 2000,
+    "samples": 1000,
+    "seed": 20260736,
+    "semantic_checks": 1000,
+    "semantic_true": 0,
+    "sequence_coordinate_checks": 666000
+  },
+  "schema": "frontiermath-hadamard-lp333-family-cnf-audit-v1",
+  "small_exhaustive_audit": {
+    "assignments_checked": 4096,
+    "kind": "exhaustive-small-model-equivalence",
+    "result": "PASS",
+    "satisfying_assignments": 196
+  },
+  "status": "pass",
+  "transformation_audit": {
+    "kind": "exhaustive-xor-and-pb-transformation-truth-tables",
+    "result": "PASS",
+    "two_value_range_assignments": 8,
+    "unit_split_assignment_extensions": 4,
+    "xor_equality_assignments": 8
+  }
+}

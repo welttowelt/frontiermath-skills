@@ -1,0 +1,89 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 p37q3 full-neighborhood tabu search",
+  "hypothesis": "Choosing the best admissible move from every legal compression-preserving swap, while using short tabu memory and forced uphill moves, may cross local barriers that leave random single-swap and periodic triple-swap annealing above zero.",
+  "evidence_unit": "one deterministic 3600-second full-neighborhood tabu run from seed 20260727 on the exact 74 p37q3 margins, enumerating all 1336 legal swaps per state, with tenure 7 through 14 and restart after 20000 global-best-stagnant sweeps",
+  "claim_boundary": "This heuristic does not prove the paper's uncompression conjecture. Only a serialized exact-zero pair independently verifying both length-333 rows, all 74 margins, and all 332 nonzero combined PAF equations is a candidate. A lower nonzero score is workload evidence only.",
+  "baseline": {
+    "evidence": "The source-correct initial state at seed 20260727 has objective 87904; the corrected periodic six-coordinate arm reached objective 6752 before this intervention was frozen.",
+    "measurement": "Best independently interpretable online score before this arm is squared residual 6752, with no exact-zero candidate."
+  },
+  "intervention": {
+    "one_change": "Replace random annealing proposals with an exhaustive 1336-neighbor sweep at every step, choose the minimum-objective non-tabu neighbor with global-best aspiration, accept it even uphill, assign both moved coordinates tenure uniformly from 7 through 14, and restart after 20000 sweeps without a global improvement.",
+    "forbidden_confounds": [
+      "the invalid length-three 3*11^2 slice",
+      "changed length-37 margins",
+      "changed exact PAF objective",
+      "changed seed",
+      "tabu-tenure tuning",
+      "stagnation-threshold tuning",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "factorization-and-seed-identity",
+      "purpose": "Bind the mechanism to the correct slice.",
+      "expected": "The included baseline verifies 333=37*3^2 and reconstructs objective 87904 with all 74 exact margins at seed 20260727."
+    },
+    {
+      "name": "full-neighborhood-enumeration",
+      "purpose": "Prove the claimed neighborhood is complete.",
+      "expected": "A deterministic fresh state contains exactly 1336 opposite-sign same-column swaps, and every one has an incremental objective equal to a full direct recomputation."
+    },
+    {
+      "name": "mechanism-telemetry",
+      "purpose": "Show the new search rule fired.",
+      "expected": "The companion record reports 1336 neighbors, applied moves equal full-neighborhood sweeps, tenures 7 through 14, the 20000-sweep restart threshold, and self-test PASS."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the endpoint outside the C implementation.",
+      "expected": "The separate Python bit-rotation auditor recomputes both PAF vectors, all margins, row sums, objective, L1, maximum residual, compression rows, and candidate status."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the intervention and included correct baseline.",
+      "expected": "Intervention source SHA-256 53f17c4cc2856fbe2d89f7ddc621bc4148030e914f9e9b66221e20320d0766a7, baseline SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d, and binary SHA-256 a570799195e13017d318921c3585cd259ac7b5c826d0dec543fb522de9e8b74a."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 6752,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is zero and the independent audit verifies the prescribed compression and every full-length combined PAF equation.",
+    "park": "The frozen schedule completes with valid mechanism telemetry and an independently audited nonzero endpoint.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule before its endpoint is written and audited.",
+    "audit-failed": "Any factorization, matched start, complete-neighborhood, source pin, binary pin, telemetry, stored-score, margin, PAF, or candidate-status control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260727.",
+    "Enumerate all 1336 legal neighbors per sweep with tenures 7 through 14 and restart only after 20000 stagnant sweeps.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 seconds without another seed, tenure, restart threshold, objective, or cap.",
+    "Run the independent bit-rotation audit before interpretation.",
+    "Do not promote a lower nonzero score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, run a second direct LP audit, construct H668, verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive this endpoint and use its mechanism telemetry to choose a distinct exact structural lane.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest source, neighborhood, delta, serialization, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public technical literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "adversarial_single-entry-mutation_rejected": true,
+  "candidate_sha256": "bdc6b5e2161a36f698e1f33d116631a47dcd3f7160b89c524df80ff731f041aa",
+  "candidate_violations": [],
+  "checked_predicates": [
+    "exact-id3-column-sum-value-set",
+    "two-length-9-sequences",
+    "normalized-row-sums",
+    "combined-squared-norm",
+    "all-eight-nonzero-periodic-autocorrelations"
+  ],
+  "checker_sha256": "42070af9ec8a3ab578c420b5d3cc6e65e9f37cf0120372249bb76d16b5332038",
+  "claim_status": "compressed-necessary-condition-feasible",
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "family_id": 3,
+  "runtime_seconds": 0.0002574159952928312,
+  "status": "pass",
+  "unchecked_predicates": [
+    "decompression-to-orbit-signs",
+    "all-332-Legendre-pair-autocorrelations",
+    "construction-of-Hadamard-order-668"
+  ]
+}

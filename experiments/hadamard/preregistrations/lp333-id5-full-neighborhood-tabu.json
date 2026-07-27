@@ -1,0 +1,92 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 full-neighborhood tabu from a pinned orbit state",
+  "hypothesis": "Best-admissible search over every legal equal-size opposite-sign orbit swap, with short tabu memory and deterministic perturbations from the global best, may escape the nonzero basins reached by random ID5 orbit annealing.",
+  "evidence_unit": "one deterministic 3600-second ID5 run at seed 20260727, starting from the SHA-256-pinned objective-8256 orbit state and enumerating all 6054 legal moves per sweep with tenure 7 through 14, restart after 5000 globally stagnant sweeps, and 64-move perturbations",
+  "claim_boundary": "Only a serialized zero-objective pair independently verifying both complete rows, subgroup {1,211,232} invariance, row sums one, forced orbit margins, and all 332 nonzero combined PAF equations is a candidate. A lower nonzero score neither closes ID5 nor proves existence.",
+  "baseline": {
+    "evidence": "The pinned start has independently reconstructed squared residual 8256, L1 residual 960, maximum absolute residual 16, row sums one, and ID5 orbit margins. The concurrent random ID5 anneal has an online campaign record of 5376 but is not an input to this arm.",
+    "measurement": "The full-neighborhood implementation improved an independent objective-8256 smoke state to 6528 in eight sweeps; that smoke is mechanism validation only and not outcome evidence."
+  },
+  "intervention": {
+    "one_change": "Replace random orbit annealing with exhaustive best-admissible evaluation of all 6054 legal ID5 orbit swaps at each state, global-best aspiration, orbit-level tabu tenure 7 through 14, and a deterministic 64-move perturbation from the global best after 5000 stagnant sweeps.",
+    "forbidden_confounds": [
+      "changed multiplier subgroup",
+      "changed singleton or triple margins",
+      "unrestricted-coordinate moves",
+      "partial-neighborhood sampling",
+      "floating-point PAF scoring",
+      "changed start state",
+      "seed sweep",
+      "tabu-tenure tuning",
+      "stagnation-threshold tuning",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "pinned-start-reconstruction",
+      "purpose": "Bind the run to one exact ID5 input state.",
+      "expected": "Start SHA-256 4549360df931e68cf924aa3a7f91f567fa27d2df4b1d521cdce3ab906facd16c reconstructs objective 8256, L1 960, maximum residual 16, two row sums one, one negative singleton and 55 negative triple-orbits per row."
+    },
+    {
+      "name": "complete-neighborhood-self-test",
+      "purpose": "Prove the enumerated search neighborhood and incremental score.",
+      "expected": "A deterministic fresh ID5 state has exactly 6054 legal opposite-sign equal-size orbit swaps, and every predicted objective equals a fresh complete PAF recomputation while all ID5 invariants remain true."
+    },
+    {
+      "name": "mechanism-telemetry",
+      "purpose": "Show the exhaustive tabu intervention fired as frozen.",
+      "expected": "The companion record reports 6054 legal neighbors, applied moves equal full-neighborhood sweeps, tenures 7 through 14, restart threshold 5000, perturbation length 64, and self-test PASS."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the endpoint outside the search implementation.",
+      "expected": "A separate Python auditor reconstructs the start and endpoint PAFs, objective, L1, maximum residual, subgroup orbits, forced margins, stored arrays, status, mechanism telemetry, source and binary pins, and a legal mutation control."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the exact full-neighborhood mechanism.",
+      "expected": "Intervention source SHA-256 349ca6470670dc9607ff9a6d8c0d309a19524002de2cb1db94344aaa9afe6fcd, included exact-PAF baseline SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d, and binary SHA-256 a34ba7551eb64815c63fb0d2c1858d728bdd82d3c2270c00c90a766c01d40161."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero in ID5",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 8256,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 2400,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is zero and the independent audit verifies ID5 invariance, forced margins, row sums, and every nonzero combined PAF equation.",
+    "park": "The frozen schedule completes with valid mechanism telemetry and an independently audited nonzero endpoint.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule.",
+    "audit-failed": "Any start hash, subgroup, orbit margin, complete-neighborhood, source pin, binary pin, telemetry, stored-score, full-PAF, status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260727 from start SHA-256 4549360df931e68cf924aa3a7f91f567fa27d2df4b1d521cdce3ab906facd16c.",
+    "Enumerate all 6054 legal neighbors per sweep, use tenures 7 through 14, and perturb the global best with exactly 64 legal random moves only after 5000 stagnant sweeps.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 seconds without another start, seed, tenure, perturbation length, restart threshold, objective, or cap.",
+    "Run the independent full-result audit before interpretation.",
+    "Do not promote a lower nonzero score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, run a second direct LP audit, construct H668, verify exact orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the endpoint and, if campaign wall budget remains, preregister a continuation from the best independently audited ID5 endpoint rather than repeating this start.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest start, neighborhood, delta, serialization, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

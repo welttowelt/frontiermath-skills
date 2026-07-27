@@ -1,0 +1,98 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID3 singleton translation canonicalization",
+  "hypothesis": "Canonicalizing the nine normalized singleton translations independently in both ID3 sequences will remove an exact factor-81 symmetry and may produce terminal evidence under a 300-second proof-producing run.",
+  "evidence_unit": "one source-pinned full fixed-multiplier ID3 formula with complete decimation/swap static symmetry and exactly the normalized singleton-translation orbit canonicalization added",
+  "claim_boundary": "A verified terminal result decides only fixed multiplier family ID3 and its separately normalized coherent translated version. A resource ceiling remains UNKNOWN and does not decide unrestricted LP333 or H668.",
+  "baseline": {
+    "evidence": "Source subgroup ID3 has elements {1,10,100}, nine singleton and 108 size-three position orbits, and 116 full PAF representative equations. The static-symmetry generator and solver are hash-bound descendants of commits 4277d0c and 597e49a.",
+    "measurement": "ID3 is source-OPEN. Prior campaign evidence concerns prescribed compression profiles, not the unrestricted fixed ID3 family; no direct LP333 model or complete UNSAT proof exists."
+  },
+  "intervention": {
+    "one_change": "Over a freshly bound full-PAF ID3 static-symmetry parent, add only the exact blocking clauses that retain the lexicographically least normalized nine-singleton pattern under translations by multiples of 37, independently for A and B.",
+    "forbidden_confounds": [
+      "prescribed compression margins",
+      "profile-73 prune lemmas",
+      "inverse-PAF deduplication",
+      "new unary cardinality channel",
+      "changed decimation or sequence-swap lex leaders",
+      "new random seed",
+      "solver option change",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "translation-annihilator",
+      "purpose": "Prove the declared translations preserve the fixed ID3 invariant space.",
+      "expected": "Direct modular enumeration for H={1,10,100} gives exactly {0,37,74,111,148,185,222,259,296}."
+    },
+    {
+      "name": "normalized-translation-automorphism",
+      "purpose": "Prove translation followed by origin sign renormalization preserves normalization, H-invariance, row-sum magnitude, and every periodic autocorrelation.",
+      "expected": "Exact direct checks pass for all nine translations on deterministic random orbit assignments."
+    },
+    {
+      "name": "singleton-orbit-partition",
+      "purpose": "Prove the blocking clauses select representatives rather than deleting translation orbits.",
+      "expected": "All 256 normalized nine-bit patterns partition into 30 orbits with size histogram {1:1,3:1,9:28}; the 171 row-feasible patterns partition into exactly 19 size-nine orbits, each with one retained lexicographic minimum."
+    },
+    {
+      "name": "independent-clause-reconstruction",
+      "purpose": "Bind the exact canonicalization block without importing the generator.",
+      "expected": "An independent auditor reconstructs and matches exactly 226 eight-literal blocking clauses per sequence, and rejects a one-literal mutation."
+    },
+    {
+      "name": "full-parent-binding",
+      "purpose": "Hold the unrestricted fixed ID3 predicate and prior static symmetry fixed.",
+      "expected": "The parent has all 116 PAF PB equations, 117 primary orbit bits per sequence, 143 nonidentity decimation/swap lex leaders, no profile margins or prune lemmas, and matches at the source clause/variable boundary."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect an invalid normalized translation or PAF encoding.",
+      "expected": "The published LP63 pair remains a directly verified Legendre pair under all tested independent normalized translations."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "independent normalized-translation symmetry factor quotiented",
+    "direction": "increase",
+    "unit": "group actions",
+    "baseline": 1,
+    "promotion_threshold": 81
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 300,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 120
+  },
+  "terminal_outcomes": {
+    "promote": "All modular, automorphism, orbit-partition, clause-reconstruction, parent-binding, positive, model, and proof controls pass; and ID3 yields a directly audited SAT model or a complete independently replayed UNSAT proof.",
+    "park": "The row-feasible singleton patterns do not all lie in size-nine orbits, so the proposed factor-81 significance floor fails without a target run.",
+    "unknown": "The exact factor-81 formula passes every control but reaches a wall, memory, proof-volume, or verification ceiling without terminal evidence.",
+    "audit-failed": "Any modular enumeration, automorphism, orbit partition, clause reconstruction, parent binding, semantic comparison, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before the target run unless the 171 row-feasible singleton patterns partition into exactly 19 size-nine orbits.",
+    "Stop before the target run unless all 452 blocking clauses reconstruct exactly and the full unrestricted ID3 parent boundary matches.",
+    "Terminate at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not import prescribed compression profiles or profile-specific lemmas."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck the terminal ID3 result; if SAT, construct and verify H668 before any submission preparation.",
+    "park": "Archive the failed symmetry significance gate and move to a different fixed family.",
+    "unknown": "Preserve strict UNKNOWN and derive propagation channels from the 19 canonical singleton cases rather than raising this cap.",
+    "audit-failed": "Repair only the smallest failed symmetry or binding gate and regenerate in fresh directories."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

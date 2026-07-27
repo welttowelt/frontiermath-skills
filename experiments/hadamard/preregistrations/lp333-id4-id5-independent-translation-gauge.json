@@ -1,0 +1,98 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID4 and ID5 independent normalized-translation gauge",
+  "hypothesis": "Quotienting the previously unbroken three normalized translations of each sequence will remove an exact factor-nine symmetry and may produce terminal evidence for ID4 or ID5 under the unchanged full-PAF solver caps.",
+  "evidence_unit": "one matched pair of the original full-PAF ID4 and ID5 static-symmetry formulas with only independent normalized-translation canonicalization added",
+  "claim_boundary": "A terminal result decides only the named fixed multiplier family or families and their separately normalized coherent translated versions. Symmetry reduction alone decides no family and no result decides unrestricted LP333 or H668.",
+  "baseline": {
+    "evidence": "Original full-PAF CNFs 9588cfbd9d3c8849c95c8cc96268391f87cbbe145d80e440bf24a201023e55d2 and ce1af710fc3937d0169d573a063c736dbdb06da26af03b9d6a841f79a4f6024a at code commit 1967171.",
+    "measurement": "ID4 is UNKNOWN at 300 seconds after 2342324 conflicts; ID5 is UNKNOWN at 249.66 seconds and 2411354 conflicts after reaching the 1 GiB proof ceiling. Neither formula canonicalizes independent translations of A and B."
+  },
+  "intervention": {
+    "one_change": "For each sequence independently, use translation by 0, 111, or 222 followed by sign renormalization at index zero to select the unique lexicographically least singleton pattern (z0,z111,z222)=(0,0,1), while retaining all 112 full PAF PB encodings and all 143 prior static lex leaders.",
+    "forbidden_confounds": [
+      "inverse-PAF deduplication",
+      "new random seed",
+      "changed fixed multiplier family",
+      "changed PAF or row-sum encoding",
+      "changed decimation or sequence-swap lex leaders",
+      "solver option change",
+      "larger resource cap",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "translation-annihilator",
+      "purpose": "Prove that the only translations preserving each H-invariant sequence space are exactly the declared three.",
+      "expected": "Direct modular enumeration gives {0,111,222} for both H={1,121,322} and H={1,211,232}."
+    },
+    {
+      "name": "normalized-translation-automorphism",
+      "purpose": "Prove that translation followed by multiplication by the translated origin preserves normalization, H-invariance, row-sum magnitude, and every periodic autocorrelation.",
+      "expected": "Exact direct checks pass for every declared translation and deterministic random orbit assignment."
+    },
+    {
+      "name": "canonical-singleton-orbit",
+      "purpose": "Prove that the fixed singleton pattern selects one representative rather than deleting an orbit.",
+      "expected": "Weighted row-sum arithmetic excludes (0,0,0); the remaining normalized patterns (0,0,1), (0,1,0), and (0,1,1) form one size-three normalized-translation orbit with unique lexicographic minimum (0,0,1)."
+    },
+    {
+      "name": "full-formula-and-symmetry-binding",
+      "purpose": "Hold the propagation-helpful full PAF layer and previous decimation/swap symmetry intervention fixed.",
+      "expected": "Each generated formula retains 112 PAF PB equalities, the same primary variable order, and the same 143 nonidentity lex leaders; only four singleton unit constraints are added before unit splitting."
+    },
+    {
+      "name": "semantic-equivalence",
+      "purpose": "Detect any mismatch between direct length-333 arithmetic and the gauged CNF.",
+      "expected": "All 1000 deterministic random assignments agree for the ungauged predicate, and the separate automorphism/canonical-orbit proof establishes equisatisfiability after gauging."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect an invalid normalized-translation action.",
+      "expected": "The published LP63 pair remains a direct Legendre pair under every tested independent translation and sign renormalization."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "independent normalized-translation symmetry factor quotiented",
+    "direction": "increase",
+    "unit": "group actions",
+    "baseline": 1,
+    "promotion_threshold": 9
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 2147483648,
+    "verification_wall_seconds": 240
+  },
+  "terminal_outcomes": {
+    "promote": "All modular, automorphism, canonical-orbit, binding, semantic, positive, and proof controls pass; the exact factor-nine quotient is present; and at least one family yields a direct-audited SAT model or a complete independently replayed UNSAT proof.",
+    "park": "Any family lacks the exact factor-nine action while all correctness controls pass, so the proposed symmetry mechanism misses its declared significance floor without a target run.",
+    "unknown": "Both gauged formulas pass every control but each reaches a wall, memory, proof-volume, or verification ceiling without terminal evidence.",
+    "audit-failed": "Any modular enumeration, automorphism, canonical orbit, formula binding, semantic comparison, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before either target run unless both annihilators are exactly {0,111,222} and all three nonconstant normalized singleton patterns form one orbit.",
+    "Stop before either target run if the full 112-row PAF layer, 143 prior lex leaders, source bindings, or solver controls change.",
+    "Terminate each target process at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not tune the second family from the first family's result."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck every terminal family result; if a direct LP333 pair appears, construct and verify H668.",
+    "park": "Archive the failed symmetry gate and choose a different exact mechanism.",
+    "unknown": "Preserve both strict-UNKNOWN manifests and move to a different remaining fixed family or a proof-logged problem-level propagator.",
+    "audit-failed": "Repair only the smallest failed symmetry or binding gate and regenerate in fresh directories."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

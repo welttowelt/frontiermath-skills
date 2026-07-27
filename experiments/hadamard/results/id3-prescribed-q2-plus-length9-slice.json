@@ -1,0 +1,237 @@
+{
+  "claim_limit": "this is stricter than the unrestricted decompression conjecture; UNKNOWN has no negative force and INFEASIBLE would address only the stated id3 slice without a replayable proof",
+  "environment": {
+    "machine": "arm64",
+    "python": "3.14.6"
+  },
+  "family_id": 3,
+  "generator_sha256": "0c70c3e376a7a5dd2da7aef5dcdc21c2f9b2f865225f1c243ae7ae421cd09b8d",
+  "length9_compression": {
+    "a_tilde": [
+      13,
+      -1,
+      -1,
+      5,
+      1,
+      -5,
+      -5,
+      -7,
+      -1
+    ],
+    "b_tilde": [
+      13,
+      -7,
+      5,
+      -1,
+      1,
+      -1,
+      -5,
+      -5,
+      -1
+    ],
+    "source_sha256": "bdc6b5e2161a36f698e1f33d116631a47dcd3f7160b89c524df80ff731f041aa"
+  },
+  "model": {
+    "base_model": "lp333/code/cpsat_search.py",
+    "length9_compression_equalities": 18,
+    "mod37_compression_equalities": 74,
+    "nonzero_shift_orbits": 116,
+    "orbit_variables_per_sequence": 117,
+    "proto_constraints": 54502,
+    "proto_variables": 13806
+  },
+  "prescribed_q2_compression": {
+    "a": [
+      1,
+      3,
+      -3,
+      3,
+      3,
+      -3,
+      -3,
+      3,
+      -3,
+      3,
+      3,
+      3,
+      3,
+      -3,
+      -3,
+      -3,
+      3,
+      -3,
+      -3,
+      -3,
+      -3,
+      3,
+      -3,
+      -3,
+      -3,
+      3,
+      3,
+      3,
+      3,
+      -3,
+      3,
+      -3,
+      -3,
+      3,
+      3,
+      -3,
+      3
+    ],
+    "author_slides": "https://us.ticmeet.com/assets/archivos/d6f1d9b8-d39f-4888-925a-7eb81c4905cc/Gomez.pdf",
+    "b": [
+      1,
+      -3,
+      3,
+      -3,
+      -3,
+      3,
+      3,
+      -3,
+      3,
+      -3,
+      -3,
+      -3,
+      -3,
+      3,
+      3,
+      3,
+      -3,
+      3,
+      3,
+      3,
+      3,
+      -3,
+      3,
+      3,
+      3,
+      -3,
+      -3,
+      -3,
+      -3,
+      3,
+      -3,
+      3,
+      3,
+      -3,
+      -3,
+      3,
+      -3
+    ],
+    "exact_checks": {
+      "a_row_sum": 1,
+      "a_squared_norm": 325,
+      "b_row_sum": 1,
+      "b_squared_norm": 325,
+      "combined_nonzero_paf": [
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18,
+        -18
+      ]
+    },
+    "p": 37,
+    "q": 3,
+    "source_doi": "10.1016/j.jsc.2026.102606"
+  },
+  "replayable_unsat_certificate": false,
+  "sat": false,
+  "schema": "frontiermath-hadamard-id3-prescribed-q2-slice-v1",
+  "scope": "Kotsireas q^2-compression prescription within common-multiplier family id3, intersected with one length-9 compression witness",
+  "solver": {
+    "branches": 0,
+    "conflicts": 0,
+    "max_seconds": 300.0,
+    "name": "OR-Tools CP-SAT",
+    "random_seed": 20260726,
+    "version": "9.15.6755",
+    "wall_seconds": 0.06849654200050281,
+    "workers": 8
+  },
+  "solver_infeasible": true,
+  "source": {
+    "base_model_sha256": "26f3c6b7877769455461b6c355f75a5cf3615f6e4d93c6f4ead85a5101c510c9",
+    "repository": "/Users/m1/Documents/Codex/2026-07-26-whats-missing-to-control-the-mac/projects/hadamard-668-multiplier-obstructions",
+    "search_common_sha256": "e5142332a45835828ffb3d74eda07d0d7b3fab8a64cceeddef6d1718401ca760",
+    "subgroup_elements": [
+      1,
+      10,
+      100
+    ],
+    "subgroup_record": {
+      "elements": [
+        1,
+        10,
+        100
+      ],
+      "generators": [
+        10
+      ],
+      "id": 3,
+      "killed_by_mod37_obstruction": false,
+      "mod37_full_reduction": false,
+      "mod9_full_reduction": false,
+      "num_nonzero_orbits": 116,
+      "num_orbits": 117,
+      "orbit_signature": [
+        [
+          1,
+          9
+        ],
+        [
+          3,
+          108
+        ]
+      ],
+      "order": 3,
+      "structure": {
+        "order": 3,
+        "reduction_mod37": [
+          1,
+          10,
+          26
+        ],
+        "reduction_mod37_order": 3,
+        "reduction_mod9": [
+          1
+        ],
+        "reduction_mod9_order": 1
+      }
+    }
+  },
+  "status": "INFEASIBLE"
+}

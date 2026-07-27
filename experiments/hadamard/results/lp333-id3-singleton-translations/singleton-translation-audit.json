@@ -1,0 +1,39 @@
+{
+  "checks": {
+    "all_orbit_size_histogram": {
+      "1": 1,
+      "3": 1,
+      "9": 28
+    },
+    "all_orbits": 30,
+    "annihilator": [
+      0,
+      37,
+      74,
+      111,
+      148,
+      185,
+      222,
+      259,
+      296
+    ],
+    "blocking_clauses_reconstructed": 452,
+    "direct_paf_automorphism_checks": 23904,
+    "independent_pair_action_order": 81,
+    "normalized_patterns": 256,
+    "one_literal_mutation_rejected": true,
+    "parent_metadata_bound": true,
+    "row_feasible_orbit_size_histogram": {
+      "9": 19
+    },
+    "row_feasible_orbits": 19,
+    "row_feasible_patterns": 171,
+    "serialized_block_sha256": "9d24c3694231e88325c032d9d51235b6f71957e2685a20d6cb2a5f026f934d0d"
+  },
+  "family_id": 3,
+  "formula_sha256": "0ea4f87736db6d1076214d8378e4f66e1fe499291d5f4d0d406209a7779172b8",
+  "metadata_sha256": "f1c9cdb20654cb7290edcacc90bede0436e5f0a702acbdf8c4712b9a33951db5",
+  "method": "Recompute the modular annihilator and all 256 normalized singleton patterns, reconstruct the 452 exact blocking clauses, and compare the DIMACS block without importing the generator or proof encoder.",
+  "schema": "frontiermath-hadamard-id3-singleton-translation-audit-v1",
+  "status": "pass"
+}

@@ -1,0 +1,5 @@
+lp333-pq2.cnf
+kissat-run/*.log
+kissat-run/*.model
+cryptominisat-run/*.log
+cryptominisat-run/*.model

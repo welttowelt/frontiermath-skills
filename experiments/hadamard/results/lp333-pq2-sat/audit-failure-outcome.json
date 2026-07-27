@@ -1,0 +1,67 @@
+{
+  "schema": "frontiermath-lp333-pq2-arithmetic-audit-failure-v1",
+  "status": "audit-failed",
+  "recorded_at_utc": "2026-07-27T02:02:26Z",
+  "false_factorization": "333 = 3 * 11^2",
+  "correct_factorization": "333 = 37 * 3^2",
+  "solver_free_rejection": {
+    "invalid_compressed_rows": [
+      [
+        1,
+        11,
+        -11
+      ],
+      [
+        1,
+        -11,
+        11
+      ]
+    ],
+    "combined_compressed_energy": 486,
+    "required_combined_compressed_energy": 446,
+    "combined_nonzero_compressed_paf": -242,
+    "required_combined_nonzero_compressed_paf": -222
+  },
+  "invalid_formula": {
+    "sha256": "7a893f92b28a7eed54ccefe5bbb89d28d04132672905abc3635d01a6e3991735",
+    "clauses": 4494772,
+    "variables": 725383
+  },
+  "interrupted_runs": {
+    "kissat": {
+      "approximate_target_seconds": 780,
+      "termination": "manual-immediate-on-audit-failure",
+      "target_log_bytes": 70821,
+      "target_log_sha256": "b403dfcb9102a3f53d04dd3b3d4edcbfede7c8a02f0b654678192c0d9604a68a",
+      "positive_control_log_sha256": "483ff5b253fd1a0bc9de0c06d35b42756feb6c4512d753767a8f5292f8ef73a9"
+    },
+    "cryptominisat": {
+      "approximate_target_seconds": 300,
+      "termination": "manual-immediate-on-audit-failure",
+      "target_log_bytes": 129252,
+      "target_log_sha256": "1377b889e81aac6262234f946f7ccb5f70043ffe7567f301c3e05684bc104530",
+      "positive_control_log_sha256": "15652165522a632ae9b0e285f64b74713f5d541bb1dc30c8876444ef1c24c7f9",
+      "workload_only": {
+        "initial_recovered_xors": 326031,
+        "used_gauss_jordan_matrices": 5
+      }
+    },
+    "single_swap_anneal": {
+      "approximate_target_seconds": 2580,
+      "termination": "manual-immediate-on-audit-failure",
+      "last_observed_proposals": 2195849216,
+      "best_invalid_slice_objective": 5568,
+      "best_invalid_slice_l1": 720,
+      "best_invalid_slice_max_abs_residual": 20
+    },
+    "six_coordinate_anneal": {
+      "approximate_target_seconds": 60,
+      "termination": "manual-immediate-on-audit-failure",
+      "last_observed_proposals": 35520512,
+      "best_invalid_slice_objective": 6336,
+      "best_invalid_slice_l1": 784,
+      "best_invalid_slice_max_abs_residual": 16
+    }
+  },
+  "claim_boundary": "The invalid formula and every interrupted run decide no LP333 slice and produce no H668 candidate. Only the solver-free arithmetic rejection of the mistakenly specified compression is terminal."
+}

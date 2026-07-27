@@ -1,0 +1,10 @@
+{
+  "schema": "computational-experiment-outcome/v1",
+  "preregistration": "experiments/hadamard/preregistrations/lp333-id3-singleton-triple-unary-channel.json",
+  "status": "audit-failed",
+  "target_run_started": false,
+  "failed_control": "row-arithmetic-implication",
+  "observed": "Independent exact enumeration found that the 19 lexicographically canonical row-feasible singleton patterns have singleton/triple negative-count pairs (1,55), (2,55), (4,54), or (5,54). Pairs (7,53) and (8,53) occur among noncanonical normalized patterns in the same translation orbits, not among the canonical representatives.",
+  "effect": "The generator stopped before creating a formula or starting a solver. No performance evidence was collected and no mathematical family claim changed.",
+  "next_action": "Repair only the row-case implication gate, validate a superseding V2 preregistration, and regenerate in a fresh output directory."
+}

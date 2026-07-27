@@ -1,0 +1,31 @@
+{
+  "cell_id": 73,
+  "family_id": 3,
+  "refined_ledger_sha256": "1760d0337f518fe7b6bc79bbd619d3ea07ba093c810f81cc9fe5bf8bd44f0532",
+  "schema": "frontiermath-hadamard-id3-compression-v1",
+  "source": "proof-producing profile-cell SAT model",
+  "witness": {
+    "a_tilde": [
+      1,
+      1,
+      1,
+      -11,
+      11,
+      -1,
+      1,
+      -1,
+      -1
+    ],
+    "b_tilde": [
+      1,
+      11,
+      7,
+      -1,
+      -1,
+      -11,
+      1,
+      1,
+      -7
+    ]
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID4 and ID5 unary cardinality channels",
+  "hypothesis": "Adding propagation-complete unary channels for the three exact cardinalities exposed by the translation gauge will reduce the matched aggregate conflict count by at least 20 percent and may produce terminal evidence under unchanged solver caps.",
+  "evidence_unit": "one matched pair of ID4 and ID5 full-PAF translation-gauged formulas with exactly three redundant sequential exact-cardinality channels added",
+  "claim_boundary": "A terminal result decides only the named fixed multiplier family or families and their separately normalized coherent translated versions. Cardinality-channel performance alone decides no family and no result decides unrestricted LP333 or H668.",
+  "baseline": {
+    "evidence": "Code commits 8aec429 and 4cf421f; gauged ID4 formula 2cb2b94118836ae9bc02b7ac4dd4458b3fdcee21c73f99d2f624beb30b285399 and ID5 formula 59538c923cf9fe92f085b987dce948b5656fb263feac5851ed6f7248ac150fb8.",
+    "measurement": "At 300 seconds ID4 remains UNKNOWN after 2180469 conflicts and ID5 remains UNKNOWN after 1901171 conflicts, for a matched aggregate of 4081640 conflicts."
+  },
+  "intervention": {
+    "one_change": "Retain every full PAF PB equation, translation-gauge unit, and prior lex leader, then add sequential unary CNF channels for exact cardinalities 55 on the 110 size-three A orbit bits, 55 on the 110 size-three B orbit bits, and 110 on the 216 coefficient-three shift-111 XOR inputs.",
+    "forbidden_confounds": [
+      "inverse-PAF deduplication",
+      "changed translation gauge",
+      "changed PAF or row-sum encoding",
+      "changed decimation or sequence-swap lex leaders",
+      "new random seed",
+      "solver option change",
+      "larger resource cap",
+      "unrecorded preprocessing"
+    ]
+  },
+  "controls": [
+    {
+      "name": "arithmetic-channel-implication",
+      "purpose": "Prove that all three channels are redundant consequences rather than new assumptions.",
+      "expected": "Gauge singleton count one plus row weighted sum 166 or 167 forces 55 size-three negatives per sequence; shift-111 singleton XOR contribution four plus target 334 and 216 coefficient-three inputs forces cardinality 110."
+    },
+    {
+      "name": "sequential-encoder-truth-table",
+      "purpose": "Detect an invalid at-most or exact-cardinality clause generator.",
+      "expected": "Exhaustive small input assignments and unique auxiliary extensions agree with direct cardinality for both positive and negated input literals."
+    },
+    {
+      "name": "independent-clause-reconstruction",
+      "purpose": "Bind the exact redundant channel block without importing the generator.",
+      "expected": "An independent auditor reconstructs every channel variable and clause, matches the serialized contiguous block, and rejects a one-literal mutation."
+    },
+    {
+      "name": "paper-to-levers-boundary",
+      "purpose": "Prevent benchmark timing claims from replacing local evidence.",
+      "expected": "The metadata binds the primary Eén-Sörensson and Bailleux sources and adopts only the unary-versus-binary propagation mechanism."
+    },
+    {
+      "name": "full-formula-and-symmetry-binding",
+      "purpose": "Hold the parent full-PAF translation-gauge formulas fixed.",
+      "expected": "Each parent formula retains all 112 PAF PB equalities, the exact factor-nine gauge, the same primary order, and the same 143 lex leaders before the contiguous channel block."
+    },
+    {
+      "name": "positive-fixture",
+      "purpose": "Detect a channel that excludes a known valid object.",
+      "expected": "A small known exact-cardinality fixture passes the sequential channels, and the published LP63 pair remains a direct Legendre pair under all prior transformations."
+    },
+    {
+      "name": "adversarial-proof-control",
+      "purpose": "Detect a proof checker that accepts false terminal evidence.",
+      "expected": "Pinned drat-trim rejects an empty proof against the known SAT control before and after every decisive UNSAT replay."
+    }
+  ],
+  "primary_metric": {
+    "name": "matched aggregate conflicts at the 300-second ceiling",
+    "direction": "decrease",
+    "unit": "conflicts",
+    "baseline": 4081640,
+    "promotion_threshold": 3265312
+  },
+  "budgets": {
+    "engineering_seconds": 7200,
+    "run_wall_seconds": 600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 2147483648,
+    "verification_wall_seconds": 240
+  },
+  "terminal_outcomes": {
+    "promote": "All implication, truth-table, reconstruction, paper-boundary, parent-binding, positive, and proof controls pass; and at least one family yields a direct-audited SAT model or a complete independently replayed UNSAT proof.",
+    "park": "Both runs are valid but nonterminal and their aggregate conflict count exceeds 3265312, so unary channeling misses its preregistered workload floor.",
+    "unknown": "The aggregate conflict floor passes but both formulas reach a wall, memory, proof-volume, or verification ceiling without terminal evidence.",
+    "audit-failed": "Any arithmetic implication, truth table, clause reconstruction, parent binding, semantic comparison, model audit, proof replay, or bogus-proof control fails."
+  },
+  "stop_rules": [
+    "Stop before target runs unless the three exact cardinalities are independently rederived from the parent gauge and raw shift-111 coefficients.",
+    "Stop before target runs unless exhaustive small truth tables and exact serialized clause reconstruction pass.",
+    "Stop before target runs if any parent PAF row, gauge literal, lex leader, solver option, or source binding changes.",
+    "Terminate each target process at 300 solver seconds, 4 GiB observed RSS, or 1 GiB proof bytes.",
+    "Do not interpret or replay an incomplete proof.",
+    "Do not tune the second family from the first family's result."
+  ],
+  "next_actions": {
+    "promote": "Archive and independently recheck every terminal family result; if a direct LP333 pair appears, construct and verify H668.",
+    "park": "Archive the valid negative workload result and move to another fixed family or a proof-logged programmatic PAF propagator.",
+    "unknown": "Preserve the strict-UNKNOWN manifests; retain the channels only if the conflict floor passes and select a new structural mechanism.",
+    "audit-failed": "Repair only the smallest implication or encoding gate and regenerate in fresh directories."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts and source-pinned repositories are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
