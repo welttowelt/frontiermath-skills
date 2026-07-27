@@ -20,3 +20,8 @@ The 300-second proof-producing calibration remains strictly **UNKNOWN**, but
 the channel mechanism passes its workload gate: `279,414` conflicts and a
 `266,805,565`-byte incomplete proof, down from `1,901,171` conflicts and
 `903,361,631` bytes in the translation-only parent.
+
+A separately preregistered one-hour proof-producing follow-through also
+remained strictly **UNKNOWN**. It explored `4,790,508` conflicts, emitted an
+incomplete `4,097,484,517`-byte proof, and peaked at `893,468,672` bytes RSS.
+This ends capacity increases for ID5 under this mechanism.
