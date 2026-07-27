@@ -1,0 +1,98 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 CryptoMiniSat parity-recovery discovery",
+  "hypothesis": "CryptoMiniSat's CNF XOR recovery and bounded Gauss-Jordan matrices may expose parity structure hidden inside the exact ID5 formula and reach a directly verifiable Legendre pair where default and phase-forced CDCL remain unresolved.",
+  "evidence_unit": "one proofless SAT-discovery run on the audited fixed-family ID5 formula with CryptoMiniSat 5.14.7, one thread, seed zero, frozen XOR and Gauss settings, and a 3600-second cap",
+  "claim_boundary": "Only a complete assignment satisfying all 1366261 serialized clauses and independently verifying two binary length-333 rows, subgroup {1,211,232} invariance, forced orbit margins, row sums one, and combined PAF minus two at all 332 nonzero shifts decides ID5. XOR telemetry and proofless UNSAT are nondecisive.",
+  "baseline": {
+    "evidence": "Exact formula SHA-256 c8c083c7311e083ec5e0bb82d3fca863f2f07e821a30cf55aeb5d79a17778d8b, 218018 variables, 1366261 clauses, and independent unary-channel formula audit status pass.",
+    "measurement": "Default one-hour Kissat and the bounded objective-8256 phase pilot returned UNKNOWN. Stronger objective-5280 and objective-4512 phase arms are separate concurrent mechanisms; no directly verified ID5 model exists."
+  },
+  "intervention": {
+    "one_change": "Replace Kissat CDCL with pinned single-thread CryptoMiniSat 5.14.7 and its frozen CNF XOR recovery plus bounded Gauss-Jordan matrices while keeping the exact original ID5 formula, family, symmetry, unary channels, seed, cap, and direct verifier fixed.",
+    "forbidden_confounds": [
+      "phase-seeded literal renaming",
+      "changed multiplier subgroup",
+      "formula regeneration",
+      "changed orbit margins",
+      "changed unary channels",
+      "seed sweep",
+      "thread-count sweep",
+      "solver-configuration sweep",
+      "proofless UNSAT claim",
+      "resource-cap extension",
+      "accepting a partial or unaudited model"
+    ]
+  },
+  "controls": [
+    {
+      "name": "exact-formula-reconstruction",
+      "purpose": "Bind the ID5 symmetry formula and unary channels.",
+      "expected": "The independent audit reconstructs all 1366261 clauses, 4679477 literals, ID5 subgroup orbits, row and shift-111 cardinality channels, exact formula hash, and a rejected literal mutation."
+    },
+    {
+      "name": "tool-and-package-pin",
+      "purpose": "Bind the parity solver and its dynamically linked implementation.",
+      "expected": "CryptoMiniSat 5.14.7 executable SHA-256 a3f85c3709b5e2a040bf82a4a604d1c7b9f10219bbf180a9e0f72319a2e892ac, library SHA-256 7952e5a5c77ac8b56253c7a2ad88c62648f20698004338bad9a443efb55b2f84, and Homebrew bottle receipt SHA-256 0309c0559340b1a766058556fad6691da0a97983d7a1195dcd4b7236f1ab33a3."
+    },
+    {
+      "name": "parity-positive-control",
+      "purpose": "Check SAT status, model extraction, CNF satisfaction, and actual XOR and Gauss activation.",
+      "expected": "On known SAT ID3 cell 73, the pinned command returns SAT, its complete assignment satisfies every clause, and its trace reports recovered XORs and a used Gauss matrix."
+    },
+    {
+      "name": "frozen-parity-settings",
+      "purpose": "Ensure the mechanism is one parity-recovery arm.",
+      "expected": "One thread and seed zero with xor enabled, maximum XOR size 7, bounded XOR discovery and matrices, at most five matrices, and Gauss-useful cutoff 0.2."
+    },
+    {
+      "name": "direct-target-model-audit",
+      "purpose": "Separate solver telemetry from mathematical evidence.",
+      "expected": "Any SAT assignment satisfies every CNF clause and independently verifies both full rows, ID5 invariance, forced margins, and every combined PAF equation."
+    },
+    {
+      "name": "runner-pins",
+      "purpose": "Bind the ID5 adaptation and shared parity mechanism.",
+      "expected": "ID5 runner SHA-256 c76a9d6cafd6c54427d82a4cf47dade1d4532e6555448ec9d311d8f9eec2fdb4, shared parity runner SHA-256 831cc8c135fce574fc9ea7bba9e47dab31b9b0f6f081dfd826504ee2bd6c2888, shared model runner SHA-256 661e1c17edf1f96cd993c616e99e0a9dc283c955c26b47f039a1bbfadd57ef4a, and direct verifier SHA-256 5ee559052065b1f48066cd2beaf0871e0712c1a350caa359361d5eb5d7f52666."
+    }
+  ],
+  "primary_metric": {
+    "name": "directly verified SAT model for fixed family ID5",
+    "direction": "reach",
+    "unit": "verified model",
+    "baseline": 0,
+    "promotion_threshold": 1
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 4294967296,
+    "artifact_bytes": 1073741824,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "CryptoMiniSat returns SAT and the complete assignment passes the exact CNF and independent direct full-length ID5 audit.",
+    "park": "The run reaches its cap or returns proofless UNSAT without a SAT model while formula, tool, positive-control, and parity controls remain valid.",
+    "unknown": "A wall, memory, tool, extraction, or verification ceiling interrupts the frozen arm.",
+    "audit-failed": "Any formula, tool, parity activation, complete-model, CNF, direct-PAF, or family-invariance control fails."
+  },
+  "stop_rules": [
+    "Require the passing independent ID5 unary-channel formula audit.",
+    "Require the parity-positive-control trace and complete-model audit before target search.",
+    "Run one CryptoMiniSat process with the frozen settings, one thread, and seed zero.",
+    "Stop immediately on a directly verified SAT model.",
+    "Otherwise terminate at 3600 solver seconds or 4 GiB observed RSS.",
+    "Do not rerun with another seed, thread count, configuration, formula, or larger cap.",
+    "Do not promote a proofless UNSAT status or parity trace."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, construct H668, independently verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the non-SAT parity manifest and compare telemetry with the p37q3 parity arm before selecting a distinct exact mechanism.",
+    "unknown": "Preserve the interrupted manifest and resume only the remaining frozen budget if the interruption is reproducible.",
+    "audit-failed": "Repair only the smallest formula, tool, parity, extraction, or direct-verification defect before rerunning."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned repositories, official open-source solver code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
