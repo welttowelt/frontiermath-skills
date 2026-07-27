@@ -1,0 +1,91 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 family ID5 exact orbit anneal",
+  "hypothesis": "A direct local search on the 113 multiplication orbits of subgroup {1,211,232} may find an exact fixed-family Legendre pair faster than generic CNF search because every state already satisfies subgroup invariance and the forced row-sum orbit margins.",
+  "evidence_unit": "one deterministic 3600-second ID5 run at seed 20260727, with 2000000 equal-size opposite-sign orbit swaps per restart and exact integer scoring of all 166 independent full-length PAF residuals",
+  "claim_boundary": "Only a serialized zero-objective pair independently verifying both full rows, subgroup {1,211,232} invariance, row sums one, and all 332 nonzero combined PAF equations is a candidate. A nonzero result does not close ID5 or any other family.",
+  "baseline": {
+    "evidence": "ID5 has exactly three singleton and 110 size-three coordinate orbits. Row sum one forces one negative singleton and 55 negative triple-orbits per row. The active pinned Kissat ID5 arm remains undecided.",
+    "measurement": "At seed 20260727 the invariant initializer has squared residual 82080, L1 residual 3072, and maximum absolute residual 48."
+  },
+  "intervention": {
+    "one_change": "Search directly in ID5 orbit-sign space: seven eighths of proposals swap opposite signs on two size-three orbits, one eighth swaps opposite singleton signs, and every move preserves subgroup invariance and row sums before exact incremental PAF scoring.",
+    "forbidden_confounds": [
+      "changed subgroup",
+      "changed orbit margins",
+      "unrestricted-coordinate moves",
+      "floating-point PAF acceptance",
+      "seed sweep",
+      "temperature sweep",
+      "restart-length sweep",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "exact-orbit-reconstruction",
+      "purpose": "Bind the search to source family ID5.",
+      "expected": "Closure of generator 211 modulo 333 reconstructs subgroup {1,211,232}, exactly three singleton and 110 triple orbits, and 113 total orbits."
+    },
+    {
+      "name": "forced-row-sum-profile",
+      "purpose": "Ensure every state lies in the exact ID5 row-sum slice.",
+      "expected": "Each row has exactly one negative singleton and 55 negative triple-orbits, hence row sum one."
+    },
+    {
+      "name": "incremental-multiflip-self-test",
+      "purpose": "Detect incorrect six-coordinate orbit-swap PAF updates.",
+      "expected": "Across 2000 deterministic singleton and triple-orbit swaps, every predicted PAF and objective equals a fresh O(333^2) recomputation while invariance and row sums remain exact."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute the endpoint outside the C implementation.",
+      "expected": "A separate Python auditor reconstructs the subgroup orbits, both complete PAF vectors, row sums, orbit margins, objective, L1, maximum residual, status, source and binary pins, and a slice-preserving mutation."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the executed mechanism.",
+      "expected": "Source SHA-256 6d90f65980de930c66aa9e091f9fa0c329c0abb5248e07a7e8f5a2ebe81caad0, included exact-PAF baseline SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d, and binary SHA-256 cc2ebe205655ce9decab81f7e884e95303f5b6a1f1899a30f9d3c936c40c4938."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero in ID5",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 82080,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 2400,
+    "run_wall_seconds": 3600,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is zero and the independent audit verifies ID5 invariance, row sums, and all 332 nonzero combined PAF equations.",
+    "park": "The frozen schedule completes with a valid independently audited nonzero endpoint.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule.",
+    "audit-failed": "Any subgroup, orbit, margin, delta, source pin, binary pin, stored-score, full-PAF, status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Run only the pinned source and binary at seed 20260727.",
+    "Use 2000000 proposals per restart and the frozen 512-to-0.25 exponential temperature schedule.",
+    "Use exactly one singleton-orbit proposal every eight proposals in expectation through the frozen deterministic RNG branch.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 3600 seconds without another seed, temperature, proposal mix, restart length, or cap.",
+    "Run the independent audit before interpretation.",
+    "Do not promote a lower nonzero score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, independently verify the Legendre equations again, construct H668, verify orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive the endpoint and use the paper's exact coset-DFS and partial-PSD pruning as the next distinct ID5 mechanism.",
+    "unknown": "Preserve the interruption and resume only the remaining frozen wall budget if reproducible.",
+    "audit-failed": "Repair only the smallest subgroup, orbit, delta, serialization, or verifier defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
