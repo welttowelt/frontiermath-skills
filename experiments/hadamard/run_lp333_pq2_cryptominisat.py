@@ -268,6 +268,20 @@ def main() -> int:
             )
             is True
         ),
+        "pq2_seed_identity": (
+            metadata["pq2_compression_channels"][
+                "compressed_length"
+            ]
+            == 37
+            and metadata["pq2_compression_channels"][
+                "compression_factor"
+            ]
+            == 9
+            and metadata["controls"]["compressed_seed_identity"][
+                "result"
+            ]
+            == "PASS"
+        ),
         "pq2_symmetry_control": (
             metadata["controls"]["pq2_symmetry_action"]["result"]
             == "PASS"

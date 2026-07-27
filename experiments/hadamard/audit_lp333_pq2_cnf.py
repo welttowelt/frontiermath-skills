@@ -13,7 +13,36 @@ from typing import Sequence
 
 
 LENGTH = 333
-NEGATIVE_TARGETS = ((55, 50, 61), (55, 61, 50))
+COMPRESSED_LENGTH = 37
+COMPRESSION_FACTOR = 9
+
+
+def legendre_symbol_37(value: int) -> int:
+    residue = value % COMPRESSED_LENGTH
+    if residue == 0:
+        return 0
+    symbol = pow(residue, 18, COMPRESSED_LENGTH)
+    if symbol == 1:
+        return 1
+    if symbol == 36:
+        return -1
+    raise ValueError("invalid Euler-criterion value")
+
+
+COMPRESSED_ROWS = (
+    tuple(
+        1 if residue == 0 else 3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ),
+    tuple(
+        1 if residue == 0 else -3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ),
+)
+NEGATIVE_TARGETS = tuple(
+    tuple((COMPRESSION_FACTOR - value) // 2 for value in row)
+    for row in COMPRESSED_ROWS
+)
 
 
 def sha256(path: Path) -> str:
@@ -214,7 +243,7 @@ def main() -> int:
         if math.gcd(unit, LENGTH) != 1:
             continue
         permutation = [(unit * index) % LENGTH for index in range(LENGTH)]
-        swap = unit % 3 == 2
+        swap = legendre_symbol_37(unit) == -1
         mapping = tuple(
             (
                 [zb[permutation[index]] for index in range(LENGTH)]
@@ -257,10 +286,10 @@ def main() -> int:
     records = channels["channels"]
     record_index = 0
     for row, primary in enumerate((za, zb)):
-        for residue in range(3):
+        for residue in range(COMPRESSED_LENGTH):
             record = records[record_index]
             record_index += 1
-            inputs = list(primary[residue::3])
+            inputs = list(primary[residue::COMPRESSED_LENGTH])
             target = NEGATIVE_TARGETS[row][residue]
             if (
                 record["inputs"] != inputs
@@ -354,8 +383,20 @@ def main() -> int:
         raise ValueError("one-literal channel mutation was not rejected")
 
     controls = metadata["controls"]
+    compressed_combined_paf = [
+        sum(
+            sum(
+                row[index]
+                * row[(index + shift) % COMPRESSED_LENGTH]
+                for index in range(COMPRESSED_LENGTH)
+            )
+            for row in COMPRESSED_ROWS
+        )
+        for shift in range(COMPRESSED_LENGTH)
+    ]
     if (
-        controls["pq2_symmetry_action"]["result"] != "PASS"
+        controls["compressed_seed_identity"]["result"] != "PASS"
+        or controls["pq2_symmetry_action"]["result"] != "PASS"
         or controls["sequential_cardinality_truth_table"]["result"]
         != "PASS"
         or controls["random_semantic_cnf_equivalence"]["result"]
@@ -364,6 +405,15 @@ def main() -> int:
         != "PASS"
     ):
         raise ValueError("generator semantic controls are incomplete")
+    if (
+        metadata["pq2_compression_channels"]["compressed_rows"]
+        != [list(row) for row in COMPRESSED_ROWS]
+        or compressed_combined_paf[0] != 650
+        or any(
+            value != -18 for value in compressed_combined_paf[1:]
+        )
+    ):
+        raise ValueError("compressed pq2 seed identity differs")
     result = {
         "schema": "frontiermath-hadamard-lp333-pq2-cnf-audit-v1",
         "status": "pass",
@@ -372,10 +422,14 @@ def main() -> int:
         "metadata_sha256": sha256(args.metadata),
         "checks": {
             "singleton_orbits": LENGTH,
-            "pq2_compressed_rows": [[1, 11, -11], [1, -11, 11]],
+            "factorization": "333 = 37 * 3^2",
+            "pq2_compressed_rows": [
+                list(row) for row in COMPRESSED_ROWS
+            ],
             "pq2_negative_targets": [
                 list(targets) for targets in NEGATIVE_TARGETS
             ],
+            "compressed_combined_paf": compressed_combined_paf,
             "symmetry_actions": 216,
             "symmetry_breakers_reconstructed": len(
                 reconstructed_breakers

@@ -16,10 +16,95 @@ import generate_lp333_symmetry_cnf as common
 
 LENGTH = 333
 FAMILY_ID = 0
-NEGATIVE_TARGETS = ((55, 50, 61), (55, 61, 50))
+COMPRESSED_LENGTH = 37
+COMPRESSION_FACTOR = 9
 PQ2_SOURCE = (
     "https://www.sciencedirect.com/science/article/pii/S0747717126000544"
 )
+
+
+def legendre_symbol_37(value: int) -> int:
+    residue = value % COMPRESSED_LENGTH
+    if residue == 0:
+        return 0
+    symbol = pow(residue, (COMPRESSED_LENGTH - 1) // 2, COMPRESSED_LENGTH)
+    if symbol == 1:
+        return 1
+    if symbol == COMPRESSED_LENGTH - 1:
+        return -1
+    raise ValueError("Euler criterion returned a non-Legendre value")
+
+
+COMPRESSED_ROWS = (
+    tuple(
+        1 if residue == 0 else 3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ),
+    tuple(
+        1 if residue == 0 else -3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ),
+)
+NEGATIVE_TARGETS = tuple(
+    tuple((COMPRESSION_FACTOR - value) // 2 for value in row)
+    for row in COMPRESSED_ROWS
+)
+
+
+def compressed_seed_control() -> dict[str, Any]:
+    paf_rows = []
+    for row in COMPRESSED_ROWS:
+        paf_rows.append(
+            [
+                sum(
+                    row[index]
+                    * row[(index + shift) % COMPRESSED_LENGTH]
+                    for index in range(COMPRESSED_LENGTH)
+                )
+                for shift in range(COMPRESSED_LENGTH)
+            ]
+        )
+    combined = [
+        paf_rows[0][shift] + paf_rows[1][shift]
+        for shift in range(COMPRESSED_LENGTH)
+    ]
+    expected_nonzero = -2 * COMPRESSION_FACTOR
+    checks = {
+        "factorization": LENGTH
+        == COMPRESSED_LENGTH * COMPRESSION_FACTOR,
+        "compression_factor_is_q_squared": COMPRESSION_FACTOR == 3**2,
+        "compressed_row_sums": [
+            sum(row) for row in COMPRESSED_ROWS
+        ]
+        == [1, 1],
+        "compressed_energy": combined[0]
+        == 2 * LENGTH - 2 * COMPRESSION_FACTOR + 2,
+        "all_nonzero_combined_paf": all(
+            value == expected_nonzero for value in combined[1:]
+        ),
+        "negative_counts": all(
+            sum(targets) == 166 for targets in NEGATIVE_TARGETS
+        ),
+    }
+    if not all(checks.values()):
+        raise ValueError(f"compressed pq2 seed identity failed: {checks}")
+    return {
+        "result": "PASS",
+        "factorization": "333 = 37 * 3^2",
+        "compressed_length": COMPRESSED_LENGTH,
+        "compression_factor": COMPRESSION_FACTOR,
+        "compressed_rows": [list(row) for row in COMPRESSED_ROWS],
+        "negative_targets": [
+            list(targets) for targets in NEGATIVE_TARGETS
+        ],
+        "combined_paf": combined,
+        "required_nonzero_combined_paf": expected_nonzero,
+        "combined_energy": combined[0],
+        "required_combined_energy": (
+            2 * LENGTH - 2 * COMPRESSION_FACTOR + 2
+        ),
+        "checks": checks,
+    }
 
 
 def add_pq2_channels(model: Any) -> dict[str, Any]:
@@ -31,9 +116,9 @@ def add_pq2_channels(model: Any) -> dict[str, Any]:
     for row, (label, primary) in enumerate(
         (("a", model.za), ("b", model.zb))
     ):
-        for residue in range(3):
-            inputs = list(primary[residue::3])
-            if len(inputs) != 111:
+        for residue in range(COMPRESSED_LENGTH):
+            inputs = list(primary[residue::COMPRESSED_LENGTH])
+            if len(inputs) != COMPRESSION_FACTOR:
                 raise ValueError("pq2 residue class size changed")
             channels.append(
                 common.add_sequential_exact_cardinality(
@@ -46,10 +131,12 @@ def add_pq2_channels(model: Any) -> dict[str, Any]:
     return {
         "enabled": True,
         "kind": (
-            "six redundant uniquely-extended sequential exact-cardinality "
-            "counters fixing the prescribed q-squared compression"
+            "seventy-four redundant uniquely-extended sequential exact-"
+            "cardinality counters fixing the prescribed q-squared compression"
         ),
-        "compressed_rows": [[1, 11, -11], [1, -11, 11]],
+        "compressed_length": COMPRESSED_LENGTH,
+        "compression_factor": COMPRESSION_FACTOR,
+        "compressed_rows": [list(row) for row in COMPRESSED_ROWS],
         "negative_targets": [
             list(targets) for targets in NEGATIVE_TARGETS
         ],
@@ -68,7 +155,7 @@ def add_pq2_channels(model: Any) -> dict[str, Any]:
             "doi": "10.1016/j.jsc.2026.102606",
             "adopted": (
                 "prescribed q-squared compression seed specialized at "
-                "333 = 3 times 11 squared"
+                "333 = 37 times 3 squared"
             ),
             "not_adopted": [
                 "a proof of the uncompression conjecture",
@@ -88,7 +175,7 @@ def pq2_symmetry_actions(
     for decimation in decimations:
         unit = decimation["unit"]
         permutation = decimation["permutation"]
-        swap = unit % 3 == 2
+        swap = legendre_symbol_37(unit) == -1
         if swap:
             mapping = tuple(
                 [zb[permutation[index]] for index in range(LENGTH)]
@@ -122,21 +209,25 @@ def pq2_action_control(
     margin_checks = 0
     for action in actions:
         unit = action["unit"]
-        if action["swap_sequences"] != (unit % 3 == 2):
+        if action["swap_sequences"] != (
+            legendre_symbol_37(unit) == -1
+        ):
             raise ValueError("pq2 action swap parity changed")
         source = expected_b if action["swap_sequences"] else expected_a
-        transformed = [0, 0, 0]
-        for residue, count in enumerate(source):
-            transformed[(unit * residue) % 3] = count
+        transformed = [
+            source[(unit * residue) % COMPRESSED_LENGTH]
+            for residue in range(COMPRESSED_LENGTH)
+        ]
         if tuple(transformed) != expected_a:
             raise ValueError("pq2 action does not preserve A margins")
         source = expected_a if action["swap_sequences"] else expected_b
-        transformed = [0, 0, 0]
-        for residue, count in enumerate(source):
-            transformed[(unit * residue) % 3] = count
+        transformed = [
+            source[(unit * residue) % COMPRESSED_LENGTH]
+            for residue in range(COMPRESSED_LENGTH)
+        ]
         if tuple(transformed) != expected_b:
             raise ValueError("pq2 action does not preserve B margins")
-        margin_checks += 6
+        margin_checks += 2 * COMPRESSED_LENGTH
 
     rng = random.Random(seed)
     direct_paf_equalities = 0
@@ -144,8 +235,10 @@ def pq2_action_control(
         rows = []
         for row in range(2):
             sequence = [1] * LENGTH
-            for residue in range(3):
-                positions = list(range(residue, LENGTH, 3))
+            for residue in range(COMPRESSED_LENGTH):
+                positions = list(
+                    range(residue, LENGTH, COMPRESSED_LENGTH)
+                )
                 for position in rng.sample(
                     positions, NEGATIVE_TARGETS[row][residue]
                 ):
@@ -197,8 +290,13 @@ def pq2_action_control(
     return {
         "result": "PASS",
         "actions": len(actions),
-        "units_modulo_3_histogram": dict(
-            sorted(Counter(item["unit"] % 3 for item in actions).items())
+        "unit_legendre_symbol_modulo_37_histogram": dict(
+            sorted(
+                Counter(
+                    legendre_symbol_37(item["unit"])
+                    for item in actions
+                ).items()
+            )
         ),
         "plain_decimations": sum(
             not item["swap_sequences"] for item in actions
@@ -261,6 +359,7 @@ def main() -> int:
     action_control = pq2_action_control(
         full_spec, actions, samples=2, seed=20260729
     )
+    seed_control = compressed_seed_control()
     variables = tuple(model.za + model.zb)
     identity = tuple(variables)
     nonidentity = [
@@ -309,7 +408,7 @@ def main() -> int:
         "status": "generated",
         "family_id": FAMILY_ID,
         "scope": (
-            "unrestricted LP333 slice with only the prescribed length-three "
+            "unrestricted LP333 slice with only the prescribed length-37 "
             "q-squared compression; no nontrivial multiplier assumption"
         ),
         "claim_boundary": (
@@ -327,7 +426,7 @@ def main() -> int:
         "symmetry": {
             "kind": (
                 "all unit decimations, with sequence swap exactly for units "
-                "congruent to two modulo three"
+                "that are quadratic nonresidues modulo 37"
             ),
             "full_group_order": len(actions),
             "nonidentity_lex_leaders": len(nonidentity),
@@ -360,6 +459,7 @@ def main() -> int:
             "random_semantic_cnf_equivalence": random_equivalence,
             "direct_full_length_semantic_equivalence": direct_equivalence,
             "exact_decimation_group": group_control,
+            "compressed_seed_identity": seed_control,
             "pq2_symmetry_action": action_control,
             "sequential_cardinality_truth_table": truth_table,
             "lp63_positive_canonicalization": positive,

@@ -11,7 +11,39 @@ from pathlib import Path
 import verify_lp333_family_model as base
 
 
-EXPECTED_COMPRESSIONS = ([1, 11, -11], [1, -11, 11])
+COMPRESSED_LENGTH = 37
+COMPRESSION_FACTOR = 9
+
+
+def legendre_symbol_37(value: int) -> int:
+    residue = value % COMPRESSED_LENGTH
+    if residue == 0:
+        return 0
+    symbol = pow(residue, 18, COMPRESSED_LENGTH)
+    if symbol == 1:
+        return 1
+    if symbol == 36:
+        return -1
+    raise ValueError("invalid Euler-criterion value")
+
+
+EXPECTED_COMPRESSIONS = (
+    [
+        1 if residue == 0 else 3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ],
+    [
+        1 if residue == 0 else -3 * legendre_symbol_37(residue)
+        for residue in range(COMPRESSED_LENGTH)
+    ],
+)
+EXPECTED_NEGATIVE_COUNTS = [
+    [
+        (COMPRESSION_FACTOR - value) // 2
+        for value in compressed
+    ]
+    for compressed in EXPECTED_COMPRESSIONS
+]
 
 
 def sha256(path: Path) -> str:
@@ -24,8 +56,13 @@ def sha256(path: Path) -> str:
 
 def compression(sequence: list[int]) -> list[int]:
     return [
-        sum(sequence[index] for index in range(residue, base.LENGTH, 3))
-        for residue in range(3)
+        sum(
+            sequence[index]
+            for index in range(
+                residue, base.LENGTH, COMPRESSED_LENGTH
+            )
+        )
+        for residue in range(COMPRESSED_LENGTH)
     ]
 
 
@@ -71,16 +108,20 @@ def main() -> int:
         [
             sum(
                 first[index] == -1
-                for index in range(residue, base.LENGTH, 3)
+                for index in range(
+                    residue, base.LENGTH, COMPRESSED_LENGTH
+                )
             )
-            for residue in range(3)
+            for residue in range(COMPRESSED_LENGTH)
         ],
         [
             sum(
                 second[index] == -1
-                for index in range(residue, base.LENGTH, 3)
+                for index in range(
+                    residue, base.LENGTH, COMPRESSED_LENGTH
+                )
             )
-            for residue in range(3)
+            for residue in range(COMPRESSED_LENGTH)
         ],
     ]
 
@@ -106,7 +147,7 @@ def main() -> int:
             compressions == EXPECTED_COMPRESSIONS
         ),
         "prescribed_negative_counts": (
-            negative_counts == [[55, 50, 61], [55, 61, 50]]
+            negative_counts == EXPECTED_NEGATIVE_COUNTS
         ),
         "single_coordinate_mutation_changes_compression": (
             compression(mutated) != original_compression

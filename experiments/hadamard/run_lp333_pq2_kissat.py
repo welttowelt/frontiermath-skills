@@ -83,8 +83,18 @@ def main() -> int:
             is True
         ),
         "pq2_compressed_rows": (
-            metadata["pq2_compression_channels"]["compressed_rows"]
-            == [[1, 11, -11], [1, -11, 11]]
+            metadata["pq2_compression_channels"][
+                "compressed_length"
+            ]
+            == 37
+            and metadata["pq2_compression_channels"][
+                "compression_factor"
+            ]
+            == 9
+            and metadata["controls"]["compressed_seed_identity"][
+                "result"
+            ]
+            == "PASS"
         ),
         "pq2_symmetry_control": (
             metadata["controls"]["pq2_symmetry_action"]["result"]

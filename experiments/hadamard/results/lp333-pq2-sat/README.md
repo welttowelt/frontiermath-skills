@@ -1,4 +1,17 @@
-# Unrestricted LP333 prescribed pq2-compression SAT slice
+# INVALIDATED: incorrect pq2 factorization control
+
+This archived formula must not be used. It was generated from the false
+arithmetic statement \(333=3\cdot11^2\); in fact
+\(333=37\cdot3^2\). The imposed length-3 rows have combined squared norm
+486, while any LP(333) compressed by a factor of 111 would require 446
+(equivalently, their frequency-111 PSD total is 728 instead of 668). Thus
+the slice is arithmetically impossible before SAT solving.
+
+The interrupted runs are audit-failed engineering evidence only. The
+correct prescribed \(q^2\) compression has length 37, factor 9, and rows
+\([1,3\chi_{37}]\), \([1,-3\chi_{37}]\).
+
+## Archived invalid design
 
 This formula encodes the full length-333 Legendre-pair equations with no
 nontrivial multiplier assumption. Its only structural restriction is the
