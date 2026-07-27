@@ -1,0 +1,95 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "Unrestricted LP333 correct p37q3 exact anneal",
+  "hypothesis": "A deterministic exact-integer local search preserving the source-correct length-37 pq2-compression rows [1,3 chi_37] and [1,-3 chi_37] may reach zero combined PAF residual and produce an unrestricted Legendre pair of length 333.",
+  "evidence_unit": "one 7200-second incremental integer-PAF annealing run with seed 20260727, 2000000 same-column swap proposals per restart, and the exact 74 length-37 column margins",
+  "claim_boundary": "The paper's uncompression statement is conjectural, not an existence theorem. Only a serialized pair with exact zero objective that independently verifies both row sums, all 74 compression margins, and all 332 nonzero full-length combined PAF equations is a candidate. A lower score is workload evidence only.",
+  "baseline": {
+    "evidence": "The corrected source passes the exact compressed-seed identity: 333=37*3^2, compressed row sums one, combined energy 650, and combined PAF -18 at all 36 nonzero compressed shifts.",
+    "measurement": "At fixed seed 20260727 the source-correct initial state has squared residual 87904, L1 residual 3096, and maximum absolute residual 72."
+  },
+  "intervention": {
+    "one_change": "Apply the published p=37,q=3 prescribed compression to the unrestricted identity-family search: initialize 74 exact size-nine column margins, propose only opposite-sign swaps within one residue class modulo 37, and score all 166 independent full-length PAF residuals in exact integer arithmetic.",
+    "forbidden_confounds": [
+      "the invalid length-three 3*11^2 slice",
+      "common multiplier constraints",
+      "changed length-37 margins",
+      "floating-point PSD acceptance",
+      "seed sweep",
+      "temperature sweep",
+      "restart-length sweep",
+      "resource-cap extension",
+      "accepting a nonzero or unaudited state"
+    ]
+  },
+  "controls": [
+    {
+      "name": "factorization-and-seed-identity",
+      "purpose": "Prevent a repeated pq2 specialization error.",
+      "expected": "Verify 333=37*3^2; the two compressed rows have sums one, squared norms 325 each, combined energy 650, and combined PAF -18 at every nonzero shift."
+    },
+    {
+      "name": "exact-margin-derivation",
+      "purpose": "Bind every full-length column cardinality.",
+      "expected": "Residue zero has four negatives in each row; each other size-nine column has three or six negatives according to plus or minus 3 times the Legendre symbol modulo 37; each full row has 166 negatives."
+    },
+    {
+      "name": "incremental-delta-self-test",
+      "purpose": "Detect an incorrect O(333) PAF update.",
+      "expected": "For 2000 deterministic random same-column swaps, every predicted PAF and squared objective equals a fresh O(333^2) recomputation and all 74 exact margins remain unchanged."
+    },
+    {
+      "name": "independent-full-result-audit",
+      "purpose": "Recompute all mathematical quantities without importing the C search implementation.",
+      "expected": "A separate Python bit-rotation auditor recomputes both complete PAF vectors, all 74 margins, row sums, objective, L1 and maximum residual, exact compression rows, and candidate status."
+    },
+    {
+      "name": "mutation-control",
+      "purpose": "Ensure the final verifier is sensitive inside the prescribed slice.",
+      "expected": "An opposite-sign same-column swap preserves the compression but is rejected by at least one full PAF equation."
+    },
+    {
+      "name": "source-and-binary-pin",
+      "purpose": "Bind the executed implementation.",
+      "expected": "Source SHA-256 7a3bf72d06023658850d9e95ebc4d4eb0b3ba885da6d748a78abd5c297df486d and compiled binary SHA-256 db5324783ea5b6e47884b822a613b7087212a6e6bd57c7ebcb9ccfd0cae51153."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 87904,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 7200,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "The best squared residual is exactly zero and the independent full result audit verifies both rows, the prescribed length-37 compression, and all 332 nonzero combined PAF equations.",
+    "park": "The frozen 7200-second schedule completes with a valid independently audited nonzero best residual.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts the frozen schedule before it writes and audits its best state.",
+    "audit-failed": "Any factorization, compressed seed identity, margin derivation, incremental delta, source pin, binary pin, stored-score, full PAF, candidate-status, or mutation control fails."
+  },
+  "stop_rules": [
+    "Require the exact 37-by-9 seed identity before launching.",
+    "Run only the pinned source and binary at seed 20260727 with 2000000 proposals per restart and the frozen 512-to-0.25 exponential temperature schedule.",
+    "Stop immediately at exact zero objective.",
+    "Otherwise stop at 7200 wall seconds without another seed, temperature, restart length, or cap.",
+    "Run the independent bit-rotation audit before interpreting the endpoint.",
+    "Do not promote a lower nonzero heuristic score."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, perform a second direct Legendre-pair audit, construct H668, verify orthogonality and artifact hashes, then package it for the gated submission workflow.",
+    "park": "Archive the endpoint and move to a distinct exact structural mechanism rather than tuning this schedule.",
+    "unknown": "Preserve the interrupted state and resume only the remaining frozen wall budget if the interruption is reproducible.",
+    "audit-failed": "Repair only the smallest factorization, margin, source, delta, serialization, or verifier defect before any target rerun."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the eight-hour autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared for submission; an actual external form action remains gated by exact destination, artifact, account, and contract terms."
+  }
+}

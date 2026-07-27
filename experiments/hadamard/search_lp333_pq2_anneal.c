@@ -6,7 +6,13 @@
 #include <string.h>
 #include <time.h>
 
-enum { LENGTH = 333, HALF = 166, ROWS = 2, CLASSES = 3 };
+enum {
+  LENGTH = 333,
+  HALF = 166,
+  ROWS = 2,
+  CLASSES = 37,
+  CLASS_SIZE = 9
+};
 
 typedef struct {
   uint64_t state;
@@ -29,10 +35,23 @@ typedef struct {
   state_t best;
 } search_record_t;
 
-static const int negative_targets[ROWS][CLASSES] = {
-    {55, 50, 61},
-    {55, 61, 50},
-};
+static int legendre_symbol_37(int value) {
+  int residue = value % 37;
+  if (!residue)
+    return 0;
+  for (int root = 1; root < 37; ++root)
+    if ((root * root) % 37 == residue)
+      return 1;
+  return -1;
+}
+
+static int negative_target(int row, int residue) {
+  int compressed =
+      residue == 0
+          ? 1
+          : (row == 0 ? 3 : -3) * legendre_symbol_37(residue);
+  return (CLASS_SIZE - compressed) / 2;
+}
 
 static uint64_t rng_next(rng_t *rng) {
   uint64_t x = rng->state;
@@ -61,16 +80,16 @@ static void initialize_row(int8_t row[LENGTH], int row_index, rng_t *rng) {
   for (int index = 0; index < LENGTH; ++index)
     row[index] = 1;
   for (int residue = 0; residue < CLASSES; ++residue) {
-    int positions[111];
-    for (int item = 0; item < 111; ++item)
-      positions[item] = residue + 3 * item;
-    for (int item = 110; item > 0; --item) {
+    int positions[CLASS_SIZE];
+    for (int item = 0; item < CLASS_SIZE; ++item)
+      positions[item] = residue + CLASSES * item;
+    for (int item = CLASS_SIZE - 1; item > 0; --item) {
       int other = (int)(rng_next(rng) % (uint64_t)(item + 1));
       int temporary = positions[item];
       positions[item] = positions[other];
       positions[other] = temporary;
     }
-    for (int item = 0; item < negative_targets[row_index][residue]; ++item)
+    for (int item = 0; item < negative_target(row_index, residue); ++item)
       row[positions[item]] = -1;
   }
 }
@@ -128,10 +147,12 @@ static long long l1_residual(const state_t *state) {
 static void choose_swap(const state_t *state, int row, rng_t *rng, int *left,
                         int *right) {
   int residue = (int)(rng_next(rng) % CLASSES);
-  int first = residue + 3 * (int)(rng_next(rng) % 111);
+  int first =
+      residue + CLASSES * (int)(rng_next(rng) % CLASS_SIZE);
   int second;
   do {
-    second = residue + 3 * (int)(rng_next(rng) % 111);
+    second =
+        residue + CLASSES * (int)(rng_next(rng) % CLASS_SIZE);
   } while (state->values[row][first] == state->values[row][second]);
   *left = first;
   *right = second;
@@ -195,7 +216,7 @@ static int exact_margins_hold(const state_t *state) {
       int negatives = 0;
       for (int index = residue; index < LENGTH; index += CLASSES)
         negatives += state->values[row][index] == -1;
-      if (negatives != negative_targets[row][residue])
+      if (negatives != negative_target(row, residue))
         return 0;
     }
   return 1;
