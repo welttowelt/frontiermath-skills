@@ -1,0 +1,90 @@
+{
+  "schema": "computational-experiment-preregistration/v1",
+  "name": "LP333 ID5 bidirectional elite path relinking between 4512 and 4704",
+  "hypothesis": "Greedy target-reducing paths between independently audited elites produced by distinct neighborhoods may expose an exact or lower-residual ID5 state not visited by either source trajectory.",
+  "evidence_unit": "the two deterministic directed paths between the SHA-256-pinned objective-4512 full-neighborhood-tabu elite and objective-4704 double-orbit-anneal elite, selecting at every step the lowest exact objective among every legal equal-size mismatch exchange that strictly approaches the target",
+  "claim_boundary": "Only a serialized zero-objective intermediate that independently replays from the pinned inputs and verifies both complete rows, subgroup {1,211,232} invariance, row sums one, forced orbit margins, and all 332 nonzero combined PAF equations is a candidate. A lower nonzero intermediate closes no family.",
+  "baseline": {
+    "evidence": "Both inputs are terminal outputs from distinct preregistered mechanisms and passed independent full-length audits.",
+    "measurement": "The left elite has squared residual 4512, L1 600, and maximum residual 12; the right elite has squared residual 4704, L1 720, and maximum residual 12."
+  },
+  "intervention": {
+    "one_change": "Search the complete deterministic greedy path-relinking neighborhood between the two fixed elites in both directions, allowing only orbit exchanges that reduce target Hamming distance and choosing the exact lowest-objective exchange at each step.",
+    "forbidden_confounds": [
+      "changed multiplier subgroup",
+      "changed singleton or triple margins",
+      "moves that do not approach the pinned target",
+      "random tie breaking",
+      "additional elite endpoints",
+      "path restart",
+      "parameter tuning",
+      "floating-point PAF scoring",
+      "accepting a nonzero or unaudited intermediate"
+    ]
+  },
+  "controls": [
+    {
+      "name": "audited-elite-inputs",
+      "purpose": "Bind both ends of the path to independent campaign evidence.",
+      "expected": "Left SHA-256 ea5f0e1743f54d1c4d49dbd235a1fe263eed462719ba95e75a9da0dc5be7f089 with audit SHA-256 410707bc4fee81753665e6ffdd27ccff183578e5931985bcff5884c01fcedb61 and right SHA-256 423a242e74a6f07f02aff4d51a9ff52b7e9a979e918b83bff637d4ecacb36fa2 with audit SHA-256 0a71c11ad9135bc3310a6de1adade76a6eff83189462f629920c1a12b2fe1981."
+    },
+    {
+      "name": "bidirectional-target-reducing-replay",
+      "purpose": "Prove every stored path step is legal and reaches its opposite elite.",
+      "expected": "The independent auditor replays both directions, checks every exchanged orbit has equal size and opposite current sign, checks both new signs agree with the target, recomputes the full PAF objective after every step, and reaches the exact target rows."
+    },
+    {
+      "name": "exact-weighted-score-control",
+      "purpose": "Prevent the accelerated class score from changing move ranking.",
+      "expected": "The search reconstructs one weight-1 and 55 weight-3 shift classes and checks the selected objective against a fresh full 333-coordinate PAF after every path step."
+    },
+    {
+      "name": "independent-best-state-audit",
+      "purpose": "Bind the serialized output to an actually replayed intermediate.",
+      "expected": "The auditor finds the serialized rows among the minimum-objective states of the two independent path replays and directly verifies all stored PAF and residual arrays."
+    },
+    {
+      "name": "source-and-auditor-pin",
+      "purpose": "Bind the deterministic path mechanism.",
+      "expected": "Intervention source SHA-256 1e6cba5c5a8693e5b260543d3aff0ed852a2beba4598e7893c7ad56816a53897, auditor SHA-256 36f1abd4b9cad49307e55c580f5160a7ac2e9946a8dfd2c5aef36cec915f140b."
+    }
+  ],
+  "primary_metric": {
+    "name": "independently verified exact squared PAF residual reaches zero on either elite path",
+    "direction": "reach",
+    "unit": "integer squared residual",
+    "baseline": 4512,
+    "promotion_threshold": 0
+  },
+  "budgets": {
+    "engineering_seconds": 1800,
+    "run_wall_seconds": 300,
+    "memory_bytes": 1073741824,
+    "artifact_bytes": 10485760,
+    "verification_wall_seconds": 300
+  },
+  "terminal_outcomes": {
+    "promote": "A replayed path intermediate has squared residual zero and the independent audit verifies every ID5 and full-PAF condition.",
+    "park": "Both complete directed paths replay and their best independently audited intermediate remains nonzero.",
+    "unknown": "A process, memory, artifact, or verification ceiling interrupts either frozen directed path.",
+    "audit-failed": "Any input hash, move legality, target reduction, exact objective, path endpoint, best-state binding, full PAF, source pin, or preregistration check fails."
+  },
+  "stop_rules": [
+    "Use only the two pinned elite inputs and evaluate exactly both directions.",
+    "At every step enumerate every legal equal-size mismatch exchange that approaches the target and choose the lowest exact objective, breaking ties lexicographically.",
+    "Stop immediately after a verified zero intermediate.",
+    "Otherwise stop after both paths reach their exact opposite endpoints without another elite, tie policy, restart, or parameter.",
+    "Run the independent full replay before interpretation.",
+    "Do not promote a lower nonzero intermediate."
+  ],
+  "next_actions": {
+    "promote": "Freeze the pair, run a second direct LP audit, construct H668, verify exact orthogonality and artifact hashes, and package it for the gated submission workflow.",
+    "park": "Archive both elite paths and retain only a lower independently audited intermediate as a future heuristic or phase seed.",
+    "unknown": "Preserve the partial path and resume only the unexecuted frozen direction if reproducible.",
+    "audit-failed": "Repair only the smallest path-replay, orbit-map, scoring, or serialization defect."
+  },
+  "authority": {
+    "data_scope": "Local public-prompt artifacts, source-pinned code, and public primary literature are authorized for the autonomous campaign.",
+    "external_actions": "A fully audited H668 candidate may be prepared; actual external submission remains gated by exact destination, artifact, account, and contract terms."
+  }
+}
