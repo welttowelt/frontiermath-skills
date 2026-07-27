@@ -26,3 +26,12 @@ Formula SHA-256:
 `8662a1054eedc5a7aedddc1a3346fdcd79181d3347045bae2b8fd8ccf248ad03`.
 The large CNF and proof payloads are ignored; tracked metadata and manifests
 bind their hashes.
+
+The preregistered target run stopped at the 1 GiB proof ceiling after
+280.96 seconds. It remained strict `UNKNOWN` after 3,283,256 conflicts and
+1,754,921,676 propagations, with peak observed RSS 973,717,504 bytes. The
+incomplete 1,073,898,542-byte proof payload has SHA-256
+`e7c5120a86d46a0718b394aefe2ee63bc942210587d045f980dd453330b14966`
+and is not a certificate. Because the run already exceeded the parent’s
+2,659,000-conflict total before reaching 300 seconds, the mechanism misses its
+2,127,200-conflict workload floor and is parked without a cap increase.
