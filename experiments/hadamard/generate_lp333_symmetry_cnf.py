@@ -417,6 +417,245 @@ def apply_translation_gauge(
     }
 
 
+def id3_singleton_translation_control(
+    full_spec: dict[str, Any],
+    subgroup_elements: Sequence[int],
+    samples: int,
+    seed: int,
+) -> dict[str, Any]:
+    translations = [
+        translation
+        for translation in range(LENGTH)
+        if all(
+            ((unit - 1) * translation) % LENGTH == 0
+            for unit in subgroup_elements
+        )
+    ]
+    expected_translations = list(range(0, LENGTH, 37))
+    if translations != expected_translations:
+        raise ValueError(
+            f"expected ID3 translations {expected_translations}, got {translations}"
+        )
+    singleton_indices = [
+        full_spec["idx"][translation] for translation in translations
+    ]
+    if any(
+        full_spec["orbits"][index] != [translation]
+        for index, translation in zip(singleton_indices, translations)
+    ):
+        raise ValueError("ID3 translation positions are not singleton orbits")
+
+    def normalized_pattern_translate(
+        pattern: tuple[int, ...], offset: int
+    ) -> tuple[int, ...]:
+        return tuple(
+            pattern[(index + offset) % len(pattern)] ^ pattern[offset]
+            for index in range(len(pattern))
+        )
+
+    patterns = [
+        (0,) + suffix for suffix in product((0, 1), repeat=8)
+    ]
+    orbit_by_pattern = {}
+    unique_orbits = set()
+    orbit_size_histogram: Counter[int] = Counter()
+    for pattern in patterns:
+        orbit = tuple(
+            sorted(
+                {
+                    normalized_pattern_translate(pattern, offset)
+                    for offset in range(9)
+                }
+            )
+        )
+        orbit_by_pattern[pattern] = orbit
+        unique_orbits.add(orbit)
+    for orbit in unique_orbits:
+        orbit_size_histogram[len(orbit)] += 1
+    if len(unique_orbits) != 30 or orbit_size_histogram != Counter(
+        {1: 1, 3: 1, 9: 28}
+    ):
+        raise ValueError("ID3 normalized singleton orbit partition changed")
+
+    row_feasible = []
+    row_cases = []
+    for pattern in patterns:
+        singleton_negatives = sum(pattern)
+        cases = []
+        for triple_negatives in range(109):
+            weighted = singleton_negatives + 3 * triple_negatives
+            if weighted in (166, 167):
+                cases.append(
+                    {
+                        "triple_negative_orbits": triple_negatives,
+                        "weighted_negative_count": weighted,
+                    }
+                )
+        if cases:
+            row_feasible.append(pattern)
+            row_cases.append(
+                {
+                    "pattern": list(pattern),
+                    "singleton_negative_count": singleton_negatives,
+                    "cases": cases,
+                }
+            )
+    feasible_orbits = {orbit_by_pattern[pattern] for pattern in row_feasible}
+    if (
+        len(row_feasible) != 171
+        or len(feasible_orbits) != 19
+        or any(len(orbit) != 9 for orbit in feasible_orbits)
+    ):
+        raise ValueError("ID3 row-feasible singleton orbit gate failed")
+    canonical_patterns = sorted(min(orbit) for orbit in unique_orbits)
+    noncanonical_patterns = sorted(
+        pattern
+        for pattern in patterns
+        if pattern != min(orbit_by_pattern[pattern])
+    )
+    if len(noncanonical_patterns) != 226:
+        raise ValueError("ID3 noncanonical singleton count changed")
+
+    rng = random.Random(seed)
+    direct_paf_equalities = 0
+    orbit_invariance_checks = 0
+    row_magnitude_checks = 0
+    for _ in range(samples):
+        orbit_values = [1] + [
+            rng.choice((-1, 1)) for _ in range(full_spec["r"] - 1)
+        ]
+        sequence = [
+            orbit_values[full_spec["idx"][position]]
+            for position in range(LENGTH)
+        ]
+        base_row_magnitude = abs(sum(sequence))
+        base_pafs = [
+            sum(
+                sequence[position] * sequence[(position + shift) % LENGTH]
+                for position in range(LENGTH)
+            )
+            for shift in range(1, LENGTH)
+        ]
+        for translation in translations:
+            origin = sequence[translation]
+            transformed = [
+                origin * sequence[(position + translation) % LENGTH]
+                for position in range(LENGTH)
+            ]
+            if transformed[0] != 1:
+                raise ValueError("ID3 translation changed normalized origin")
+            for orbit in full_spec["orbits"]:
+                if len({transformed[position] for position in orbit}) != 1:
+                    raise ValueError("ID3 translation broke H-invariance")
+                orbit_invariance_checks += 1
+            if abs(sum(transformed)) != base_row_magnitude:
+                raise ValueError("ID3 translation changed row magnitude")
+            row_magnitude_checks += 1
+            for shift, expected in enumerate(base_pafs, start=1):
+                actual = sum(
+                    transformed[position]
+                    * transformed[(position + shift) % LENGTH]
+                    for position in range(LENGTH)
+                )
+                if actual != expected:
+                    raise ValueError("ID3 translation changed a PAF")
+                direct_paf_equalities += 1
+    return {
+        "result": "PASS",
+        "translations": translations,
+        "singleton_indices": singleton_indices,
+        "per_sequence_action_order": 9,
+        "independent_pair_action_order": 81,
+        "normalized_patterns": len(patterns),
+        "all_orbits": len(unique_orbits),
+        "all_orbit_size_histogram": dict(
+            sorted(orbit_size_histogram.items())
+        ),
+        "row_feasible_patterns": len(row_feasible),
+        "row_feasible_orbits": len(feasible_orbits),
+        "row_feasible_orbit_size_histogram": {"9": 19},
+        "canonical_patterns": [list(pattern) for pattern in canonical_patterns],
+        "noncanonical_patterns": [
+            list(pattern) for pattern in noncanonical_patterns
+        ],
+        "row_cases": row_cases,
+        "random_orbit_assignments": samples,
+        "seed": seed,
+        "orbit_invariance_checks": orbit_invariance_checks,
+        "row_magnitude_checks": row_magnitude_checks,
+        "direct_paf_equalities": direct_paf_equalities,
+    }
+
+
+def apply_id3_singleton_translation_canonicalization(
+    model: Any,
+    control: dict[str, Any],
+) -> dict[str, Any]:
+    singleton_indices = control["singleton_indices"]
+    noncanonical_patterns = [
+        tuple(pattern) for pattern in control["noncanonical_patterns"]
+    ]
+    block_start = len(model.builder.clauses) + 1
+    sequence_records = []
+    for label, primary in (("a", model.za), ("b", model.zb)):
+        variables = [primary[index] for index in singleton_indices]
+        clauses_before = len(model.builder.clauses)
+        for pattern in noncanonical_patterns:
+            model.builder.add_clause(
+                *[
+                    (-variable if value else variable)
+                    for variable, value in zip(variables[1:], pattern[1:])
+                ]
+            )
+        sequence_records.append(
+            {
+                "sequence": label,
+                "singleton_variables": variables,
+                "blocking_clauses": len(model.builder.clauses)
+                - clauses_before,
+            }
+        )
+    return {
+        "enabled": True,
+        "kind": (
+            "blocking clauses for non-lex-minimal normalized singleton "
+            "translation patterns"
+        ),
+        "independent_pair_action_order": 81,
+        "block_source_clause_start": block_start,
+        "block_source_clause_end": len(model.builder.clauses),
+        "block_source_clauses": len(model.builder.clauses) - block_start + 1,
+        "sequence_records": sequence_records,
+        "canonical_patterns": control["canonical_patterns"],
+        "noncanonical_patterns": control["noncanonical_patterns"],
+    }
+
+
+def bind_serialized_plain_clause_block(
+    builder: Any,
+    serialization: dict[str, Any],
+    block: dict[str, Any],
+) -> None:
+    source_start = block["block_source_clause_start"]
+    source_end = block["block_source_clause_end"]
+    split_sources = {
+        item["source_clause_index"]
+        for item in serialization["unit_split_map"]
+    }
+    if any(source in split_sources for source in range(source_start, source_end + 1)):
+        raise ValueError("plain canonicalization block unexpectedly contains units")
+    prior_splits = sum(source < source_start for source in split_sources)
+    digest = hashlib.sha256()
+    for source_index in range(source_start, source_end + 1):
+        clause = builder.clauses[source_index - 1]
+        digest.update(
+            (" ".join(map(str, clause)) + " 0\n").encode("ascii")
+        )
+    block["serialized_clause_start"] = source_start + prior_splits
+    block["serialized_clauses"] = source_end - source_start + 1
+    block["serialized_block_sha256"] = digest.hexdigest()
+
+
 def add_sequential_exact_cardinality(
     builder: Any,
     inputs: Sequence[int],
@@ -912,15 +1151,20 @@ def main() -> int:
         help="fix the normalized singleton translation gauge in each sequence",
     )
     parser.add_argument(
+        "--canonicalize-id3-singleton-translations",
+        action="store_true",
+        help="retain one singleton-pattern representative per ID3 translation orbit",
+    )
+    parser.add_argument(
         "--add-unary-cardinality-channels",
         action="store_true",
         help="add the three preregistered redundant unary channels",
     )
     parser.add_argument("--parent-metadata", type=Path)
     args = parser.parse_args()
-    if args.family_id not in (4, 5, 7, 9, 10):
+    if args.family_id not in (3, 4, 5, 7, 9, 10):
         raise ValueError(
-            "static symmetry generator accepts ID4, ID5, ID7, ID9, or ID10"
+            "static symmetry generator accepts ID3, ID4, ID5, ID7, ID9, or ID10"
         )
     if args.random_equivalence_samples <= 0:
         raise ValueError("random-equivalence sample count must be positive")
@@ -931,6 +1175,17 @@ def main() -> int:
     ):
         raise ValueError(
             "unary channels require the full PAF translation gauge and parent metadata"
+        )
+    if args.canonicalize_id3_singleton_translations and (
+        args.family_id != 3
+        or args.canonicalize_independent_translations
+        or args.deduplicate_inverse_paf
+        or args.add_unary_cardinality_channels
+        or args.parent_metadata is None
+    ):
+        raise ValueError(
+            "ID3 singleton translation canonicalization requires full PAF ID3 "
+            "and parent metadata"
         )
 
     source_family, classification_path, status_path = load_source_family(
@@ -981,6 +1236,14 @@ def main() -> int:
             seed=20260826 + args.family_id,
         )
         translation_gauge = apply_translation_gauge(model, full_spec)
+    id3_translation_control = None
+    if args.canonicalize_id3_singleton_translations:
+        id3_translation_control = id3_singleton_translation_control(
+            full_spec,
+            subgroup_elements,
+            samples=8,
+            seed=20260903,
+        )
     actions = unit_permutations(model.spec)
     group_control = validate_decimation_group(
         model.spec, actions, len(subgroup["elements"])
@@ -1074,6 +1337,61 @@ def main() -> int:
         unary_channels = add_unary_cardinality_channels(
             model, full_spec
         )
+    id3_parent_binding = None
+    id3_singleton_canonicalization = None
+    if args.canonicalize_id3_singleton_translations:
+        parent_metadata = json.loads(
+            args.parent_metadata.read_text(encoding="utf-8")
+        )
+        expected_source_variables = (
+            parent_metadata["cnf"]["variables"]
+            - parent_metadata["cnf"]["unit_split_count"]
+        )
+        expected_source_clauses = (
+            parent_metadata["cnf"]["clauses"]
+            - parent_metadata["cnf"]["unit_split_count"]
+        )
+        id3_parent_binding = {
+            "result": "PASS",
+            "path": str(args.parent_metadata),
+            "metadata_sha256": sha256_file(args.parent_metadata),
+            "formula_sha256": parent_metadata["cnf"]["sha256"],
+            "family_id_equal": parent_metadata["family_id"] == 3,
+            "source_variables_equal_before_canonicalization": (
+                model.builder.num_vars == expected_source_variables
+            ),
+            "source_clauses_equal_before_canonicalization": (
+                len(model.builder.clauses) == expected_source_clauses
+            ),
+            "primary_variables_equal": (
+                parent_metadata["primary_variables"]["za"] == model.za
+                and parent_metadata["primary_variables"]["zb"] == model.zb
+            ),
+            "symmetry_equal": (
+                parent_metadata["symmetry"]["breakers"] == breaker_records
+            ),
+            "full_paf_representatives": full_spec["num_reps"],
+            "no_profile_constraints": (
+                "profile" not in json.dumps(parent_metadata).lower()
+            ),
+        }
+        required = [
+            value
+            for key, value in id3_parent_binding.items()
+            if key.endswith("_equal") or key == "no_profile_constraints"
+        ]
+        if (
+            not all(required)
+            or id3_parent_binding["full_paf_representatives"] != 116
+        ):
+            raise ValueError(
+                f"ID3 parent formula binding failed: {id3_parent_binding}"
+            )
+        id3_singleton_canonicalization = (
+            apply_id3_singleton_translation_canonicalization(
+                model, id3_translation_control
+            )
+        )
 
     args.output_dir.mkdir(parents=True, exist_ok=False)
     cnf_path = args.output_dir / f"id{args.family_id}-symmetry.cnf"
@@ -1093,6 +1411,12 @@ def main() -> int:
     if unary_channels is not None:
         bind_serialized_channel_block(
             model.builder, serialization, unary_channels
+        )
+    if id3_singleton_canonicalization is not None:
+        bind_serialized_plain_clause_block(
+            model.builder,
+            serialization,
+            id3_singleton_canonicalization,
         )
     in_memory_hash = encoder.dimacs_sha256(
         model.builder, split_unit_clauses=True
@@ -1213,6 +1537,16 @@ def main() -> int:
         )
         metadata["controls"]["parent_formula_binding"] = parent_binding
         metadata["unary_cardinality_channels"] = unary_channels
+    if id3_singleton_canonicalization is not None:
+        metadata["controls"]["id3_normalized_translation_automorphism"] = (
+            id3_translation_control
+        )
+        metadata["controls"]["id3_static_parent_binding"] = (
+            id3_parent_binding
+        )
+        metadata["id3_singleton_translation_canonicalization"] = (
+            id3_singleton_canonicalization
+        )
     metadata_path.write_text(
         json.dumps(metadata, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",

@@ -201,6 +201,9 @@ def main() -> int:
                 or metadata.get("independent_translation_gauge", {}).get(
                     "enabled"
                 )
+                or metadata.get(
+                    "id3_singleton_translation_canonicalization", {}
+                ).get("enabled")
             )
             else args.formula_audit is None
         ),
