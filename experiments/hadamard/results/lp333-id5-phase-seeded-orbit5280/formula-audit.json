@@ -1,0 +1,95 @@
+{
+  "checks": {
+    "all_true_phase_maps_to_heuristic": true,
+    "binary_length_333_heuristic": true,
+    "flipped_count": true,
+    "formula_dimensions_preserved": true,
+    "full_stream_literal_renaming": true,
+    "generator_hash": true,
+    "heuristic_forced_margins": true,
+    "heuristic_id5_invariance": true,
+    "heuristic_input_hash": true,
+    "heuristic_stored_objective": true,
+    "heuristic_stored_residual": true,
+    "mapping_mutation_rejected": true,
+    "metadata_input_hash": true,
+    "metadata_schema_and_family": true,
+    "phase_metadata_schema_and_family": true,
+    "primary_map_length": true,
+    "shared_generator_hash": true,
+    "source_formula_hash": true,
+    "transformed_formula_hash": true
+  },
+  "family_id": 5,
+  "formula_audit": {
+    "changed_literal_occurrences": 221622,
+    "exact_literal_renaming": true,
+    "source_header": [
+      "p",
+      "cnf",
+      "218018",
+      "1366261"
+    ],
+    "streamed_clauses": 1366261,
+    "streamed_lines": 1366262,
+    "streamed_literals": 4679477,
+    "transformed_header": [
+      "p",
+      "cnf",
+      "218018",
+      "1366261"
+    ]
+  },
+  "inputs": {
+    "auditor_sha256": "0207dfddebae216101b08f8fe7ba5a54310e28d47be81eefb4c019b0492724ad",
+    "encoding_metadata": "experiments/hadamard/results/lp333-id5-unary-channels/encoding.json",
+    "encoding_metadata_sha256": "170d61f0acedbbe5f445f76db1c115934f5f03d354ae8646a31b53c44921ab13",
+    "generator": "experiments/hadamard/generate_lp333_id5_phase_seeded_cnf.py",
+    "generator_sha256": "fb62155bb571b43ee1a1f3337227a8b9960e0c167086fd084a7f241ca3bb6788",
+    "heuristic": "experiments/hadamard/results/lp333-id5-orbit-anneal/result.json",
+    "heuristic_sha256": "cd017adf83134dffaa3055601a166d5dcbb6d69b8bf0f805f7990ca768707019",
+    "phase_metadata": "experiments/hadamard/results/lp333-id5-phase-seeded-orbit5280/encoding.json",
+    "phase_metadata_sha256": "c049dec6ad8e0611061351417451dd4aa95f12b7b11349e502ea9e3472645ce8",
+    "shared_generator": "experiments/hadamard/generate_lp333_pq2_phase_seeded_cnf.py",
+    "shared_generator_sha256": "d0cfb7390a5bdc8924a844815c88b7757a50143cdbabc8ae060b9af6c3c9507d",
+    "source_formula": "experiments/hadamard/results/lp333-id5-unary-channels/id5-symmetry.cnf",
+    "source_formula_sha256": "c8c083c7311e083ec5e0bb82d3fca863f2f07e821a30cf55aeb5d79a17778d8b",
+    "transformed_formula": "experiments/hadamard/results/lp333-id5-phase-seeded-orbit5280/lp333-id5-phase-seeded.cnf",
+    "transformed_formula_sha256": "89351b92ca55ce4b73a6794f5582dd0318dda3a6e498833d7b24890ea9b96626"
+  },
+  "l1_residual": 696,
+  "maximum_absolute_residual": 16,
+  "objective": 5280,
+  "phase_mapping": {
+    "flipped_variables": 114,
+    "mutation_variable": 3,
+    "primary_variables": 226,
+    "unchanged_variables": 112
+  },
+  "profiles": [
+    {
+      "invariant": true,
+      "negative_singletons": 1,
+      "negative_triples": 55,
+      "orbit_size_histogram": {
+        "1": 3,
+        "3": 110
+      },
+      "orbits": 113,
+      "row_sum": 1
+    },
+    {
+      "invariant": true,
+      "negative_singletons": 1,
+      "negative_triples": 55,
+      "orbit_size_histogram": {
+        "1": 3,
+        "3": 110
+      },
+      "orbits": 113,
+      "row_sum": 1
+    }
+  ],
+  "schema": "frontiermath-lp333-id5-phase-seeded-cnf-audit-v1",
+  "status": "pass"
+}
